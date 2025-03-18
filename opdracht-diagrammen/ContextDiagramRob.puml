@@ -4,24 +4,29 @@
 
 title Context Diagram TripTop
 
-Person(Reiziger, "Reiziger", "Een reiziger die zonder zorgen op reis wil.")
-Person(Reisagent, "reisagent", "helpt met de reis plannen voor andere reizigers")
+LAYOUT_WITH_LEGEND()
 
-System(triptop, "TripTop", "Reisplatform voor reisplanning.")
+SHOW_PERSON_OUTLINE()
+Person(Reiziger, "Reiziger", "Een reiziger die zonder zorgen op reis wil.")
+Person(Reisagent, "Reisagent", "Helpt met de reis plannen voor andere reizigers")
+
+System_Boundary(triptop_core, "TripTop") {
+    System(triptop, "TripTop", "Reisplatform voor reisplanning.")
+}
 
 System_Ext(betaalsysteem, "Betaalsysteem", "Externe betaalprovider.")
-System_Ext(reisaanbieder, "Reisaanbieder", "busMaatschappij, Trein schema's, luchtvaartmaatschappijen, etc.")
-System_Ext(etenaanbieder, "EetAanbieder", "kan eten bestellen via bijv: uber eats, just eat")
-System_Ext(Autoaanbieder, "autoaanbieder", "Auto of fiets verhuur")
-System_Ext(Dagbesteding, "dagbesteding", "Heeft tickets voor dagjes uit")
+System_Ext(reisAanbieder, "ReisAanbieder", "busMaatschappij, Trein schema's, luchtvaartmaatschappijen, etc.")
+System_Ext(etenAanbieder, "EetAanbieder", "kan eten bestellen via bijv: uber eats, just eat")
+System_Ext(AutoAanbieder, "AutoAanbieder", "Auto of fiets verhuur")
+System_Ext(Dagbesteding, "Dagbesteding", "Heeft tickets voor dagjes uit")
 
 Reiziger --> triptop : Boekt reis
 Reisagent --> triptop : Boekt reis voor andere
 
 
 triptop --> betaalsysteem : Verwerkt betaling
-triptop --> reisaanbieder : Reserveert reis naar locatie
-triptop --> etenaanbieder : Kan eten bestellen
-triptop --> Autoaanbieder : Kan een vervoer huren bij
+triptop --> reisAanbieder : Reserveert reis naar locatie
+triptop --> etenAanbieder : Kan eten bestellen
+triptop --> AutoAanbieder : Kan een vervoer huren bij
 triptop --> Dagbesteding : kan dagjes plannen
 @enduml
