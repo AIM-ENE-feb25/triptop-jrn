@@ -4,8 +4,8 @@
 
 title Context Diagram TripTop
 
-Person(Reiziger, "Reiziger", "Een reiziger die zonder zorgen op reis.")
-Person(Reisagent, "reisagent", "helpt met de reis")
+Person(Reiziger, "Reiziger", "Een reiziger die zonder zorgen op reis wil.")
+Person(Reisagent, "reisagent", "helpt met de reis plannen voor andere reizigers")
 
 System(triptop, "TripTop", "Reisplatform voor reisplanning.")
 
