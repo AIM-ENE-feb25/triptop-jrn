@@ -1,1 +1,27 @@
 @startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+
+title Context Diagram TripTop
+
+Person(Reiziger, "Reiziger", "Een reiziger die zonder zorgen op reis.")
+Person(Reisagent, "reisagent", "helpt met de reis")
+
+System(triptop, "TripTop", "Reisplatform voor reisplanning.")
+
+System_Ext(betaalsysteem, "Betaalsysteem", "Externe betaalprovider.")
+System_Ext(reisaanbieder, "Reisaanbieder", "busMaatschappij, Trein schema's, luchtvaartmaatschappijen, etc.")
+System_Ext(etenaanbieder, "EetAanbieder", "kan eten bestellen via bijv: uber eats, just eat")
+System_Ext(Autoaanbieder, "autoaanbieder", "Auto of fiets verhuur")
+System_Ext(Dagbesteding, "dagbesteding", "Heeft tickets voor dagjes uit")
+
+Reiziger --> triptop : Boekt reis
+Reisagent --> triptop : Boekt reis voor andere
+
+
+triptop --> betaalsysteem : Verwerkt betaling
+triptop --> reisaanbieder : Reserveert reis naar locatie
+triptop --> etenaanbieder : Kan eten bestellen
+triptop --> Autoaanbieder : Kan een vervoer huren bij
+triptop --> Dagbesteding : kan dagjes plannen
+@enduml
