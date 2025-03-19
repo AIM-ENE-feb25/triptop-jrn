@@ -1,0 +1,26 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+LAYOUT_TOP_DOWN()
+
+Person(student, "Student", "A student who takes exams in the system")
+Person(teacher, "Teacher", "A teacher who creates and grades exams")
+
+System_Ext(osiris, "Osiris", "Contains registered students and stores validated grades")
+System_Ext(schoolyear, "Schoolyear", "Secures Ans to be used only in a safe browser")
+System_Ext(surfConnect, "SurfConnect", "Authenticates users who want to access the program")
+
+' System Boundary for Ans
+Boundary(ans_boundary, "ANS omgeving (system)") {
+    System(examSystem, "Ans digitaal formatief toetsen", "The exam application")
+}
+
+' Relationships
+Rel(student, examSystem, "Makes exams")
+Rel(teacher, examSystem, "Creates and grades exams")
+Rel(teacher, schoolyear, "Manually inputs student grades from Ans to")
+
+Rel(examSystem, schoolyear, "Checks if Ans is used in a safe browser")
+Rel(examSystem, surfConnect, "Authenticates users who want to access exam")
+Rel(examSystem, osiris, "Checks registration & exports validated grades")
+
+@enduml
