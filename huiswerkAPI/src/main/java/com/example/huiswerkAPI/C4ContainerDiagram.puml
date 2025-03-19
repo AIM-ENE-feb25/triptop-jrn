@@ -1,0 +1,45 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!include <C4/C4_Container>
+
+title C4 Container Diagram voor TripTop
+
+LAYOUT_WITH_LEGEND()
+
+SHOW_PERSON_OUTLINE()
+Person(Reiziger, "Reiziger", "Een reiziger die zonder zorgen op reis wil.")
+Person(Reisagent, "Reisagent", "Helpt met de reis plannen voor andere reizigers")
+
+Container_Ext(id, "IdentityProvider",  Een applicatie voor het identificeren en authoriseren van een gebruiker)
+
+System_Boundary(triptop_core, "TripTop") {
+
+Container(triptop, "TripTop Web Applicatie", "React", "User interface voor het plannen en boeken van vakanties")
+Container(backend, "TripTop Back-end", "Java", "Verwerken, controleren en aanpassen van api requests vanuit de web applicatie")
+Container(db, "TripTop Database", "MSSQL", "Opslag van gegevens")
+Container(gateway, "API Gateway", "React", "Handelen van API calls")
+}
+
+System_Ext(betaalsysteem, "Betaalsysteem", "Externe betaalprovider.")
+System_Ext(reisAanbieder, "ReisAanbieder", "busMaatschappij, Trein schema's, luchtvaartmaatschappijen, etc.")
+System_Ext(etenAanbieder, "EetAanbieder", "kan eten bestellen via bijv: uber eats, just eat")
+System_Ext(AutoAanbieder, "AutoAanbieder", "Auto of fiets verhuur")
+System_Ext(Dagbesteding, "Dagbesteding", "Heeft tickets voor dagjes uit")
+System_Ext(GoogleMaps, "GoogleMaps", Heeft de kaart waar alles op gesplaatst kan worden)
+
+Reiziger --> id : Logt in via
+Reiziger --> triptop : Bekijkt website
+Reisagent --> id : Logt in via
+id --> triptop : Stuurt gebruiker door naar
+
+triptop --> backend : stuurt api calls naar
+backend --> db : haalt gegevens uit/slaat gegegevens op in
+backend --> gateway : geeft api calls door naar
+
+Rel(gateway, betaalsysteem, "Verwerkt betaling via", "HTTPS (REST API, JSON)")
+Rel(gateway, reisAanbieder, "Plaatsen van reserveringen / beschikbaarheid ophalen", "HTTPS (REST API, JSON)")
+Rel(gateway, etenAanbieder, "Eten opties ophalen", "HTTPS (REST API, JSON)")
+Rel(gateway, AutoAanbieder, "Vervoer opties ophalen / vervoer huren", "HTTPS (REST API, JSON)")
+Rel(gateway, Dagbesteding, "Activiteiten inplannen", "HTTPS (REST API, JSON)")
+Rel(gateway, GoogleMaps, "Activiteiten tonen op kaart", "HTTPS (REST API, JSON)")
+@enduml
