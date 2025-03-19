@@ -30,7 +30,7 @@ System_Ext(GoogleMaps, "GoogleMaps", Heeft de kaart waar alles op gesplaatst kan
 Reiziger --> id : Logt in via
 Reiziger --> triptop : Bekijkt website
 Reisagent --> id : Logt in via
-id --> triptop : Stuurt gebruiker door naar
+id --> triptop : Verifieert gebruiker voor
 
 triptop --> backend : stuurt api calls naar
 backend --> db : haalt gegevens uit/slaat gegegevens op in
