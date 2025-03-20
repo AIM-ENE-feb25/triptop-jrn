@@ -16,7 +16,7 @@ System_Boundary(triptop_core, "TripTop") {
 
 System_Ext(betaalsysteem, "Betaalsysteem", "Externe betaalprovider.")
 System_Ext(reisAanbieder, "ReisAanbieder", "busMaatschappij, Trein schema's, luchtvaartmaatschappijen, etc.")
-System_Ext(etenAanbieder, "EetAanbieder", "kan eten bestellen via bijv: uber eats, just eat")
+System_Ext(etenAanbieder, "EetAanbieder", "Heeft informatie over restaurants")
 System_Ext(AutoAanbieder, "AutoAanbieder", "Auto of fiets verhuur")
 System_Ext(Dagbesteding, "Dagbesteding", "Heeft tickets voor dagjes uit")
 System_Ext(ov, "openbaar vervoer", "Heeft schema's voor plaatselijk openbaar vervoer")
@@ -29,7 +29,7 @@ Reisagent --> triptop : Boekt reis voor andere
 
 triptop --> betaalsysteem : Verwerkt betaling
 triptop --> reisAanbieder : Reserveert reis naar locatie
-triptop --> etenAanbieder : Kan eten bestellen
+triptop --> etenAanbieder : Laat info zien over restaurants in de buurt
 triptop --> AutoAanbieder : Kan een vervoer huren bij
 triptop --> Dagbesteding : kan dagjes plannen
 triptop --> GoogleMaps : laat activiateiten zien op
