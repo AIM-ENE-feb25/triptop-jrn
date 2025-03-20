@@ -27,7 +27,7 @@ System_Boundary(triptop_core, "TripTop") {
 
 ' Definieer externe systemen
 System_Ext(betaalsysteem, "Paypal API", "Externe betaalprovider met creditcards, ideal en wallet payments.")
-System_Ext(reisAanbieder, "ReisAanbieder", "Busmaatschappij, Treinschema's, Luchtvaartmaatschappijen, etc.")
+System_Ext(reisAanbieder, "Navitia API", "Busmaatschappij, Treinschema's, Luchtvaartmaatschappijen, etc.")
 System_Ext(etenAanbieder, "Uber Eats Scraper API", "Informatie over restaurants, locaties menu's en reviews")
 System_Ext(AutoAanbieder, "Booking.com API", "Verhuur van auto's of fietsen")
 System_Ext(Dagbesteding, "Booking.com API", "Biedt tickets voor dagjes uit")
