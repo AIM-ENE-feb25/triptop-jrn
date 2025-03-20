@@ -20,6 +20,7 @@ System_Ext(etenAanbieder, "EetAanbieder", "kan eten bestellen via bijv: uber eat
 System_Ext(AutoAanbieder, "AutoAanbieder", "Auto of fiets verhuur")
 System_Ext(Dagbesteding, "Dagbesteding", "Heeft tickets voor dagjes uit")
 System_Ext(GoogleMaps, "GoogleMaps", Heeft de kaart waar alles op gesplaatst kan worden)
+System_Ext(Acomodatie, "Accomodatie", heeft de overnachtingen en verblijfplaatsen te beschikking)
 
 Reiziger --> triptop : Boekt reis
 Reisagent --> triptop : Boekt reis voor andere
@@ -31,4 +32,5 @@ triptop --> etenAanbieder : Kan eten bestellen
 triptop --> AutoAanbieder : Kan een vervoer huren bij
 triptop --> Dagbesteding : kan dagjes plannen
 triptop --> GoogleMaps : laat activiateiten zien op
+triptop --> Acomodatie : Kun je overnachting boeken bij
 @enduml

@@ -1,0 +1,46 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!include <C4/C4_Container>
+
+
+title Dit is een Container diagram voor Ans
+
+LAYOUT_WITH_LEGEND()
+
+SHOW_PERSON_OUTLINE()
+
+Person(student, "Student", "student who uses the system to make a exam")
+Person(Leraar, "leraar", "Teacher who uses the system to create and grade tests")
+
+System_Ext(Schoolyear, "SchoolYear", "Zorgt dat ANS alleen in veilige browser geopend kan worden")
+System_Ext(SurfConnect, "SurfConnect", "Logt in via de HAN")
+
+System_Boundary(Ans, "Ansie App") {
+Container(AnsieApp , "Web Applicatie","React", "gebruikers interface voor het maken/creeren/nakijken van de toets")
+
+Container(BackEnd,"Backend","Spring Boot","zorgt voor bedrijfslogica en gegevensverwerking")
+Container(ApiGateway, "API-Gateway","node.js","Behandeld alle API verzoeken")
+
+Container(DatabaseNoSQL, "NoSqlDb","redis", "Database die de vragen en antwoorden opslaat")
+}
+System_Ext(Osiris, "Osiris", "bevat de studenten voor de toets")
+
+student --> AnsieApp : "Bekijkt cijfers"
+Leraar --> AnsieApp : "Creered en kijken toets na in"
+
+AnsieApp --> BackEnd : "Maakt API verzoek aan"
+
+BackEnd --> DatabaseNoSQL : "Slaat op/ haalt op uit/in"
+BackEnd --> ApiGateway : "Stuurt verzoeken naar"
+
+student --> Schoolyear : "maakt de toets in"
+Schoolyear --> AnsieApp : "Beveiligd"
+
+
+
+ApiGateway --> SurfConnect : "Verstuurd verzoek(?)"
+ApiGateway --> Osiris : "Verstuurd verzoek(?)"
+
+
+
+@enduml
