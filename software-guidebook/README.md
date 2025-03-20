@@ -12,16 +12,30 @@ Dit software guidebook geeft een overzicht van de Triptop-applicatie. Het bevat 
 > [!IMPORTANT]
 > Werk zelf dit hoofdstuk uit met context diagrammen en een beschrijving van de context van de software.
 
-![Context diagram Triptop algemeen](../opdracht-diagrammen/ContextDiagram.puml)
+![Context diagram Triptop algemeen](../opdracht-diagrammen/ContextDiagram.png)
 
 ### 2.1 gebruikers
 
-De gebruikers van het systeem gebruikers die een reis willen plannen en boeken via Triptop en deze gedurende de reis de functionaliteit 
+De gebruikers van het systeem gebruikers die een reis willen plannen en boeken via Triptop. Deze staan hierboven als "reiziger" aangeduid.
+Daarnaast zijn er medewerkers van (digitale) reisbureau's, hierboven aangeduid als "reisagent", die reizigers ondersteunen bij het boeken van hun droom reis.
+Uiteraard zijn er mensen die gewoon even komen kijken wat de website te bieden heeft. Deze laten we in deze even buiten scope. Dit omdat bijna alle functionaliteit alleen van
+toepassing is als je daadwerkelijk inlogd en een vakantie gaat boeken. Verder geld dit diagram enkel voor gebruikers. Administratoren of anders betrokkene hebben een andere context.
 
-Toelichting op de context van de software inclusief System Context Diagram:
-* Functionaliteit
-* Gebruikers
-* Externe systemen
+
+## 2.2 Functionaliteit & externe systemen
+
+Binnen Triptop zijn verschillende functionaliteiten die ondersteunen bij het boeken en ervaren van een reis. Deze 'bouwstenen' hebben elk hun eigen functie.
+De functionaliteiten zijn in het contextdiagram als volgt gemaakt:
+- BetaalSysteem: Dit is een systeem waarmee mensen op onze applicatie kunnen betalen. Denk hierbij aan het boeken van een vlucht of het bestellen van tickets voor een museaum.
+- Reisaanbieder: Hier kan de reiziger vluchten, treinreizen of busreizen naar de bestemming bekijken en eventueel boeken. In deze gaat het voornamelijk over het boeken van de reis naar de vakantie bestemming toe. Voor reizen op locatie zie 'openbaar vervoer' en 'autoAanbieder'.
+- Eetaanbieder: Vanaf hier kunnen de reizigers de restaurents in de buurt bekijken. De locaties, menukaarten en reviews zijn te zien om het makkelijk te maken om een geschikte eetgelegenheid te vinden.  
+- Autoaanbieder: Dit is een functionaliteit die de reiziger de mogelijkheid geeft om een auto te huren op locatie.
+- Dagebesteding: Hier zijn de bezienswaardigheden in de buurt te vinden. Het is mogelijk om tickets te bestellen voor de desbetreffende activiteit.
+- OpenbaarVervoer: de rijschema's van de verschillende opties voor het openbaar vervoer worden getoond. Zo kan de reiziger makkelijk vanaf 1 punt zijn plaatselijke reis plannen met het ov.
+- GoogleMaps: Dit is een kaart waar alles op weergegeven kan worden. Zo kan de gebruiker zien waar hij is en waar hij heen moet of kan.
+- accomodatie: Hier kan de reiziger zijn accomodatie regelen/boeken en betalen vanaf de applicatie.
+Voor alle functionaliteiten worden externe systemen gebruikt. Zo zijn de functionaliteiten zoveel mogelijk lokaal te gebruiken. Zo heeft de gebruiker maxinmaal comfort van de applicatie. In hoofdstuk 7 worden de Api's verder toegeligd en in de vorm van een container diagram uitgelegd. 
+
 
 ## 3. Functional Overview
 
@@ -86,6 +100,9 @@ Voordat deze casusomschrijving tot stand kwam, heeft de opdrachtgever de volgend
 ###     7.1. Containers
 
 > [!IMPORTANT]
+> Het moet mogelijk zijn om later meerdere bouwstenen toe te voegen of weg te halen. De bouwstenen dienen dus zelfstandig te kunnen opereren. Google maps is een uitzondering daarop. Deze zou eventueel de routebeschrijving kunnen geven van bijvoorbeeld een restaurant.
+Er wordt voor de bouwstenen waar dit mogelijk is gebruik gemaakt van externe API's. Zo hebben we de beste functionaliteiten met de meest flexibele en up-to-date data.
+
 > Voeg toe: Container Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
 
 ###     7.2. Components
