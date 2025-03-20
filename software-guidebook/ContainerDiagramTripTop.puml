@@ -1,0 +1,53 @@
+@startuml
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!include <C4/C4_Container>
+
+title C4 Container Diagram voor TripTop
+
+LAYOUT_WITH_LEGEND()
+
+SHOW_PERSON_OUTLINE()
+
+' Definieer personen
+Person(Reiziger, "Reiziger", "Een reiziger die zonder zorgen op reis wil.")
+Person(Reisagent, "Reisagent", "Helpt met de reis plannen voor andere reizigers")
+
+' Definieer externe container voor IdentityProvider
+Container_Ext(id, "IdentityProvider", "Een applicatie voor het identificeren en authoriseren van een gebruiker")
+
+' Definieer de interne systemen binnen de TripTop boundary
+System_Boundary(triptop_core, "TripTop") {
+    Container(triptop, "TripTop Web Applicatie", "React", "User interface voor het plannen, boeken en bijhouden van vakanties")
+    Container(backend, "TripTop Back-end", "Java", "Verwerken, controleren en aanpassen van API requests vanuit de web applicatie")
+    Container(db, "TripTop Database", "MSSQL", "Opslag van gegevens")
+    Container(gateway, "API Gateway", "React", "Handelen van API calls")
+}
+
+' Definieer externe systemen
+System_Ext(betaalsysteem, "Paypal API", "Externe betaalprovider met creditcards, ideal en wallet payments.")
+System_Ext(reisAanbieder, "ReisAanbieder", "Busmaatschappij, Treinschema's, Luchtvaartmaatschappijen, etc.")
+System_Ext(etenAanbieder, "EetAanbieder", "Bestellen van eten via bijv: Uber Eats, Just Eat")
+System_Ext(AutoAanbieder, "AutoAanbieder", "Verhuur van auto's of fietsen")
+System_Ext(Dagbesteding, "Dagbesteding", "Biedt tickets voor dagjes uit")
+System_Ext(GoogleMaps, "GoogleMaps", "Kaartweergave")
+System_Ext(accommodatieAanbieder, "AccommodatieAanbieder", "Externe accommodatie provider, zoals hotels en hostels")
+
+' Definieer relaties
+Reiziger --> id : "Logt in via"
+Reisagent --> id : "Logt in via"
+id --> triptop : "Stuurt gebruiker door naar"
+
+triptop --> backend : "Stuurt API calls naar"
+backend --> db : "Halen/slaan gegevens op"
+backend --> gateway : "Geeft API calls door naar"
+
+Rel(gateway, betaalsysteem, "Verwerkt betaling via", "HTTPS (REST API, JSON)")
+Rel(gateway, reisAanbieder, "Reserveringen plaatsen / beschikbaarheid ophalen", "HTTPS (REST API, JSON)")
+Rel(gateway, etenAanbieder, "Eten opties ophalen", "HTTPS (REST API, JSON)")
+Rel(gateway, AutoAanbieder, "Vervoer opties ophalen / huren", "HTTPS (REST API, JSON)")
+Rel(gateway, Dagbesteding, "Activiteiten inplannen", "HTTPS (REST API, JSON)")
+Rel(gateway, GoogleMaps, "Activiteiten tonen op kaart", "HTTPS (REST API, JSON)")
+Rel(gateway, accommodatieAanbieder, "Accommodatie opties ophalen / reserveren", "HTTPS (REST API, JSON)")
+
+@enduml
