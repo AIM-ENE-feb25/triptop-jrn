@@ -14,7 +14,8 @@ Person(Reiziger, "Reiziger", "Een reiziger die zonder zorgen op reis wil.")
 Person(Reisagent, "Reisagent", "Helpt met de reis plannen voor andere reizigers")
 
 ' Definieer externe container voor IdentityProvider
-Container_Ext(id, "IdentityProvider", "Een applicatie voor het identificeren en authoriseren van een gebruiker")
+Container_Ext(id, "Login - Signup API", "Een applicatie voor het identificeren en authoriseren van een gebruiker")
+Container_Ext(FbLogin, "Facebook Media API", "Zorgt voor het inloggen via facebook")
 
 ' Definieer de interne systemen binnen de TripTop boundary
 System_Boundary(triptop_core, "TripTop") {
@@ -37,7 +38,11 @@ System_Ext(accommodatieAanbieder, "Booking.com API", "Externe accommodatie provi
 ' Definieer relaties
 Reiziger --> id : "Logt in via"
 Reisagent --> id : "Logt in via"
+Reiziger -->FbLogin : "logt in via facebook met"
+Reisagent -->FbLogin : "logt in via facebook met"
+
 id --> triptop : "Stuurt gebruiker door naar"
+FbLogin --> triptop : "Stuurt gebruiker door naar"
 
 triptop --> backend : "Stuurt API calls naar"
 backend --> db : "Halen/slaan gegevens op"
