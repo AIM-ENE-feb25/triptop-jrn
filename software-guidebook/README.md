@@ -14,7 +14,9 @@ Dit software guidebook geeft een overzicht van de Triptop-applicatie. Het bevat 
 
 ![Context diagram Triptop algemeen](../opdracht-diagrammen/ContextDiagram.puml)
 
+### 2.1 gebruikers
 
+De gebruikers van het systeem gebruikers die een reis willen plannen en boeken via Triptop en deze gedurende de reis de functionaliteit 
 
 Toelichting op de context van de software inclusief System Context Diagram:
 * Functionaliteit
