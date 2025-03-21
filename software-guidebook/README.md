@@ -146,8 +146,13 @@ Zodra de database kan bevestigen dat de login valide is wordt de gebruiker ingel
 Er is een mogelijkheid om in te loggen met een Facebook account. Dit gebeurd doormiddel van de Facebook Media API. Deze verwerkt de login en geeft een acces token. Deze sturen wij zelf weer door naar de Facebook graph API. 
 Van uit deze api krijgen we in Json gegevens terug. Dat zijn een ID, een username en een email. Deze neemt de backend op. De backend maakt er vervolgends een JWT-token van en controleerd deze op de database en logt zo de gebruiker in.
 
+#### reis boeken navitia
 
-ToDo: in voegen reis boeken Container diagram.
+![Container diagram reis boeken navitia]()
+
+#### vlucht boeken SkyScanner
+
+![Container diagram reis boeken SkyScanner]()
 
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
@@ -205,36 +210,71 @@ ToDo: in voegen reis boeken Container diagram.
 
 
 
-### 8.2. ADR-002 TITLE
+### 8.2. ADR-002 intergratie PayPal wallet in Triptop
+## 1. Titel
+**Betalingen bij externe partijen via PayPal Wallet**
 
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
+## 2. Status
+**Voorstel**
 
-#### Context
+## 3. Context
+Om bij bepaalde bedrijven of bureaus producten of diensten te kunnen bestellen, moet er een betaalmogelijkheid zijn.
 
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
+## 4. Beslissing
+Om betalingen zo soepel mogelijk te laten verlopen, hebben wij gekozen voor een centrale betaalfunctie binnen Triptop zelf.
+Zo kunnen gebruikers overal betalen ongeacht de valuta of de locatie. Niet alle landen accepteren banken uit nederland.
+Ook niet iedereen heeft een CreditCard om ergens te betalen of heeft behoefte deze aan te vragen. Om te voorkomen dat mensen tegen betaal problemen aanlopen hebben wij gekozen dit in ons platform te intergreren.
 
-#### Considered Options
+We hebben iDEAL, PayPal en bankoverschrijvingen overwogen en gekozen voor **PayPal** vanwege de wereldwijde beschikbaarheid. PayPal ondersteunt betalingen met creditcards,
+het koppelen van bankrekeningen en biedt bovendien de mogelijkheid om je PayPal Wallet op te waarderen met iDEAL.
+Hierdoor kunnen ook gebruikers zonder creditcard internationaal betalen.
 
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
+## 5. Betalingsopties vergelijking
 
-#### Decision
+| Forces              | iDEAL | PayPal | Bank |
+|---------------------|:-----:|:------:|:----:|
+| **Beschikbaarheid** | -   | ++     | 0    |
+| **Creditcards**     | --  | ++     | ++   |
+| **Betrouwbaarheid** | ++  | +      | ++   |
+| **Extra kosten**    | ?   | +      | +    |
 
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
+## 6. Consequenties
 
-#### Status
+### **Voordelen:**
+Het gebruik van paypal heeft de volgende voordelen:
 
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
+- Betalingen in de wallet kunnen worden opgewaardeerd via iDEAL.
+- Ondersteunt creditcards en het koppelen van bankrekeningen.
+- Wereldwijd bruikbaar.
 
-#### Consequences
+### **Nadelen:**
+Ook heeft het enkele nadelen:
 
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
+- PayPal is opgericht door Elon Musk en heeft in het verleden kritiek gekregen op beleid en kosten.
+- Externe API vereist integratie en communicatie met andere API’s.
+- Niet alle bedrijven accepteren PayPal.
 
+## 7. Alternatieven overwogen
+
+### **Geen betalingen via Triptop**
+- **Voordeel:** Eenvoudigere integratie, geen extra betalingslogica nodig.
+- **Nadeel:** Gebruikers kunnen mogelijk niet betalen met hun gewenste betaalmethode.
+
+Geen betalingsmogelijkheden van Triptop zelf was een overwogen optie.
+We kwamen er achter dat veel landen geen nederlandse pinpassen of bankbetalingen accepteren.
+Vooral landen die nog niet echt klaar zijn voor grote vakantieganger
+
+### **iDEAL**
+- **Voordeel:** Veelgebruikte betaalmethode in Nederland.
+- **Nadeel:** Werkt alleen in Nederland en ondersteunt geen buitenlandse valuta.
+
+### **Bankoverschrijvingen**
+- **Voordeel:** Werkt (bijna) overal en is een directe manier van betalen.
+- **Nadeel:** Vereist directe bankgegevens en extra beveiligingsmaatregelen.
+
+## 8. bronnen
+
+ToDo: Toevoegen bronnen
 ### 8.3. ADR-003 TITLE
 
 > [!TIP]
