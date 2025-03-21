@@ -3,16 +3,19 @@
 ## 1. Titel
 **Integratie van de Skyscanner API voor Vluchtinformatie**
 
-## 2. Context
+## 2. Status
+**Voorstel**
+
+## 3. Context
 Onze applicatie moet vluchtinformatie kunnen ophalen voor het plannen van reizen. Skyscanner API biedt uitgebreide vluchtdata. Alternatieven, zoals Kiwi.com of niet-publieke oplossingen zoals Google Flights, zijn minder geschikt voor onze toepassing.
 
-## 3. Beslissing
+## 4. Beslissing
 Wij kiezen voor de Skyscanner API vanwege:
 - **Uitgebreide data:** Betrouwbare en actuele vluchtinformatie.
 - **Toegankelijkheid:** Eenvoudige integratie met de API.
 - **Focus op reisdata:** Specifiek ontworpen voor vluchtzoekopdrachten.
 
-## 4. Consequenties
+## 5. Consequenties
 
 ### Voordelen:
 - Kwalitatieve en gedetailleerde vluchtinformatie.
@@ -23,7 +26,7 @@ Wij kiezen voor de Skyscanner API vanwege:
 - Mogelijke beperkingen in verzoeken afhankelijk van het contract.
 - Afhankelijkheid van externe data voor kritieke functionaliteit.
 
-## 5. Alternatieven Overwogen
+## 6. Alternatieven Overwogen
 
 | Kenmerk                  | Skyscanner  | Kiwi.com | 
 |--------------------------|-------------|----------|
@@ -32,8 +35,7 @@ Wij kiezen voor de Skyscanner API vanwege:
 | **Documentatie**         | ++          | +        | 
 | **Kosten/Kwota**         | +           | ?        |
 
-## 6. Status
-**Voorstel**
+
 
 ---
 

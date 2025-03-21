@@ -3,7 +3,10 @@
 ## 1. Titel
 **Routeplanning: Vergelijking tussen Navitia en Google Maps**
 
-## 2. Context
+## 2. Status
+**Voorstel**
+
+## 3. Context
 Voor de routeplanning in onze applicatie is het noodzakelijk om gebruikers meerdere reismogelijkheden te bieden (zoals auto, openbaar vervoer, fietsen en wandelen). Er zijn twee hoofdopties overwogen:
 
 - **Google Maps API (specifiek de Google Directions API / Routes API):**  
@@ -12,14 +15,14 @@ Voor de routeplanning in onze applicatie is het noodzakelijk om gebruikers meerd
 - **Navitia API:**  
   Een open platform dat zich richt op multi-modale reisdata, vaak tegen lagere kosten (inclusief een gratis tier) maar met een mogelijk beperkter dekkingsgebied en minder gedetailleerde wereldwijde data.
 
-## 3. Beslissing
+## 4. Beslissing
 Wij kiezen voor de integratie van **Navitia API** als primaire routeplanner, met de mogelijkheid om de **Google Directions API / Routes API** als fallback of aanvullende bron te gebruiken indien er specifieke, wereldwijde data nodig is. Deze beslissing is gebaseerd op de volgende overwegingen:
 
 - **Kosten:** Navitia biedt een aantrekkelijk gratis tier en lagere instapkosten, wat ideaal is voor de initiële ontwikkelfase.
 - **Multi-modale routeplanning:** Navitia is specifiek ontworpen voor routes met meerdere vervoerswijzen, wat aansluit bij onze functionele eisen.
 - **Uitbreidbaarheid:** Indien we later internationale of zeer gedetailleerde route-informatie nodig hebben, kan de Google Directions API als aanvullende service worden geïntegreerd.
 
-## 4. Consequenties
+## 5. Consequenties
 
 ### Voordelen:
 - **Navitia:**
@@ -40,7 +43,7 @@ Wij kiezen voor de integratie van **Navitia API** als primaire routeplanner, met
   - Hogere kosten bij intensief gebruik.
   - Complexere prijsstructuur en quota-beperkingen.
 
-## 5. Alternatieven Overwogen
+## 6. Alternatieven Overwogen
 
 | Kenmerk                         | Navitia                                                          | Google  Routes API                                                                                  |
 |---------------------------------|------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
@@ -50,8 +53,7 @@ Wij kiezen voor de integratie van **Navitia API** als primaire routeplanner, met
 | **Nauwkeurigheid en details**   | Goed, met focus op openbaar vervoer                              | Zeer gedetailleerd en accuraat                                                                      |
 | **Documentatie & Support**      | Voldoende, maar minder uitgebreid dan Google Maps                | Uitgebreide en robuuste documentatie en ondersteuning                                               |
 
-## 6. Status
-**Voorstel**
+
 
 ---
 
