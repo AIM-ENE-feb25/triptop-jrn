@@ -1,0 +1,38 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!include <C4/C4_Container>
+
+title Dynamic Container Diagram voor Routeplanning met Navitia API
+
+LAYOUT_WITH_LEGEND()
+SHOW_PERSON_OUTLINE()
+
+' Personen bovenaan
+Person(Reiziger, "Reiziger", "Een reiziger die routeplanning gebruikt.")
+Person(Reisagent, "Reisagent", "Helpt met het plannen van reizen voor anderen")
+
+' TripTop system boundary in het midden
+System_Boundary(triptop_core, "TripTop") {
+    Container(ui, "TripTop Web App", "React", "Gebruikersinterface voor routeplanning")
+    Container(backend, "TripTop Back-end", "Java", "Verwerkt business logica, API-integraties en database opslag")
+    Container(db, "TripTop Database", "MSSQL", "Opslag van route- en gebruikersdata")
+    Container(gateway, "API Gateway", "React/Node", "Verwerkt externe API-aanroepen")
+}
+
+' Externe systemen onderaan
+System_Ext(navitia, "Navitia API", "REST API", "Externe API voor multi-modale routeplanning")
+
+' Dynamische interacties met genummerde stappen
+Reiziger --> ui : (0) Vraagt routeplanning aan
+Reisagent --> ui : (0) Vraagt routeplanning aan voor anderen
+
+ui --> backend : (1) Verstuurd routeverzoek (via TripTop API - JSON/HTTPS)
+backend --> db : (2) Controleert bestaande routegegevens of gebruikersdata (SQL/TCP)
+backend --> gateway : (3) Vraagt route op bij externe service via API Gateway (JSON/HTTPS)
+gateway --> navitia : (4) Vraagt route op bij Navitia API (JSON/HTTPS)
+navitia --> gateway : (5) Retourneert routegegevens (JSON/HTTPS)
+gateway --> backend : (6) Retourneert externe routegegevens (JSON/HTTPS)
+backend --> db : (7) Slaat routegegevens op (SQL/TCP)
+backend --> ui : (8) Retourneert verwerkte routegegevens (JSON/HTTPS)
+
+@enduml

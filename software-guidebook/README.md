@@ -110,17 +110,17 @@ Er wordt voor de bouwstenen gebruik gemaakt van externe API's. Zo hebben we de b
 
 #### **Functionele mapping naar API's**
 
-| **Functionaliteit**     | **Externe API**                               | **Beschrijving** |
-|------------------------|----------------------------------------------|----------------|
-| **Authenticatie** | Login - Signup API, Facebook Media API | Inloggen en authenticeren van gebruikers. |
-| **Betalingen** | Paypal API | Verwerken van betalingen voor boekingen en tickets. |
-| **Reisaanbieder** | ReisAanbieder API | Ophalen en boeken van bus-, trein- en vliegreizen. |
-| **Eetaanbieder** | Uber Eats Scraper API | Opvragen van restaurants, menu's en reviews. |
-| **Autoaanbieder** | Booking.com API | Ophalen en huren van auto's of fietsen. |
-| **Dagbesteding** | Booking.com API | Ophalen en boeken van activiteiten en bezienswaardigheden. |
-| **Openbaar vervoer** | Public Transport API | Opvragen van reisschema’s en lokaal OV-informatie. |
-| **Google Maps** | Google Maps API | Weergave van locaties en routes. |
-| **Accommodatie** | Booking.com API | Boeken van hotels, hostels en andere accommodaties. |
+| **Functionaliteit**  | **Externe API**                         | **Beschrijving** |
+|----------------------|-----------------------------------------|----------------|
+| **Authenticatie**    | Login - Signup API, Facebook Media API  | Inloggen en authenticeren van gebruikers. |
+| **Betalingen**       | Paypal API                              | Verwerken van betalingen voor boekingen en tickets. |
+| **Reisaanbieder**    | ReisAanbieder API                       | Ophalen en boeken van bus-, trein- en vliegreizen. |
+| **Eetaanbieder**     | Uber Eats Scraper API                   | Opvragen van restaurants, menu's en reviews. |
+| **Autoaanbieder**    | Booking.com API                         | Ophalen en huren van auto's of fietsen. |
+| **Dagbesteding**     | Booking.com API                         | Ophalen en boeken van activiteiten en bezienswaardigheden. |
+| **Openbaar vervoer** | Public Transport API                    | Opvragen van reisschema’s en lokaal OV-informatie. |
+| **Google Maps**      | Google Maps API                         | Weergave van locaties en routes. |
+| **Accommodatie**     | Booking.com API                         | Boeken van hotels, hostels en andere accommodaties. |
 
 #### **modulariteit**
 Het moet mogelijk zijn om later meerdere bouwstenen toe te voegen of weg te halen. De bouwstenen dienen dus zelfstandig te kunnen opereren. Google maps is een uitzondering daarop. Deze zou eventueel de routebeschrijving kunnen geven van bijvoorbeeld een restaurant.
@@ -145,8 +145,35 @@ Zodra de database kan bevestigen dat de login valide is wordt de gebruiker ingel
 Er is een mogelijkheid om in te loggen met een Facebook account. Dit gebeurd doormiddel van de Facebook Media API. Deze verwerkt de login en geeft een acces token. Deze sturen wij zelf weer door naar de Facebook graph API. 
 Van uit deze api krijgen we in Json gegevens terug. Dat zijn een ID, een username en een email. Deze neemt de backend op. De backend maakt er vervolgends een JWT-token van en controleerd deze op de database en logt zo de gebruiker in.
 
+--- 
 
-ToDo: in voegen reis boeken Container diagram.
+#### **Routeplanning Container Diagram**
+
+![routeplanning container diagram](../opdracht-diagrammen/DynamicContainer-NavitiaApi.png)
+
+Bovenstaand diagram laat zien hoe de routeplanning functionaliteit binnen TripTop is opgebouwd. De gebruiker (of reisagent) vraagt een routeplanning aan via de webapplicatie. De webapplicatie communiceert met de backend via onze eigen API.
+
+De backend controleert of er al routegegevens beschikbaar zijn in de database. Indien nodig vraagt de backend route-informatie op bij externe bronnen via de API Gateway. De API Gateway verwerkt de aanvraag en communiceert met de externe Navitia API.
+Proces:
+
+    De gebruiker stuurt een routeaanvraag via de TripTop Web App.
+    De backend valideert en checkt bestaande data in de database.
+    Bij geen resultaat haalt de backend via de API Gateway nieuwe data op bij de Navitia API.
+    De routegegevens worden opgeslagen en teruggestuurd naar de gebruiker.
+
+--- 
+#### **Vluchtinformatie Container Diagram**
+
+![Skyscanner diagram](../opdracht-diagrammen/DynamicContainerSkyScannerApi.png)
+Bovenstaand diagram laat de werking van het opvragen van vluchtinformatie binnen TripTop zien. Zowel de gebruiker als de reisagent kan vluchtinformatie opvragen via de webapplicatie.
+
+De aanvraag komt altijd eerst bij de backend via onze eigen API. Vervolgens handelt de backend de logica af en controleert bestaande vluchtdata in de database. Wanneer er actuele data nodig is, wordt via de API Gateway een aanvraag naar de externe Skyscanner API gestuurd.
+Proces:
+
+    De gebruiker doet een vluchtzoekopdracht via de TripTop Web App.
+    De backend controleert bestaande vluchtgegevens in de database.
+    Zo nodig haalt de backend via de API Gateway vluchtinformatie op bij Skyscanner.
+    De vluchtgegevens worden opgeslagen en teruggestuurd naar de gebruiker.
 
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.

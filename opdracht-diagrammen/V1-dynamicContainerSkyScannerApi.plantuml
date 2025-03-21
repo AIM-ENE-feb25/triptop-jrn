@@ -1,0 +1,38 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!include <C4/C4_Container>
+
+title Dynamic Container Diagram voor Vluchtinformatie met Skyscanner API
+
+LAYOUT_WITH_LEGEND()
+SHOW_PERSON_OUTLINE()
+
+' Personen bovenaan
+Person(Reiziger, "Reiziger", "Een reiziger die vluchtinformatie zoekt.")
+Person(Reisagent, "Reisagent", "Assisteert bij het plannen van reizen voor anderen")
+
+' TripTop system boundary in het midden
+System_Boundary(triptop_core, "TripTop") {
+    Container(ui, "TripTop Web App", "React", "Gebruikersinterface voor vluchtzoekopdrachten")
+    Container(backend, "TripTop Back-end", "Java", "Verwerkt business logica, API-integraties en database opslag")
+    Container(db, "TripTop Database", "MSSQL", "Opslag van vlucht- en gebruikersdata")
+    Container(gateway, "API Gateway", "React/Node", "Verwerkt externe API-aanroepen")
+}
+
+' Externe systemen onderaan
+System_Ext(skyscanner, "Skyscanner API", "REST API", "Externe API voor vluchtinformatie en prijsdata")
+
+' Dynamische interacties met genummerde stappen
+Reiziger --> ui : (0) Vraagt vluchtinformatie op
+Reisagent --> ui : (0) Vraagt vluchtinformatie op voor anderen
+
+ui --> backend : (1) Verstuurd vluchtzoekverzoek (via TripTop API - JSON/HTTPS)
+backend --> db : (2) Controleert bestaande vlucht- of gebruikersdata (SQL/TCP)
+backend --> gateway : (3) Vraagt vluchtdata op bij externe service via API Gateway (JSON/HTTPS)
+gateway --> skyscanner : (4) Vraagt vluchtdata op bij Skyscanner API (JSON/HTTPS)
+skyscanner --> gateway : (5) Retourneert vluchtdata (JSON/HTTPS)
+gateway --> backend : (6) Retourneert externe vluchtdata (JSON/HTTPS)
+backend --> db : (7) Slaat vluchtgegevens op (SQL/TCP)
+backend --> ui : (8) Retourneert verwerkte vluchtinformatie (JSON/HTTPS)
+
+@enduml
