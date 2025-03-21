@@ -1,0 +1,29 @@
+@startuml
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!include <C4/C4_Container>
+
+title C4 Container Diagram voor Routeplanning met Navitia API
+
+LAYOUT_WITH_LEGEND()
+SHOW_PERSON_OUTLINE()
+
+' Definieer een gebruiker die routeplanning zoekt
+Person(Reiziger, "Reiziger", "Een reiziger die op zoek is naar optimale routes voor openbaar vervoer, fietsen, wandelen, etc.")
+
+' Definieer de interne systemen binnen de TripTop boundary
+System_Boundary(triptop_core, "TripTop") {
+    Container(backend, "TripTop Back-end", "Java", "Verwerkt API requests en vertaalt gebruikersinput naar routeplanningsdata.")
+    Container(db, "TripTop Database", "MSSQL", "Opslag van route- en gebruikersgegevens")
+    Container(gateway, "API Gateway", "React", "Handelt API calls af en fungeert als centrale router voor externe requests")
+}
+
+' Definieer het externe systeem voor routeplanning
+Container_Ext(Navitia, "Navitia API", "REST API", "Externe API voor multi-modale routeplanning (openbaar vervoer, fietsen, wandelen, etc.)")
+
+' Relaties
+Reiziger --> gateway : "Verstuurd routeverzoek via web interface"
+gateway --> Navitia : "Verstuurt routeplanning verzoeken\nvia HTTPS (REST API, JSON)"
+backend --> db : "Halen/slaan route- en gebruikersdata op"
+
+@enduml
