@@ -6,7 +6,7 @@
 ## Context
 > Voor de TripTop applicatie is er een externi api nodig voor het vinden van bestellen van eten/drinken.
 
-## ALternatieven
+## Alternatieven
 
 - Uber Eats Scraper API
 - The Fork The Spoon
