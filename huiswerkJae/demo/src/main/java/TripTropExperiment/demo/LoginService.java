@@ -20,7 +20,7 @@ public class LoginService {
     }
 
     public String performLogin(String username, String password) {
-        String loginUrl = "https://triptop-identity.wiremockapi.cloud/login";
+        String loginUrl = "http://localhost:8080/login";
 
         // Prepare JSON body using a Map
         Map<String, String> loginRequestBody = new HashMap<>();

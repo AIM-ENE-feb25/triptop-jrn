@@ -16,7 +16,7 @@ public class AccessCheckService {
     }
 
     public void checkAppAccess(String username, String application, String token) {
-        String accessUrl = "https://triptop-identity.wiremockapi.cloud/checkAppAccess?token=" + token;
+        String accessUrl = "http://localhost:8080/checkAppAccess?token=" + token;
 
         // Prepare JSON body using a Map
         Map<String, String> accessRequestBody = new HashMap<>();
