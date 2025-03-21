@@ -1,5 +1,6 @@
 package com.example.huiswerkAPI;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -30,19 +31,24 @@ public class HuiswerkController {
     }
 
     @GetMapping("/reviews")
-    public ResponseEntity<String> getAttractionReviews(@RequestParam String id, @RequestParam(defaultValue = "1") int page) {
+    public ResponseEntity<JsonNode> getAttractionReviews(
+            @RequestParam String id,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestHeader("x-rapidapi-key") String rapidApiKey,
+            @RequestHeader("x-rapidapi-host") String rapidApiHost) {
+
         String url = "https://booking-com15.p.rapidapi.com/api/v1/attraction/getAttractionReviews?id=" + id + "&page=" + page;
 
         // Maak headers aan
         HttpHeaders headers = new HttpHeaders();
-        headers.set("x-rapidapi-key", "c70851b4c7msh277df39776047c1p15ca0ajsnc9fc22ec0514");
-        headers.set("x-rapidapi-host", "booking-com15.p.rapidapi.com");
+        headers.set("x-rapidapi-key", rapidApiKey);
+        headers.set("x-rapidapi-host", rapidApiHost);
 
         // Maak een request entity aan (zonder body omdat het een GET is)
         HttpEntity<String> request = new HttpEntity<>(headers);
 
         // Verstuur GET-aanvraag en ontvang response
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+        ResponseEntity<JsonNode> response = restTemplate.exchange(url, HttpMethod.GET, request, JsonNode.class);
 
         return ResponseEntity.ok(response.getBody());
     }
