@@ -23,8 +23,8 @@ System_Boundary(triptop_core, "TripTop") {
 System_Ext(navitia, "Navitia API", "REST API", "Externe API voor multi-modale routeplanning")
 
 ' Dynamische interacties met genummerde stappen
-Reiziger --> ui : Boekt routeplanning
-Reisagent --> ui : Boekt routeplanning voor anderen
+Reiziger --> ui : (0) Boekt routeplanning
+Reisagent --> ui : (0) Boekt routeplanning voor anderen
 
 ui --> gateway : (1) Verstuurd routeverzoek (JSON/HTTPS)
 gateway --> navitia : (2) Verzendt verzoek naar Navitia API (JSON/HTTPS)

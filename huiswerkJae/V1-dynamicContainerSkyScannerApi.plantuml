@@ -23,8 +23,8 @@ System_Boundary(triptop_core, "TripTop") {
 System_Ext(skyscanner, "Skyscanner API", "REST API", "Externe API voor vluchtinformatie en prijsdata")
 
 ' Dynamische interacties met genummerde stappen
-Reiziger --> ui : Boekt vluchtzoekopdracht
-Reisagent --> ui : Boekt vluchtzoekopdracht voor anderen
+Reiziger --> ui : (0) Boekt vluchtzoekopdracht
+Reisagent --> ui : (0) Boekt vluchtzoekopdracht voor anderen
 
 ui --> gateway : (1) Verstuurd vluchtzoekverzoek (JSON/HTTPS)
 gateway --> skyscanner : (2) Verzendt verzoek naar Skyscanner API (JSON/HTTPS)
