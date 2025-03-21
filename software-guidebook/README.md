@@ -9,32 +9,31 @@ Dit software guidebook geeft een overzicht van de Triptop-applicatie. Het bevat 
 
 ## 2. Context
 
-> [!IMPORTANT]
-> Werk zelf dit hoofdstuk uit met context diagrammen en een beschrijving van de context van de software.
-
 ![Context diagram Triptop algemeen](../opdracht-diagrammen/ContextDiagram.png)
 
-### 2.1 gebruikers
+### 2.1 Gebruikers
 
-De gebruikers van het systeem gebruikers die een reis willen plannen en boeken via Triptop. Deze staan hierboven als "reiziger" aangeduid.
-Daarnaast zijn er medewerkers van (digitale) reisbureau's, hierboven aangeduid als "reisagent", die reizigers ondersteunen bij het boeken van hun droom reis.
-Uiteraard zijn er mensen die gewoon even komen kijken wat de website te bieden heeft. Deze laten we in deze even buiten scope. Dit omdat bijna alle functionaliteit alleen van
-toepassing is als je daadwerkelijk inlogd en een vakantie gaat boeken. Verder geld dit diagram enkel voor gebruikers. Administratoren of anders betrokkene hebben een andere context.
+De gebruikers van het systeem zijn mensen die een reis willen plannen en boeken via Triptop. In het diagram worden zij aangeduid als **"reiziger"**.  
+Daarnaast zijn er medewerkers van (digitale) reisbureaus, aangeduid als **"reisagent"**, die reizigers ondersteunen bij het boeken van hun droomreis.  
+Uiteraard zijn er ook bezoekers die gewoon even komen kijken wat de website te bieden heeft. Deze laten we in deze context buiten beschouwing, omdat bijna alle functionaliteiten alleen van toepassing zijn als je daadwerkelijk inlogt en een vakantie boekt.  
+Verder geldt dit diagram enkel voor gebruikers; beheerders of andere betrokkenen hebben een andere context.
 
+### 2.2 Functionaliteit & externe systemen
 
-## 2.2 Functionaliteit & externe systemen
+Binnen Triptop zijn verschillende functionaliteiten beschikbaar die het boeken en beleven van een reis ondersteunen. Deze **'bouwstenen'** hebben elk hun eigen functie.  
+In het contextdiagram zijn de volgende functionaliteiten opgenomen:
 
-Binnen Triptop zijn verschillende functionaliteiten die ondersteunen bij het boeken en ervaren van een reis. Deze 'bouwstenen' hebben elk hun eigen functie.
-De functionaliteiten zijn in het contextdiagram als volgt gemaakt:
-- BetaalSysteem: Dit is een systeem waarmee mensen op onze applicatie kunnen betalen. Denk hierbij aan het boeken van een vlucht of het bestellen van tickets voor een museaum.
-- Reisaanbieder: Hier kan de reiziger vluchten, treinreizen of busreizen naar de bestemming bekijken en eventueel boeken. In deze gaat het voornamelijk over het boeken van de reis naar de vakantie bestemming toe. Voor reizen op locatie zie 'openbaar vervoer' en 'autoAanbieder'.
-- Eetaanbieder: Vanaf hier kunnen de reizigers de restaurents in de buurt bekijken. De locaties, menukaarten en reviews zijn te zien om het makkelijk te maken om een geschikte eetgelegenheid te vinden.  
-- Autoaanbieder: Dit is een functionaliteit die de reiziger de mogelijkheid geeft om een auto te huren op locatie.
-- Dagebesteding: Hier zijn de bezienswaardigheden in de buurt te vinden. Het is mogelijk om tickets te bestellen voor de desbetreffende activiteit.
-- OpenbaarVervoer: de rijschema's van de verschillende opties voor het openbaar vervoer worden getoond. Zo kan de reiziger makkelijk vanaf 1 punt zijn plaatselijke reis plannen met het ov.
-- GoogleMaps: Dit is een kaart waar alles op weergegeven kan worden. Zo kan de gebruiker zien waar hij is en waar hij heen moet of kan.
-- accomodatie: Hier kan de reiziger zijn accomodatie regelen/boeken en betalen vanaf de applicatie.
-Voor alle functionaliteiten worden externe systemen gebruikt. Zo zijn de functionaliteiten zoveel mogelijk lokaal te gebruiken. Zo heeft de gebruiker maxinmaal comfort van de applicatie. In hoofdstuk 7 worden de Api's verder toegeligd en in de vorm van een container diagram uitgelegd. 
+- **Betaalsysteem:** Dit systeem maakt betalingen binnen de applicatie mogelijk, zoals het boeken van een vlucht of het bestellen van tickets voor een museum.
+- **Reisaanbieder:** Hier kunnen reizigers vluchten, treinreizen of busreizen naar hun bestemming bekijken en eventueel boeken. Dit betreft voornamelijk de reis naar de vakantiebestemming. Voor lokaal vervoer, zie 'Openbaar vervoer' en 'Autoaanbieder'.
+- **Eetaanbieder:** Reizigers kunnen restaurants in de buurt bekijken, inclusief locaties, menukaarten en reviews, om eenvoudig een geschikte eetgelegenheid te vinden.
+- **Autoaanbieder:** Biedt reizigers de mogelijkheid om een auto te huren op locatie.
+- **Dagbesteding:** Hier zijn bezienswaardigheden in de buurt te vinden, en het is mogelijk om tickets te bestellen voor activiteiten.
+- **Openbaar vervoer:** Toont reisschema’s van verschillende opties voor het openbaar vervoer, zodat reizigers eenvoudig hun lokale reis kunnen plannen.
+- **Google Maps:** Een kaart waarop locaties worden weergegeven, zodat gebruikers kunnen zien waar ze zijn en waar ze naartoe kunnen gaan.
+- **Accommodatie:** Hiermee kunnen reizigers hun verblijf regelen, boeken en betalen via de applicatie.
+
+Voor alle functionaliteiten worden externe systemen gebruikt, zodat de functionaliteiten lokaal beschikbaar zijn en gebruikers maximaal comfort ervaren.  
+In **hoofdstuk 7** worden de API's verder toegelicht en uitgelegd in de vorm van een **containerdiagram**.
 
 
 ## 3. Functional Overview
@@ -99,13 +98,36 @@ Voordat deze casusomschrijving tot stand kwam, heeft de opdrachtgever de volgend
 
 ###     7.1. Containers
 
-Container diagram
+## hoofd application
 
-> [!IMPORTANT]
-> Het moet mogelijk zijn om later meerdere bouwstenen toe te voegen of weg te halen. De bouwstenen dienen dus zelfstandig te kunnen opereren. Google maps is een uitzondering daarop. Deze zou eventueel de routebeschrijving kunnen geven van bijvoorbeeld een restaurant.
-Er wordt voor de bouwstenen waar dit mogelijk is gebruik gemaakt van externe API's. Zo hebben we de beste functionaliteiten met de meest flexibele en up-to-date data.
+![hoofd applicatie container diagram](../opdracht-diagrammen/containerDiagram.png)
 
-> Voeg toe: Container Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
+Dit is het containerdiagram die aangeeft hoe het programma werkt en met welke api's deze communiceert. Zowel de reiziger als de reisagent heeft de mogelijkheid om in te loggen bij de eigen site. Dit wordt geregeld door de 'login-signup' API afgehandeld.
+Deze handeld een groot deel van het inlogprocess af. Ook kan er ingelogd worden met de Facebook API. Deze werkingen worden verder uitgelegd in het containerdiagram van 'login'. 
+
+Zodra de gebruiker is ingelogd komt deze op de front-end van de applicatie. Hier aangegeven als 'TripTop web applicatie'. Hier worden de bouwblokken in een interface getoond aan de gebruiker om interactie mogelijk te maken.
+Er wordt voor de bouwstenen gebruik gemaakt van externe API's. Zo hebben we de beste functionaliteiten met de meest flexibele en up-to-date data.
+
+#### **Functionele mapping naar API's**
+
+| **Functionaliteit**     | **Externe API**                               | **Beschrijving** |
+|------------------------|----------------------------------------------|----------------|
+| **Authenticatie** | Login - Signup API, Facebook Media API | Inloggen en authenticeren van gebruikers. |
+| **Betalingen** | Paypal API | Verwerken van betalingen voor boekingen en tickets. |
+| **Reisaanbieder** | ReisAanbieder API | Ophalen en boeken van bus-, trein- en vliegreizen. |
+| **Eetaanbieder** | Uber Eats Scraper API | Opvragen van restaurants, menu's en reviews. |
+| **Autoaanbieder** | Booking.com API | Ophalen en huren van auto's of fietsen. |
+| **Dagbesteding** | Booking.com API | Ophalen en boeken van activiteiten en bezienswaardigheden. |
+| **Openbaar vervoer** | Public Transport API | Opvragen van reisschema’s en lokaal OV-informatie. |
+| **Google Maps** | Google Maps API | Weergave van locaties en routes. |
+| **Accommodatie** | Booking.com API | Boeken van hotels, hostels en andere accommodaties. |
+
+#### **modulariteit**
+Het moet mogelijk zijn om later meerdere bouwstenen toe te voegen of weg te halen. De bouwstenen dienen dus zelfstandig te kunnen opereren. Google maps is een uitzondering daarop. Deze zou eventueel de routebeschrijving kunnen geven van bijvoorbeeld een restaurant.
+Dit wil zeggen dat er geen afhankelijkheden mogen zijn tussen de verschillende blokken. 
+
+Omdat het mogelijk moet zijn om de API's te wisselen indien er dingen veranderen of we voor bepaalde regio's andere API's nodig hebben is het van belang dat er gewerkt word met een hexagonaal design in mind. Voor alle API's zal dus een port gemaakt moeten worden om de modulariteit te garanderen.
+
 
 ###     7.2. Components
 
