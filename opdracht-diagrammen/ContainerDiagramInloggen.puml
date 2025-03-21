@@ -13,25 +13,32 @@ Person(Reiziger, "Reiziger", "Een reiziger die zonder zorgen op reis wil.")
 Person(Reisagent, "Reisagent", "Helpt met de reis plannen voor andere reizigers")
 
 Container_Ext(fbLogin, "Facebook Media API", "Zorgt voor het inloggen via Facebook")
-Container_Ext(id, "Login - Signup API", "Een applicatie voor het identificeren en authoriseren van een gebruiker")
 Container_Ext(fbVerify, "Facebook Graph API", "haalt de gegevens van fb op")
+
 
 
 System_Boundary(triptop_core, "TripTop") {
     Container(backend, "TripTop Back-end", "Java", "Verwerken, controleren en aanpassen van API requests vanuit de web applicatie")
     Container(db, "TripTop Database", "MSSQL", "Opslag van gegevens")
+    Container(triptop, "TripTop Web Applicatie", "React", "User interface voor het plannen, boeken en bijhouden van vakanties")
+
 }
 
-Reiziger --> id : "Logt in op website"
-Reisagent --> id : "Logt in op website"
-Reiziger --> fbLogin : "Logt in op website"
-Reisagent --> fbLogin : "Logt in via Facebook"
+Reiziger --> triptop : "Logt in op website (1)"
+triptop --> backend : "stuurt inloggegevens ter controle[Json](2)"
+backend --> db : "Controleerd inloggegevens(3)"
+backend --> triptop : "Slaat de JWT-token op in de Session(4, 5A)"
+triptop --> triptop : "laat de username zien, en vervangt de login voor logout.(5,6A)"
 
-id --> backend : "verifieerd met JWT Token"
-backend --> db : "Controleerd inloggegevens"
-backend --> backend : "Genereert JWT na verificatie van facebook"
-fbLogin --> fbVerify : "verifieerd met FBaccess token"
-fbVerify --> backend : "stuur gegevens door in Json"
+Reisagent --> triptop : "Logt in op website(1)"
+
+
+Reiziger --> fbLogin : "Logt in via facebook(1A)"
+Reisagent --> fbLogin : "Logt in via Facebook(1A)"
+fbLogin --> fbVerify : "verifieerd met FBaccess token(2A)"
+fbVerify --> backend : "stuur gegevens door[Json](3A)"
+
+backend --> backend : "Genereert JWT na verificatie van facebook(4A)"
 
 
 @enduml

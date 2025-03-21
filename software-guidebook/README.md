@@ -29,7 +29,7 @@ In het contextdiagram zijn de volgende functionaliteiten opgenomen:
 - **Autoaanbieder:** Biedt reizigers de mogelijkheid om een auto te huren op locatie.
 - **Dagbesteding:** Hier zijn bezienswaardigheden in de buurt te vinden, en het is mogelijk om tickets te bestellen voor activiteiten.
 - **Openbaar vervoer:** Toont reisschema’s van verschillende opties voor het openbaar vervoer, zodat reizigers eenvoudig hun lokale reis kunnen plannen.
-- **Google Maps:** Een kaart waarop locaties worden weergegeven, zodat gebruikers kunnen zien waar ze zijn en waar ze naartoe kunnen gaan.
+- **Maps Functionaliteit:** Een kaart waarop locaties worden weergegeven, zodat gebruikers kunnen zien waar ze zijn en waar ze naartoe kunnen gaan.
 - **Accommodatie:** Hiermee kunnen reizigers hun verblijf regelen, boeken en betalen via de applicatie.
 
 Voor alle functionaliteiten worden externe systemen gebruikt, zodat de functionaliteiten lokaal beschikbaar zijn en gebruikers maximaal comfort ervaren.  
@@ -110,17 +110,18 @@ Er wordt voor de bouwstenen gebruik gemaakt van externe API's. Zo hebben we de b
 
 #### **Functionele mapping naar API's**
 
-| **Functionaliteit**     | **Externe API**                               | **Beschrijving** |
-|------------------------|----------------------------------------------|----------------|
-| **Authenticatie** | Login - Signup API, Facebook Media API | Inloggen en authenticeren van gebruikers. |
-| **Betalingen** | Paypal API | Verwerken van betalingen voor boekingen en tickets. |
-| **Reisaanbieder** | ReisAanbieder API | Ophalen en boeken van bus-, trein- en vliegreizen. |
-| **Eetaanbieder** | Uber Eats Scraper API | Opvragen van restaurants, menu's en reviews. |
-| **Autoaanbieder** | Booking.com API | Ophalen en huren van auto's of fietsen. |
-| **Dagbesteding** | Booking.com API | Ophalen en boeken van activiteiten en bezienswaardigheden. |
-| **Openbaar vervoer** | Public Transport API | Opvragen van reisschema’s en lokaal OV-informatie. |
-| **Google Maps** | Google Maps API | Weergave van locaties en routes. |
-| **Accommodatie** | Booking.com API | Boeken van hotels, hostels en andere accommodaties. |
+| **Functionaliteit**     | **Externe API**                        | **Beschrijving**                                           |
+|------------------------|----------------------------------------|------------------------------------------------------------|
+| **Authenticatie** | Facebook Media API | Inloggen en authenticeren van gebruikers.                  |
+| **Betalingen** | Paypal API                             | Verwerken van betalingen voor boekingen en tickets.        |
+| **Reisaanbieder** | Navitia API                            | Ophalen en boeken van bus- en treinreizen.                 |
+|**Vluchtaanbieder**| SkyScanner API                         | Ophalen en boeken van vluchten                             |
+| **Eetaanbieder** | Uber Eats Scraper API/ Tripadvisor API | Opvragen van restaurants, menu's en reviews.               |
+| **Autoaanbieder** | Booking.com API                        | Ophalen en huren van auto's of fietsen.                    |
+| **Dagbesteding** | Booking.com API                        | Ophalen en boeken van activiteiten en bezienswaardigheden. |
+| **Openbaar vervoer** | Public Transport API                   | Opvragen van reisschema’s en lokaal OV-informatie.         |
+| **Google Maps** | Google Maps API                        | Weergave van locaties en routes.                           |
+| **Accommodatie** | Booking.com API                        | Boeken van hotels, hostels en andere accommodaties.        |
 
 #### **modulariteit**
 Het moet mogelijk zijn om later meerdere bouwstenen toe te voegen of weg te halen. De bouwstenen dienen dus zelfstandig te kunnen opereren. Google maps is een uitzondering daarop. Deze zou eventueel de routebeschrijving kunnen geven van bijvoorbeeld een restaurant.
