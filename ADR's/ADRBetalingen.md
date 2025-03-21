@@ -13,8 +13,8 @@ We hebben iDEAL, PayPal en bankoverschrijvingen overwogen en gekozen voor **PayP
 
 ## 4. Betalingsopties vergelijking
 
-| Kenmerk          | iDEAL | PayPal | Bank |
-|-----------------|:-----:|:------:|:----:|
+| Forces              | iDEAL | PayPal | Bank |
+|---------------------|:-----:|:------:|:----:|
 | **Beschikbaarheid** | -   | ++     | 0    |
 | **Creditcards**     | --  | ++     | ++   |
 | **Betrouwbaarheid** | ++  | +      | ++   |
@@ -52,4 +52,4 @@ We hebben iDEAL, PayPal en bankoverschrijvingen overwogen en gekozen voor **PayP
 ---
 
 **Datum:** 21-03-2025  
-**Auteur:** Rob  
+**Auteur:** Rob Kokx
