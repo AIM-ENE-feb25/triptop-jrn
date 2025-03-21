@@ -39,17 +39,20 @@ public class HuiswerkController {
 
         String url = "https://booking-com15.p.rapidapi.com/api/v1/attraction/getAttractionReviews?id=" + id + "&page=" + page;
 
-        // Maak headers aan
+        // Maak headers
         HttpHeaders headers = new HttpHeaders();
         headers.set("x-rapidapi-key", rapidApiKey);
         headers.set("x-rapidapi-host", rapidApiHost);
 
-        // Maak een request entity aan (zonder body omdat het een GET is)
+        // Maak een request entity
         HttpEntity<String> request = new HttpEntity<>(headers);
 
-        // Verstuur GET-aanvraag en ontvang response
+        // Verstuur GET
         ResponseEntity<JsonNode> response = restTemplate.exchange(url, HttpMethod.GET, request, JsonNode.class);
 
+
+        // Return response
+        
         return ResponseEntity.ok(response.getBody());
     }
 }
