@@ -100,11 +100,9 @@ Voordat deze casusomschrijving tot stand kwam, heeft de opdrachtgever de volgend
 
 ## hoofd application
 
-![hoofd applicatie container diagram](../opdracht-diagrammen/containerDiagram.png)
+![hoofd applicatie container diagram](../opdracht-diagrammen/ContainerDiagramTripTop.png)
 
-Dit is het containerdiagram die aangeeft hoe het programma werkt en met welke api's deze communiceert. Zowel de reiziger als de reisagent heeft de mogelijkheid om in te loggen bij de eigen site. Dit wordt geregeld door de 'login-signup' API afgehandeld.
-Deze handeld een groot deel van het inlogprocess af. Ook kan er ingelogd worden met de Facebook API. Deze werkingen worden verder uitgelegd in het containerdiagram van 'login'. 
-
+De gebruiker kan inloggen via 2 wegen. De eigen manier die binnen de triptop accplicatie ontwikkeld is. Of via de facebook API met een facebook account. Dit word verder uitgelegd in 7.2 in een dynamisch Container diagram.
 Zodra de gebruiker is ingelogd komt deze op de front-end van de applicatie. Hier aangegeven als 'TripTop web applicatie'. Hier worden de bouwblokken in een interface getoond aan de gebruiker om interactie mogelijk te maken.
 Er wordt voor de bouwstenen gebruik gemaakt van externe API's. Zo hebben we de beste functionaliteiten met de meest flexibele en up-to-date data.
 
