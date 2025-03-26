@@ -1,0 +1,52 @@
+@startuml
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container("frontend", "Frontend", "Container met React.js", "Zorgt voor frontend en de gebruikersinterfaces")
+
+System_Boundary(triptop_core, "TripTop") {
+Component("restaurentController", "restaurentController","SpringBoot.java","Controller voor een restaurantscraper")
+Component("Activiteitencontroller", "Activiteitencontroller","SpringBoot.java","Controller voor een restaurantscraper")
+Component("restaurentService", "restaurentService","SpringBoot.java","Controller voor een restaurantscraper")
+Component("ActiviteitenService", "ActiviteitenService","SpringBoot.java","Controller voor een restaurantscraper")
+Component("ApiCaller", "ApiCaller(abstract)","Java Abstract class", "makes sure api's are called propperly")
+Component("RestaurentPort","RestaurentPort", "java interface", "Forceerd de juiste formatering van info van de api")
+Component("RestaurantApi1Implementatie", "RestaurantApi1Implementatie", "Java class", "neemt alle info op uit api1")
+Component("RestaurantApi1.2Implementatie", "RestaurantApi1.2Implementatie", "Java class", "neemt alle info op uit api1.2")
+Component("Api2Implementatie", "Api2Implementatie", "Java class", "neemt alle info op uit api2")
+}
+
+System_Ext("RestaurantApi1","RestaurantApi1")
+System_Ext("RestaurantApi2","RestaurantApi2")
+System_Ext("api2","api2")
+
+
+frontend --> restaurentController : "Roept aan met CRUD"
+frontend --> Activiteitencontroller : "Roept aan met CRUD"
+
+restaurentController --> restaurentService : "vraagt voor bedrijfslogica"
+Activiteitencontroller --> ActiviteitenService : "vraagt voor bedrijfslogica"
+
+restaurentService --> "RestaurantApi1Implementatie" : "aanroep"
+restaurentService --> "RestaurantApi1.2Implementatie" : "aanroep"
+
+ActiviteitenService --> "Api2Implementatie" : "aanroep"
+
+"RestaurantApi1Implementatie" --> "ApiCaller" : "extends"
+"RestaurantApi1.2Implementatie" --> "ApiCaller" : "extends"
+"Api2Implementatie" --> "ApiCaller" : "extends"
+
+"RestaurantApi1Implementatie" --> "RestaurentPort" : "implements"
+"RestaurantApi1.2Implementatie" --> "RestaurentPort" : "implements"
+"Api2Implementatie" --> "RestaurentPort" : "implements"
+
+"RestaurantApi1Implementatie" --> "RestaurantApi1" : "[Json]"
+"RestaurantApi1.2Implementatie" --> "RestaurantApi2" : "[Json]"
+
+"Api2Implementatie" --> "api2" : "aanroep[?]"
+
+
+
+
+@enduml
