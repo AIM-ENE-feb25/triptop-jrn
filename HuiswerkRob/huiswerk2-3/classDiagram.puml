@@ -2,24 +2,26 @@
 
 abstract class ApiCaller {
   + roepExternaApiAan()
-  + formatData
+  + Login(): void
+  + ApiCal(): ?
+  + TokenCheck(): boolean
 }
 
 interface RestaurentPort {
-  + formatData()
+  + formatData() : object
 }
 
 interface ActiviteitenPort {
-  + formatData()
+  + formatData() : object
 }
 
 class RestaurentController {
-  - RestaurentService restaurentService
+  - restaurentService
   + getRestaurantData(opt String zoekwoord)
 }
 
 class ActiviteitenController {
-  - ActiviteitenService activiteitenService
+  - ActiviteitenService
   + getActivities(opt String zoekwoord)
 }
 
@@ -32,15 +34,15 @@ class ActiviteitenService {
 }
 
 class RestaurantApi1Implementatie {
-  + fetchData()
+  + fetchData() :object
 }
 
 class RestaurantApi1_2Implementatie {
-  + fetchData()
+  + fetchData():object
 }
 
 class Api2Implementatie {
-  + fetchData()
+  + fetchData():object
 }
 
 interface RestaurantApi1
@@ -53,9 +55,9 @@ Frontend ..> ActiviteitenController : "calls"
 RestaurentController --> RestaurentService : "has"
 ActiviteitenController --> ActiviteitenService : "has"
 
-RestaurentService ..> RestaurantApi1Implementatie : "queries"
-RestaurentService ..> RestaurantApi1_2Implementatie : "queries"
-ActiviteitenService ..> Api2Implementatie : "queries"
+RestaurentService --> RestaurantApi1Implementatie : "queries"
+RestaurentService --> RestaurantApi1_2Implementatie : "queries"
+ActiviteitenService --> Api2Implementatie : "queries"
 
 RestaurantApi1Implementatie ..|> RestaurentPort : "implements"
 RestaurantApi1_2Implementatie ..|> RestaurentPort : "implements"

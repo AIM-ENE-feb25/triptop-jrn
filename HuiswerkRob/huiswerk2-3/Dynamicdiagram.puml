@@ -7,44 +7,32 @@ Container("frontend", "Frontend", "Container met React.js", "Zorgt voor frontend
 
 System_Boundary(triptop_core, "TripTop") {
 Component("restaurentController1", "restaurentController","SpringBoot.java","Controller voor een restaurantscraper")
-Component("ActiviteitenController", "ActiviteitenController","SpringBoot.java","Controller voor een restaurantscraper")
 Component("restaurentService1", "restaurentService","SpringBoot.java","Controller voor een restaurantscraper")
-Component("ActiviteitenService", "ActiviteitenService","SpringBoot.java","Controller voor een restaurantscraper")
 Component("RestaurantApi1Implementatie", "RestaurantApi1Implementatie", "Java class", "neemt alle info op uit api1")
 Component("RestaurantApi1.2Implementatie", "RestaurantApi1.2Implementatie", "Java class", "neemt alle info op uit api1.2")
-Component("Api2Implementatie", "Api2Implementatie", "Java class", "neemt alle info op uit api2")
 }
 
 System_Ext("RestaurantApi1","RestaurantApi1")
 System_Ext("RestaurantApi2","RestaurantApi2")
-System_Ext("api2","api2")
 
+frontend --> restaurentController1 : "/GET Voor het ophalen van restaurants in de buurt 1"
 
-frontend --> restaurentController1 : "Roept aan met CRUD"
-frontend --> ActiviteitenController : "Roept aan met CRUD"
+restaurentController1 --> restaurentService1 : "aanroep voor ophalen restaurants 2"
 
-restaurentController1 --> restaurentService1 : "vraagt voor bedrijfslogica"
-ActiviteitenController --> ActiviteitenService : "vraagt voor bedrijfslogica"
+restaurentService1 --> "RestaurantApi1Implementatie" : "Geeft de aanvraag aan beschikbare api 3"
+restaurentService1 --> "RestaurantApi1.2Implementatie" : "Geeft de aanvraag aan beschikbare api"
 
-restaurentService1 --> "RestaurantApi1Implementatie" : "Vraagt info met Query"
-restaurentService1 --> "RestaurantApi1.2Implementatie" : "Vraagt info met Query"
-
-ActiviteitenService --> "Api2Implementatie" : "Vraagt info met Query"
-
-
-"RestaurantApi1Implementatie" --> "RestaurantApi1" : "Haalt data op met evt params[Json]"
+"RestaurantApi1Implementatie" --> "RestaurantApi1" : "Haalt data op met evt params[Json] 4"
 "RestaurantApi1.2Implementatie"--> "RestaurantApi2" : "Haalt data op met evt params[Json]"
 
-"Api2Implementatie" --> "api2" : "Haalt data op met evt params[Json]"
+"RestaurantApi2" --> "RestaurantApi1.2Implementatie" : "returned data in eigen format "
+"RestaurantApi1" --> "RestaurantApi1Implementatie" : "returned data in eigen format 5"
 
-"RestaurantApi2" --> "RestaurantApi1.2Implementatie" : "returned data in eigen format"
-"RestaurantApi1" --> "RestaurantApi1Implementatie" : "returned data in eigen format"
+"RestaurantApi1.2Implementatie" --> "RestaurantApi1.2Implementatie" : "formateerd data naar service format[Json]"
+"RestaurantApi1Implementatie" --> "RestaurantApi1Implementatie" : "formateerd data naar service format[Json] 6"
 
-"RestaurantApi1.2Implementatie" --> "RestaurantApi1.2Implementatie" : "formateerd data naar port format"
-"RestaurantApi1Implementatie" --> "RestaurantApi1Implementatie" : "formateerd data naar port format"
-
-"RestaurantApi1Implementatie" --> "restaurentService1" : "Returned data in bruikbare format"
-"RestaurantApi1.2Implementatie" --> "restaurentService1" : "Returned data in bruikbare format"
+"RestaurantApi1Implementatie" --> "restaurentService1" : "Returned data in bruikbare format[Json] 7"
+"RestaurantApi1.2Implementatie" --> "restaurentService1" : "Returned data in bruikbare format[Json]"
 
 
 
