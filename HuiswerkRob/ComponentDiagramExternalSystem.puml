@@ -1,0 +1,27 @@
+@startuml
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container("frontend", "Frontend", "Container met React.js", "Zorgt voor frontend en de gebruikersinterfaces")
+
+System_Boundary(triptop_core, "TripTop") {
+Component("restaurentController1", "restaurentController1","SpringBoot.java","Controller voor een restaurantscraper")
+Component("restaurentController2", "restaurentController2","SpringBoot.java","Controller voor een restaurantscraper")
+Component("restaurentService1", "restaurentService1","SpringBoot.java","Controller voor een restaurantscraper")
+Component("restaurentController2", "restaurentController2","SpringBoot.java","Controller voor een restaurantscraper")
+Component("ApiCaller", "ApiCaller(abstract)","Java Abstract class", "makes sure api's are called propperly")
+Component("RestaurentPort","RestaurentPort", "java interface", "Forceerd de juiste formatering van info van de api")
+Component("Api1Implementatie", "Api1Implementatie", "Java class", "neemt alle info op uit api1")
+Component("Api1Implementatie", "Api1Implementatie", "Java class", "neemt alle info op uit api1.2")
+Component("Api2Implementatie", "Api2Implementatie", "Java class", "neemt alle info op uit api2")
+}
+
+System_Ext("RestaurantApi1","RestaurantApi1")
+System_Ext("RestaurantApi2","RestaurantApi2")
+
+
+
+
+
+@enduml
