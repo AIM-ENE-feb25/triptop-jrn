@@ -12,6 +12,7 @@ Component("restaurentService", "restaurentService","SpringBoot.java","Controller
 Component("ActiviteitenService", "ActiviteitenService","SpringBoot.java","Controller voor een restaurantscraper")
 Component("ApiCaller", "ApiCaller(abstract)","Java Abstract class", "makes sure api's are called propperly")
 Component("RestaurentPort","RestaurentPort", "java interface", "Forceerd de juiste formatering van info van de api")
+Component("activiteitenPort","activiteitenPort", "java interface", "Forceerd de juiste formatering van info van de api")
 Component("RestaurantApi1Implementatie", "RestaurantApi1Implementatie", "Java class", "neemt alle info op uit api1")
 Component("RestaurantApi1.2Implementatie", "RestaurantApi1.2Implementatie", "Java class", "neemt alle info op uit api1.2")
 Component("Api2Implementatie", "Api2Implementatie", "Java class", "neemt alle info op uit api2")
@@ -39,7 +40,7 @@ ActiviteitenService --> "Api2Implementatie" : "aanroep"
 
 "RestaurantApi1Implementatie" --> "RestaurentPort" : "implements"
 "RestaurantApi1.2Implementatie" --> "RestaurentPort" : "implements"
-"Api2Implementatie" --> "RestaurentPort" : "implements"
+"Api2Implementatie" --> "activiteitenPort" : "implements"
 
 "RestaurantApi1Implementatie" --> "RestaurantApi1" : "[Json]"
 "RestaurantApi1.2Implementatie" --> "RestaurantApi2" : "[Json]"

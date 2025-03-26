@@ -1,0 +1,72 @@
+@startuml
+
+abstract class ApiCaller {
+  + roepExternaApiAan()
+  + formatData;
+}
+
+interface RestaurentPort {
+  + formatData()
+}
+
+interface ActiviteitenPort {
+  + formatData()
+
+}
+
+class RestaurentController {
+  + getRestaurantData(opt String zoekwoord)
+
+}
+
+class ActiviteitenController {
+  + getActivities(opt String zoekwoord)
+}
+
+class RestaurentService {
+  + processRestaurantData()
+}
+
+class ActiviteitenService {
+  + processActivityData()
+}
+
+class RestaurantApi1Implementatie {
+  + fetchData()
+}
+
+class RestaurantApi1_2Implementatie {
+  + fetchData()
+}
+
+class Api2Implementatie {
+  + fetchData()
+}
+
+interface RestaurantApi1
+interface RestaurantApi2
+interface Api2
+
+Frontend ..> RestaurentController : "calls"
+Frontend ..> ActiviteitenController : "calls"
+
+RestaurentController ..> RestaurentService : "uses"
+ActiviteitenController ..> ActiviteitenService : "uses"
+
+RestaurentService ..> RestaurantApi1Implementatie : "queries"
+RestaurentService ..> RestaurantApi1_2Implementatie : "queries"
+ActiviteitenService ..> Api2Implementatie : "queries"
+
+RestaurantApi1Implementatie ..|> RestaurentPort : "implements"
+RestaurantApi1_2Implementatie ..|> RestaurentPort : "implements"
+Api2Implementatie ..|> ActiviteitenPort : "implements"
+
+RestaurantApi1Implementatie --|> ApiCaller : "extends"
+RestaurantApi1_2Implementatie --|> ApiCaller : "extends"
+Api2Implementatie --|> ApiCaller : "extends"
+
+RestaurantApi1Implementatie ..> RestaurantApi1 : "fetches data"
+RestaurantApi1_2Implementatie ..> RestaurantApi2 : "fetches data"
+Api2Implementatie ..> Api2 : "fetches data"
+
+@enduml
