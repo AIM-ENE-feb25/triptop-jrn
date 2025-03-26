@@ -14,7 +14,6 @@ Person(Reiziger, "Reiziger", "Een reiziger die zonder zorgen op reis wil.")
 Person(Reisagent, "Reisagent", "Helpt met de reis plannen voor andere reizigers")
 
 ' Definieer externe container voor IdentityProvider
-Container_Ext(id, "Login - Signup API", "Een applicatie voor het identificeren en authoriseren van een gebruiker")
 Container_Ext(FbLogin, "Facebook Media API", "Zorgt voor het inloggen via facebook")
 
 ' Definieer de interne systemen binnen de TripTop boundary
@@ -27,7 +26,8 @@ System_Boundary(triptop_core, "TripTop") {
 
 ' Definieer externe systemen
 System_Ext(betaalsysteem, "Paypal API", "Externe betaalprovider met creditcards, ideal en wallet payments.")
-System_Ext(reisAanbieder, "ReisAanbieder", "Busmaatschappij, Treinschema's, Luchtvaartmaatschappijen, etc.")
+System_Ext(reisAanbieder, "Navitia API", "Busmaatschappij, Treinschema's voor lange reizen.")
+System_Ext(vluchtaanbieder, "SkyScanner API", "Vluchten bekijken en boeken ")
 System_Ext(etenAanbieder, "Uber Eats Scraper API", "Informatie over restaurants, locaties menu's en reviews")
 System_Ext(AutoAanbieder, "Booking.com API", "Verhuur van auto's of fietsen")
 System_Ext(Dagbesteding, "Booking.com API", "Biedt tickets voor dagjes uit")
@@ -36,12 +36,11 @@ System_Ext(GoogleMaps, "GoogleMaps API", "Kaartweergave")
 System_Ext(accommodatieAanbieder, "Booking.com API", "Externe accommodatie provider, zoals hotels en hostels")
 
 ' Definieer relaties
-Reiziger --> id : "Logt in via"
-Reisagent --> id : "Logt in via"
+Reiziger --> triptop : "Logt in via"
+Reisagent --> triptop : "Logt in via"
 Reiziger -->FbLogin : "logt in via facebook met"
 Reisagent -->FbLogin : "logt in via facebook met"
 
-id --> triptop : "Stuurt gebruiker door naar"
 FbLogin --> triptop : "Stuurt gebruiker door naar"
 
 triptop --> backend : "Stuurt API calls naar"
@@ -49,13 +48,14 @@ backend --> db : "Halen/slaan gegevens op"
 backend --> gateway : "Geeft API calls door naar"
 
 Rel(gateway, betaalsysteem, "Verwerkt betaling via", "HTTPS (REST API, JSON)")
-Rel(gateway, reisAanbieder, "Reserveringen plaatsen / beschikbaarheid ophalen", "?")
+Rel(gateway, reisAanbieder, "Reserveringen plaatsen / beschikbaarheid ophalen", "HTTPS (REST API, JSON)")
 Rel(gateway, etenAanbieder, "Eten opties ophalen", "HTTPS (REST API, JSON)")
 Rel(gateway, AutoAanbieder, "Vervoer opties ophalen / huren", "HTTPS (REST API, JSON)")
 Rel(gateway, Dagbesteding, "Activiteiten inplannen", "HTTPS (REST API, JSON)")
 Rel(gateway, GoogleMaps, "Activiteiten tonen op kaart", "HTTPS (REST API, JSON)")
 Rel(gateway, accommodatieAanbieder, "Accommodatie opties ophalen / reserveren", "HTTPS (REST API, JSON)")
 Rel(gateway, Ov, "informatie ophalen omtrent lokaal ov", "HTTPS (REST API, JSON)")
+Rel(gateway, vluchtaanbieder, "zoek en boekt vlucht", "HTTPS (REST API, JSON)")
 
 ' keuzes:
 ' geen bezoeker, moet altijd inloggen voor gebruik

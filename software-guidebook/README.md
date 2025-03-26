@@ -29,7 +29,7 @@ In het contextdiagram zijn de volgende functionaliteiten opgenomen:
 - **Autoaanbieder:** Biedt reizigers de mogelijkheid om een auto te huren op locatie.
 - **Dagbesteding:** Hier zijn bezienswaardigheden in de buurt te vinden, en het is mogelijk om tickets te bestellen voor activiteiten.
 - **Openbaar vervoer:** Toont reisschema’s van verschillende opties voor het openbaar vervoer, zodat reizigers eenvoudig hun lokale reis kunnen plannen.
-- **Google Maps:** Een kaart waarop locaties worden weergegeven, zodat gebruikers kunnen zien waar ze zijn en waar ze naartoe kunnen gaan.
+- **Maps Functionaliteit:** Een kaart waarop locaties worden weergegeven, zodat gebruikers kunnen zien waar ze zijn en waar ze naartoe kunnen gaan.
 - **Accommodatie:** Hiermee kunnen reizigers hun verblijf regelen, boeken en betalen via de applicatie.
 
 Voor alle functionaliteiten worden externe systemen gebruikt, zodat de functionaliteiten lokaal beschikbaar zijn en gebruikers maximaal comfort ervaren.  
@@ -100,27 +100,27 @@ Voordat deze casusomschrijving tot stand kwam, heeft de opdrachtgever de volgend
 
 ## hoofd application
 
-![hoofd applicatie container diagram](../opdracht-diagrammen/containerDiagram.png)
+![hoofd applicatie container diagram](../opdracht-diagrammen/ContainerDiagramTripTop.png)
 
-Dit is het containerdiagram die aangeeft hoe het programma werkt en met welke api's deze communiceert. Zowel de reiziger als de reisagent heeft de mogelijkheid om in te loggen bij de eigen site. Dit wordt geregeld door de 'login-signup' API afgehandeld.
-Deze handeld een groot deel van het inlogprocess af. Ook kan er ingelogd worden met de Facebook API. Deze werkingen worden verder uitgelegd in het containerdiagram van 'login'. 
-
+De gebruiker kan inloggen via 2 wegen. De eigen manier die binnen de triptop accplicatie ontwikkeld is. Of via de facebook API met een facebook account. Dit word verder uitgelegd in 7.2 in een dynamisch Container diagram.
 Zodra de gebruiker is ingelogd komt deze op de front-end van de applicatie. Hier aangegeven als 'TripTop web applicatie'. Hier worden de bouwblokken in een interface getoond aan de gebruiker om interactie mogelijk te maken.
 Er wordt voor de bouwstenen gebruik gemaakt van externe API's. Zo hebben we de beste functionaliteiten met de meest flexibele en up-to-date data.
 
 #### **Functionele mapping naar API's**
 
-| **Functionaliteit**     | **Externe API**                               | **Beschrijving** |
-|------------------------|----------------------------------------------|----------------|
-| **Authenticatie** | Login - Signup API, Facebook Media API | Inloggen en authenticeren van gebruikers. |
-| **Betalingen** | Paypal API | Verwerken van betalingen voor boekingen en tickets. |
-| **Reisaanbieder** | ReisAanbieder API | Ophalen en boeken van bus-, trein- en vliegreizen. |
-| **Eetaanbieder** | Uber Eats Scraper API | Opvragen van restaurants, menu's en reviews. |
-| **Autoaanbieder** | Booking.com API | Ophalen en huren van auto's of fietsen. |
-| **Dagbesteding** | Booking.com API | Ophalen en boeken van activiteiten en bezienswaardigheden. |
-| **Openbaar vervoer** | Public Transport API | Opvragen van reisschema’s en lokaal OV-informatie. |
-| **Google Maps** | Google Maps API | Weergave van locaties en routes. |
-| **Accommodatie** | Booking.com API | Boeken van hotels, hostels en andere accommodaties. |
+
+| **Functionaliteit**     | **Externe API**                        | **Beschrijving**                                           |
+|------------------------|----------------------------------------|------------------------------------------------------------|
+| **Authenticatie** | Facebook Media API | Inloggen en authenticeren van gebruikers.                  |
+| **Betalingen** | Paypal API                             | Verwerken van betalingen voor boekingen en tickets.        |
+| **Reisaanbieder** | Navitia API                            | Ophalen en boeken van bus- en treinreizen.                 |
+|**Vluchtaanbieder**| SkyScanner API                         | Ophalen en boeken van vluchten                             |
+| **Eetaanbieder** | Uber Eats Scraper API/ Tripadvisor API | Opvragen van restaurants, menu's en reviews.               |
+| **Autoaanbieder** | Booking.com API                        | Ophalen en huren van auto's of fietsen.                    |
+| **Dagbesteding** | Booking.com API                        | Ophalen en boeken van activiteiten en bezienswaardigheden. |
+| **Openbaar vervoer** | Public Transport API                   | Opvragen van reisschema’s en lokaal OV-informatie.         |
+| **Google Maps** | Google Maps API                        | Weergave van locaties en routes.                           |
+| **Accommodatie** | Booking.com API                        | Boeken van hotels, hostels en andere accommodaties.        |
 
 #### **modulariteit**
 Het moet mogelijk zijn om later meerdere bouwstenen toe te voegen of weg te halen. De bouwstenen dienen dus zelfstandig te kunnen opereren. Google maps is een uitzondering daarop. Deze zou eventueel de routebeschrijving kunnen geven van bijvoorbeeld een restaurant.
@@ -145,8 +145,36 @@ Zodra de database kan bevestigen dat de login valide is wordt de gebruiker ingel
 Er is een mogelijkheid om in te loggen met een Facebook account. Dit gebeurd doormiddel van de Facebook Media API. Deze verwerkt de login en geeft een acces token. Deze sturen wij zelf weer door naar de Facebook graph API. 
 Van uit deze api krijgen we in Json gegevens terug. Dat zijn een ID, een username en een email. Deze neemt de backend op. De backend maakt er vervolgends een JWT-token van en controleerd deze op de database en logt zo de gebruiker in.
 
+--- 
 
-ToDo: in voegen reis boeken Container diagram.
+#### **Routeplanning Container Diagram**
+
+![routeplanning container diagram](../opdracht-diagrammen/DynamicContainer-NavitiaApi.png)
+
+Bovenstaand diagram laat zien hoe de routeplanning functionaliteit binnen TripTop is opgebouwd. De gebruiker (of reisagent) vraagt een routeplanning aan via de webapplicatie. De webapplicatie communiceert met de backend via onze eigen API.
+
+De backend controleert of er al routegegevens beschikbaar zijn in de database. Indien nodig vraagt de backend route-informatie op bij externe bronnen via de API Gateway. De API Gateway verwerkt de aanvraag en communiceert met de externe Navitia API.
+Proces:
+
+    De gebruiker stuurt een routeaanvraag via de TripTop Web App.
+    De backend valideert en checkt bestaande data in de database.
+    Bij geen resultaat haalt de backend via de API Gateway nieuwe data op bij de Navitia API.
+    De routegegevens worden opgeslagen en teruggestuurd naar de gebruiker.
+
+--- 
+#### **Vluchtinformatie Container Diagram**
+
+![Skyscanner diagram](../opdracht-diagrammen/DynamicContainerSkyScannerApi.png)
+Bovenstaand diagram laat de werking van het opvragen van vluchtinformatie binnen TripTop zien. Zowel de gebruiker als de reisagent kan vluchtinformatie opvragen via de webapplicatie.
+
+De aanvraag komt altijd eerst bij de backend via onze eigen API. Vervolgens handelt de backend de logica af en controleert bestaande vluchtdata in de database. Wanneer er actuele data nodig is, wordt via de API Gateway een aanvraag naar de externe Skyscanner API gestuurd.
+Proces:
+
+    De gebruiker doet een vluchtzoekopdracht via de TripTop Web App.
+    De backend controleert bestaande vluchtgegevens in de database.
+    Zo nodig haalt de backend via de API Gateway vluchtinformatie op bij Skyscanner.
+    De vluchtgegevens worden opgeslagen en teruggestuurd naar de gebruiker.
+
 
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
@@ -161,67 +189,218 @@ ToDo: in voegen reis boeken Container diagram.
 > [!IMPORTANT]
 > Voeg toe: 3 tot 5 ADR's die beslissingen beschrijven die zijn genomen tijdens het ontwerpen en bouwen van de software.
 
-### 8.1. ADR-001 TITLE
+### 8.1. Eten
 
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
+## Status
+> Voorgesteld
 
-#### Context 
+## Context
+> Voor de TripTop applicatie is er een externi api nodig voor het vinden van bestellen van eten/drinken.
 
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
+## Alternatieven
 
-#### Considered Options
+- Uber Eats Scraper API
+- The Fork The Spoon
+- Tripadvisor
+- Restaurants
+- Red Flower Business Data
 
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
+| **Criteria**        | **Uber Eats Scraper API**                                                                | **The Fork The Spoon**                                      | **Tripadvisor**                                                                      | **Restaurants**                                   | **Red Flower Business Data**                                    |
+|---------------------|------------------------------------------------------------------------------------------|-------------------------------------------------------------|--------------------------------------------------------------------------------------|---------------------------------------------------|-----------------------------------------------------------------|
+| **Gebied**          | ++ Globaal, maar vooral gericht op bepaalde regio's                                      | ++ Globaal                                                  | ++ Globaal                                                                           | ++ Globaal                                        | ++ Globaal                                                      |
+| **Bruikbaarheid**   | -- Biedt niet de mogelijkheden die wij nodig hebben voor de applicatie(geen mogelijkheid tot zoeken op locatie) | -- Geeft foutmelding bij het meegeven van de voorbeeld code | 0 Zeer uitgebreid. Je kan makkelijk een lijst aan restaurants krijgen via locationId | - Maakt geen gebruik van JSON                     | - Geeft lege arrays terug als je bepaalde locaties zoekt        |
+| **Soorten**         | ++ Veel verschillende soorten restaurants, zoals fastfood, snackbars, cafés, fine dining | + Meer gericht op restaurants en specifieke eetgelegenheden | -- Beperkte soorten en vaak gefocust op grotere ketens                               | -- Beperkt tot algemene restaurant- of eetlocaties | + Diverse eetgelegenheden, met een focus op de lokale markten.  |
 
-#### Decision
+## Beslissing
 
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
+> Voor de applicatie blijkt Tripadvisor het beste te zijn. TripAdvisor biedt de mogelijkheid om restaurants te vinden op basis van een megegeven locatie. Dit is nodig voor de applicatie. Tripdadvisor haalt alleen bekende restaurants op, maar dit is voldoende voor de applicatie de gebouwd wordt.
 
-#### Status 
+## Gevolgen
 
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
+### Positieve gevolgen
 
-#### Consequences 
+- Bij het ophalen van een restaurant wordt veel informatie opgehaald. Hierdoor kan je de gebruiker extra informatie geven en zijn er veel opties voor filteren.
+- TripAdviser haalt wereldwijd restaurants op. Zo kunnen over restaurant opties worden weergegeven.
+- Betrouwbaarheid van gegevens. Tripadvisor heeft een 100% Service Level. Ook is Tripadvisor een bekend bedrijf waardoor je betrouwbare informatie kan verwachten.
+- Tripadvisor biedt ook de mogelijkheid om vliegvelden, vluchten, autoverhuur en hotels. Hierdoor heb je eventueel geen andere API's hiervoor nodig.
+### Negatieve gevolgen
 
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
+- Bij het ophalen van een restaurant wordt veel informatie opgehaald. Deze informatie is vaak niet allemaal nodig waardoor je eigenlijk te veel gegevens ophaald.
+- Voor het vinden van restaurants moet je een locationId meegeven. Hierdoor moet je twee GET requests doen. Eén voor het ophalen van de locationId en één voor het ophalen van de restaurants in die omgeving.
+- Het is afhankelijk van een locationId. Hierdoor moet je precies weten waar de gebruiker wilt zoeken en kan je niet algemeen zoeken zoals een land of regio.
 
-### 8.2. ADR-002 TITLE
 
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
 
-#### Context
 
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
+### 8.2. ADR-002 intergratie PayPal wallet in Triptop
+## 1. Titel
+**Betalingen bij externe partijen via PayPal Wallet**
 
-#### Considered Options
+## 2. Status
+**Voorstel**
 
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
+## 3. Context
+Om bij bepaalde bedrijven of bureaus producten of diensten te kunnen bestellen, moet er een betaalmogelijkheid zijn.
 
-#### Decision
+## 4. Beslissing
+Om betalingen zo soepel mogelijk te laten verlopen, hebben wij gekozen voor een centrale betaalfunctie binnen Triptop zelf.
+Zo kunnen gebruikers overal betalen ongeacht de valuta of de locatie. Niet alle landen accepteren banken uit nederland.
+Ook niet iedereen heeft een CreditCard om ergens te betalen of heeft behoefte deze aan te vragen. Om te voorkomen dat mensen tegen betaal problemen aanlopen hebben wij gekozen dit in ons platform te intergreren.
 
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
+We hebben iDEAL, PayPal en bankoverschrijvingen overwogen en gekozen voor **PayPal** vanwege de wereldwijde beschikbaarheid. PayPal ondersteunt betalingen met creditcards,
+het koppelen van bankrekeningen en biedt bovendien de mogelijkheid om je PayPal Wallet op te waarderen met iDEAL.
+Hierdoor kunnen ook gebruikers zonder creditcard internationaal betalen.
 
-#### Status
+## 5. Betalingsopties vergelijking
 
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
+| Forces              | iDEAL | PayPal | Bank |
+|---------------------|:-----:|:------:|:----:|
+| **Beschikbaarheid** | -   | ++     | 0    |
+| **Creditcards**     | --  | ++     | ++   |
+| **Betrouwbaarheid** | ++  | +      | ++   |
+| **Extra kosten**    | ?   | +      | +    |
 
-#### Consequences
+## 6. Consequenties
 
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
+### **Voordelen:**
+Het gebruik van paypal heeft de volgende voordelen:
 
-### 8.3. ADR-003 TITLE
+- Betalingen in de wallet kunnen worden opgewaardeerd via iDEAL.
+- Ondersteunt creditcards en het koppelen van bankrekeningen.
+- Wereldwijd bruikbaar.
+
+### **Nadelen:**
+Ook heeft het enkele nadelen:
+
+- PayPal is opgericht door Elon Musk en heeft in het verleden kritiek gekregen op beleid en kosten.
+- Externe API vereist integratie en communicatie met andere API’s.
+- Niet alle bedrijven accepteren PayPal.
+
+## 7. Alternatieven overwogen
+
+### **Geen betalingen via Triptop**
+- **Voordeel:** Eenvoudigere integratie, geen extra betalingslogica nodig.
+- **Nadeel:** Gebruikers kunnen mogelijk niet betalen met hun gewenste betaalmethode.
+
+Geen betalingsmogelijkheden van Triptop zelf was een overwogen optie.
+We kwamen er achter dat veel landen geen nederlandse pinpassen of bankbetalingen accepteren.
+Vooral landen die nog niet echt klaar zijn voor grote vakantieganger
+
+### **iDEAL**
+- **Voordeel:** Veelgebruikte betaalmethode in Nederland.
+- **Nadeel:** Werkt alleen in Nederland en ondersteunt geen buitenlandse valuta.
+
+### **Bankoverschrijvingen**
+- **Voordeel:** Werkt (bijna) overal en is een directe manier van betalen.
+- **Nadeel:** Vereist directe bankgegevens en extra beveiligingsmaatregelen.
+
+### 8.2.1 bronnen
+
+ToDo: Toevoegen bronnen
+
+### 8.3. ADR-003 Integratie van de Skyscanner API voor Vluchtinformatie
+
+## 1. Titel
+**Integratie van de Skyscanner API voor Vluchtinformatie**
+
+## 2. Status
+**Voorstel**
+
+## 3. Context
+Onze applicatie moet vluchtinformatie kunnen ophalen voor het plannen van reizen. Skyscanner API biedt uitgebreide vluchtdata. Alternatieven, zoals Kiwi.com of niet-publieke oplossingen zoals Google Flights, zijn minder geschikt voor onze toepassing.
+
+## 4. Beslissing
+Wij kiezen voor de Skyscanner API vanwege:
+- **Uitgebreide data:** Betrouwbare en actuele vluchtinformatie.
+- **Toegankelijkheid:** Eenvoudige integratie met de API.
+- **Focus op reisdata:** Specifiek ontworpen voor vluchtzoekopdrachten.
+
+## 5. Consequenties
+
+### Voordelen:
+- Kwalitatieve en gedetailleerde vluchtinformatie.
+- Eenvoudige API-integratie binnen de Spring Boot applicatie.
+- Ondersteuning voor meerdere datapunten zoals prijs en luchtvaartmaatschappij.
+
+### Nadelen:
+- Mogelijke beperkingen in verzoeken afhankelijk van het contract.
+- Afhankelijkheid van externe data voor kritieke functionaliteit.
+
+## 6. Alternatieven Overwogen
+
+| Kenmerk                  | Skyscanner  | Kiwi.com | 
+|--------------------------|-------------|----------|
+| **Data Nauwkeurigheid**  | ++          | +        | 
+| **Toegankelijkheid**     | ++          | +        | 
+| **Documentatie**         | ++          | +        | 
+| **Kosten/Kwota**         | +           | ?        |
+
+
+**Datum:** 21-03-2025  
+**Auteur:** Jae Dreijling
+--- 
+
+### 8.4. ADR-004 Vergelijking tussen Navitia en Google Maps
+
+## 1. Titel
+**Routeplanning: Vergelijking tussen Navitia en Google Maps**
+
+## 2. Status
+**> Voorstel**
+
+## 3. Context
+Voor de routeplanning in onze applicatie is het noodzakelijk om gebruikers meerdere reismogelijkheden te bieden (zoals auto, openbaar vervoer, fietsen en wandelen). Er zijn twee hoofdopties overwogen:
+
+- **Google Maps API (specifiek de Google Directions API / Routes API):**  
+  Bekend om zijn uitgebreide wereldwijde dekking, hoge nauwkeurigheid en uitgebreide documentatie, maar met hogere kosten bij intensief gebruik. Deze API biedt gedetailleerde routeinformatie voor verschillende vervoerswijzen, met name gericht op auto en openbaar vervoer.
+
+- **Navitia API:**  
+  Een open platform dat zich richt op multi-modale reisdata, vaak tegen lagere kosten (inclusief een gratis tier) maar met een mogelijk beperkter dekkingsgebied en minder gedetailleerde wereldwijde data.
+
+## 4. Beslissing
+Wij kiezen voor de integratie van **Navitia API** als primaire routeplanner, met de mogelijkheid om de **Google Directions API / Routes API** als fallback of aanvullende bron te gebruiken indien er specifieke, wereldwijde data nodig is. Deze beslissing is gebaseerd op de volgende overwegingen:
+
+- **Kosten:** Navitia biedt een aantrekkelijk gratis tier en lagere instapkosten, wat ideaal is voor de initiële ontwikkelfase.
+- **Multi-modale routeplanning:** Navitia is specifiek ontworpen voor routes met meerdere vervoerswijzen, wat aansluit bij onze functionele eisen.
+- **Uitbreidbaarheid:** Indien we later internationale of zeer gedetailleerde route-informatie nodig hebben, kan de Google Directions API als aanvullende service worden geïntegreerd.
+
+## 5. Consequenties
+
+### Voordelen:
+- **Navitia:**
+    - Kostenefficiënt voor laag tot matig gebruik.
+    - Uitstekende ondersteuning voor multi-modale routes.
+    - Flexibele integratie met een duidelijke focus op openbaar vervoer en lokale routes.
+
+- **Google Directions API / Routes API (als fallback):**
+    - Hoogwaardige en nauwkeurige data met wereldwijde dekking.
+    - Uitgebreide documentatie en ondersteuning.
+
+### Nadelen:
+- **Navitia:**
+    - Beperkte wereldwijde dekking vergeleken met Google Maps.
+    - Mogelijk minder gedetailleerde data in sommige regio’s.
+
+- **Google Directions API / Routes API:**
+    - Hogere kosten bij intensief gebruik.
+    - Complexere prijsstructuur en quota-beperkingen.
+
+## 6. Alternatieven Overwogen
+
+| Kenmerk                         | Navitia                                                          | Google  Routes API                                                                                  |
+|---------------------------------|------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| **Kosten**                      | Laag/Gratis tier                                                 | Duurder (betaal per gebruik)                                                                        |
+| **Multi-modale routeplanning**  | Uitstekend, specifiek gericht op openbaar vervoer, fietsen, etc. | Ondersteuning voor auto en openbaar vervoer, maar minder gespecialiseerd in multi-modale integratie |
+| **Wereldwijde dekking**         | Regionaal sterk, maar beperkt buiten Europa                      | Uitgebreide wereldwijde dekking                                                                     |
+| **Nauwkeurigheid en details**   | Goed, met focus op openbaar vervoer                              | Zeer gedetailleerd en accuraat                                                                      |
+| **Documentatie & Support**      | Voldoende, maar minder uitgebreid dan Google Maps                | Uitgebreide en robuuste documentatie en ondersteuning                                               |
+
+
+## ADR Info
+**Datum:** 21-03-2025  
+**Auteur:** Jae Dreijling
+--- 
+
 
 > [!TIP]
 > These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
