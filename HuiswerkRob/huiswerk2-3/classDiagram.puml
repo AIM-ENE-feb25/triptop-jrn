@@ -2,7 +2,7 @@
 
 abstract class ApiCaller {
   + roepExternaApiAan()
-  + formatData;
+  + formatData
 }
 
 interface RestaurentPort {
@@ -11,15 +11,15 @@ interface RestaurentPort {
 
 interface ActiviteitenPort {
   + formatData()
-
 }
 
 class RestaurentController {
+  - RestaurentService restaurentService
   + getRestaurantData(opt String zoekwoord)
-
 }
 
 class ActiviteitenController {
+  - ActiviteitenService activiteitenService
   + getActivities(opt String zoekwoord)
 }
 
@@ -50,8 +50,8 @@ interface Api2
 Frontend ..> RestaurentController : "calls"
 Frontend ..> ActiviteitenController : "calls"
 
-RestaurentController ..> RestaurentService : "uses"
-ActiviteitenController ..> ActiviteitenService : "uses"
+RestaurentController --> RestaurentService : "has"
+ActiviteitenController --> ActiviteitenService : "has"
 
 RestaurentService ..> RestaurantApi1Implementatie : "queries"
 RestaurentService ..> RestaurantApi1_2Implementatie : "queries"
