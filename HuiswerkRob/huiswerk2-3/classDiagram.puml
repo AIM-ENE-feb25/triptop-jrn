@@ -45,10 +45,6 @@ class Api2Implementatie {
   + fetchData():object
 }
 
-interface RestaurantApi1
-interface RestaurantApi2
-interface Api2
-
 Frontend ..> RestaurentController : "calls"
 Frontend ..> ActiviteitenController : "calls"
 
@@ -66,9 +62,5 @@ Api2Implementatie ..|> ActiviteitenPort : "implements"
 RestaurantApi1Implementatie --|> ApiCaller : "extends"
 RestaurantApi1_2Implementatie --|> ApiCaller : "extends"
 Api2Implementatie --|> ApiCaller : "extends"
-
-RestaurantApi1Implementatie ..> RestaurantApi1 : "fetches data"
-RestaurantApi1_2Implementatie ..> RestaurantApi2 : "fetches data"
-Api2Implementatie ..> Api2 : "fetches data"
 
 @enduml

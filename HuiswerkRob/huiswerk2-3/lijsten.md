@@ -31,7 +31,5 @@ geen nummering in dynamic diagram
 todo:
 adr, nieuwe pattern en princiepes en uitleg waarom
 feedback aanpassing in SGB
-statsch component diagram
-dianamisch compenent diagram en uitleg
 toelichting op ontwerpvraag en toelichting
 klassediagram en toelichten
