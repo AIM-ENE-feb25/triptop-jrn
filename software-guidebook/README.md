@@ -199,7 +199,11 @@ Mocht er een compleet nieuwe functionaliteit komen met een nieuwe api is het wel
 
 ![]()
 
-Dit is het Dynamische diagram dat hoort bij het 
+Dit is het Dynamische diagram dat hoort bij het externe api component diagram. 
+Zoals te zien is komt de aanvraag uit de frontend en wordt doorgegeven door de backend tot de service. Deze roept 1 of meerdere adapters aan afhankelijk van de hoeveelheid api's en of dat er een specefieke gevraagd wordt.
+Zodra de adapter de aanvraag krijgt gaat hij de api aanroepen met de voorgaand genoemde stappen. De api geeft informatie terug in een format die kan verschillen per api. De adapter zet het daarna weer om naar de juiste format en geeft het terug aan de serive die de aanvraag deed.
+De service kan dan ermee doen wat het moet. Dit is verder voor het diagram niet meer van belang. Het gaat in deze om de werking van de connectie met de externe API's.
+
 
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
