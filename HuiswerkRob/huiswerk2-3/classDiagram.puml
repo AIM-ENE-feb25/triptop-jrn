@@ -1,10 +1,10 @@
 @startuml
 
 abstract class ApiCaller {
-  + roepExternaApiAan()
-  + Login(): void
-  + ApiCal(): ?
-  + TokenCheck(): boolean
+    + roepExternaApiAan()
+    Login() {abstract}
+    ApiCal() {abstract}
+    TokenCheck() {abstract}
 }
 
 interface RestaurentPort {

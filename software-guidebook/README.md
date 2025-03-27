@@ -212,7 +212,14 @@ De service kan dan ermee doen wat het moet. Dit is verder voor het diagram niet 
 ###     7.3. Design & Code
 
 #### **class diagram exteren api's**
+![Class diagram externe api's](../opdracht-diagrammen/classdiagramExterneApi.png)
 
+In dit klassediagram kijken we vooral naar het onderste deel van het diagram. Hier is duidelijk hoe de interfaces en abstracte classes invloed hebben op de adaptor-klasse, aangegeven als de 'implamentatie'.  
+De ApiCaller heeft een functie roepExterneApiaan. Deze maakt gebruikt van de **Template Method Pattern** door vast te stellen in een niet abstracte klasse dat de volgorde van aanroep login(), dan apiCall() en als laatste checkToken(). 
+De implementatie van deze functies wordt gedaan per adaptor gezien elke externe api een eigen aanroepadres en key heeft. 
+
+De service kan dus meerdere adaptors aanroepen. Om ons te houden aan het **open closed principale** wordt er binnen de service gebruik gemaakt van **program to an inferface principal**. In de service wordt niet elke vorm van bij restaurantPort los aangeroepen. Je roept hier alle restaurant ports aan door een simpele restaurantPort.fetchData().
+Zo hoeven we niet voor elke port een langer of nieuwe aanroep te maken in de service. Zo blijft de code onderhoudbaar en betrouwbaar omdat je geen aanpassingen kunt vergeten. Zoals eerder besproken heeft elke adaptor zijn eigen implementatie voor het formateren van de data.
 
 
 > [!IMPORTANT]
