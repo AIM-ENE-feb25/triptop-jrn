@@ -11,6 +11,7 @@
 ## Beslissing
 
 > We kiezen ervoor om een API Gateway te gebruiken. De API Gateway zal verantwoordelijk zijn voor:
+> 
 - Het centraliseren van authenticatie en autorisatie.
 - Het gelijkmaken van API-aanroepen ongeacht de verschillen tussen de externe APIs.
 
@@ -26,11 +27,14 @@
 ## Gevolgen
 
 ### Voordelen
+
 - **Eenvoudiger beheer:** Authenticatie en autorisatie worden op één centrale plek afgehandeld.
 - **Schaalbaarheid:** Het systeem kan makkelijker worden uitgebreid met nieuwe externe APIs zonder aanpassingen.
 
 ### Nadelen
+
 - **Single point of failure:** Als de API Gateway werkt, werkt de rest ook niet.
 
 ## Decision Outcome
-Door de voordelen op het gebied van security, beheerbaarheid en flexibiliteit kiezen we voor een API Gateway als de beste oplossing voor dit project.
+
+> Door de voordelen op het gebied van security, beheerbaarheid en flexibiliteit kiezen we voor een API Gateway als de beste oplossing voor dit project.
