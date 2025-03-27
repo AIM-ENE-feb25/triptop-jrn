@@ -446,30 +446,86 @@ Wij kiezen voor de integratie van **Navitia API** als primaire routeplanner, met
 > [!TIP]
 > These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
 
-#### Context
+# Architecture Decision Record (ADR)
 
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
+### 8.5. implemtentatie nieuwe externe API's
 
-#### Considered Options
+## 1. Titel
+**Het makkelijk uitbreiden van de applicatie met nieuwe externe API's**
 
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
+## 2. Status
+**`Voorstel`**
 
-#### Decision
+## 3. Context
+Momenteel werkt de applicatie met verschillende externe API's. In de toekomst is het mogelijk dat er nieuwe of andere API's moeten worden geïntegreerd om de applicatie verder uit te breiden en goed te onderhouden. Op dit moment is er geen eenduidige en eenvoudige manier om nieuwe API's toe te voegen of bestaande te wisselen zonder de bestaande code te veel aan te passen.
 
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
+## 4. Beslissing
+We hebben besloten om het hexagonaal ontwerp te gebruiken binnen de applicatie. Dit betekent dat we **ports en adapters** zullen gebruiken om externe API's makkelijk en snel te integreren.
 
-#### Status
+Door abstractie toe te passen, kunnen we een **open/closed** codebase behouden. Dit stelt ons in staat om API's toe te voegen of te wijzigen zonder de bestaande code te hoeven aanpassen. Nieuwe functionaliteiten of API's vereisen enkel een nieuwe **port** en **adapter** om snel en eenvoudig werkend te zijn. Afhankelijk van de nieuwe functionaliteit kan het nodig zijn om een nieuwe **Controller** en **Service** te creëren.
 
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
+## 5. Alternatieven overwogen
+Tijdens de zoektocht naar een oplossing hebben we de volgende alternatieven overwogen:
 
-#### Consequences
+**1. Hexagonaal ontwerp (Ports en Adapters)**  
+Het gebruik van ports en adapters waarbij we een interface implementeren die de manier waarop de service de data ontvangt garandeert, en de adapter zorgt voor het omzetten van de data naar een leesbaar formaat voor de service.
 
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
+**2. Switch-case voor afhandeling data abstractie**  
+Binnen de service wordt een switch-case gebruikt om alle inkomende datatypes per API te verwerken. De code wordt geformatteerd naar een voor de frontend bruikbare vorm binnen de switch-case.
+
+**3. Geen abstractie, switch-case per API**  
+Een switch-case in de service die per API de data doorgeeft zoals deze aankomt. In de frontend wordt een switch-case gebruikt die het type data detecteert en in het juiste formaat toont, afhankelijk van de API.
+
+**De opties zijn bekeken en hieruit is de volgende tabel gekomen:**
+
+| **Optie** | **Impact op onderhoudbaarheid** | **Impact op testbaarheid** | **Impact op schaalbaarheid** | **Impact op leesbaarheid** | **Impact op Betrouwbaarheid** |
+|-----------|---------------------------------|-----------------------------|------------------------------|----------------------------|----------------------------|
+| **1. Hexagonaal ontwerp (Ports en Adapters)** | ++ | ++ | ++ | - | ++ |
+| **2. Gebruik van een switch-case voor verschillende datatypes** | - | - | - | + | - |
+| **3. Directe integratie in de controller (zonder abstractie)** | -- | -- | -- | -- | -- |
+
+### **Hexagonaal ontwerp (Ports en Adapters)**
+
+**Voordelen:**
+- Het maakt de code **open/closed** en uitbreidbaar.
+- Goede **Separation of Concerns**, waardoor de code beter georganiseerd is.
+- Door **programming for an interface** kan de service makkelijk met nieuwe API's communiceren.
+
+**Nadelen:**
+- Door de abstractie kan de code moeilijker leesbaar zijn, vooral voor ontwikkelaars die minder bekend zijn met dit ontwerp.
+- Er is een steilere leercurve dan bij eenvoudigere oplossingen, zoals de switch-case.
+
+### **Switch-case voor afhandeling data abstractie**
+
+**Voordelen:**
+- **Leesbaarheid** is beter omdat alle logica op één plek staat.
+
+**Nadelen:**
+- **Schaalbaarheid** is beperkt. Voor elke API moet er een nieuwe switch-case worden toegevoegd.
+- De switch-cases kunnen erg groot worden voor grotere API's.
+- De service wordt verantwoordelijk voor te veel taken, wat **Separation of Concerns** schendt.
+
+### **Geen abstractie**
+
+**Voordelen:**
+- Geen extra omzetting van data nodig; de data komt direct van de API.
+
+**Nadelen:**
+- De code wordt moeilijk te onderhouden door lange switch-cases in zowel de backend als frontend.
+- De frontend is niet altijd goed voorbereid op alle vormen van inkomende data.
+- Aanpassingen moeten in meerdere plekken worden doorgevoerd, wat de kans op fouten vergroot.
+
+## 6. Onderbouwing
+De keuze voor het **hexagonaal ontwerp** levert de beste resultaten op het gebied van onderhoudbaarheid, testbaarheid en schaalbaarheid. Het gebruik van abstractie en het ontwerpen op basis van interfaces maakt het mogelijk om de code uit te breiden zonder bestaande functionaliteiten te breken. Dit ondersteunt drie belangrijke principes uit SOLID: **Separation of Concerns**, **Open/Closed principle** en **Programming for an Interface**.
+
+Hoewel het gebruik van een hexagonaal ontwerp een hogere leercurve met zich meebrengt, is de lange termijnwinst veel groter dan de korte termijnkosten. De tijd die nodig is om deze architectuur te begrijpen en toe te passen is verwaarloosbaar in vergelijking met de tijd die verloren zou gaan door het onderhoud van complexe switch-cases en de risico's van fouten bij wijzigingen.
+
+Door interfaces te gebruiken, wordt de **testbaarheid** aanzienlijk verbeterd, aangezien we niet voor elke nieuwe API een test hoeven te schrijven, maar alleen de implementatie van de interface moeten testen.
+
+---
+
+**Datum:** `[27-03-2025]`
+**Auteur:** `[Rob Kokx]`
 
 ### 8.4. ADR-004 TITLE
 
