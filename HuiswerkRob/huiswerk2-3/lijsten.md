@@ -29,7 +29,7 @@ geen nummering in dynamic diagram
 - Hoe zou je anders externe systemen kunnen implementeren?
 
 todo:
-adr, nietwe pattern en princiepes en uitleg waarom
+adr, nieuwe pattern en princiepes en uitleg waarom
 feedback aanpassing in SGB
 statsch component diagram
 dianamisch compenent diagram en uitleg
