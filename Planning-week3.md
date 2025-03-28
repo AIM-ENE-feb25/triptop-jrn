@@ -44,7 +44,7 @@
 
 **Donderdag:**
 
-- Code volledig werkend met de apters.
+- Code volledig werkend met de adapters.
 - Verschillende API verzoeken naar verschillende APIs werkend in Postman.
 - Eventueel begin maken aan integratie.
 
