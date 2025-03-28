@@ -52,3 +52,4 @@
 
 - Laatste puntjes op de i waar nodig.
 - Code integreren met de andere code van groepsgenoten.
+

@@ -21,7 +21,7 @@ Verder geldt dit diagram enkel voor gebruikers; beheerders of andere betrokkenen
 ### 2.2 Functionaliteit & externe systemen
 
 Binnen Triptop zijn verschillende functionaliteiten beschikbaar die het boeken en beleven van een reis ondersteunen. Deze **'bouwstenen'** hebben elk hun eigen functie.  
-In het contextdiagram zijn de volgende functionaliteiten opgenomen:
+In het contextdiagram staan de volgende functionaliteiten:
 
 - **Betaalsysteem:** Dit systeem maakt betalingen binnen de applicatie mogelijk, zoals het boeken van een vlucht of het bestellen van tickets voor een museum.
 - **Reisaanbieder:** Hier kunnen reizigers vluchten, treinreizen of busreizen naar hun bestemming bekijken en eventueel boeken. Dit betreft voornamelijk de reis naar de vakantiebestemming. Voor lokaal vervoer, zie 'Openbaar vervoer' en 'Autoaanbieder'.
