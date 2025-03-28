@@ -235,6 +235,17 @@ Het toevoegen van een nieuwe API vereist twee stappen:
 
 Hierdoor blijft de architectuur modulair en flexibel, terwijl TransportService via TransportProviderSelector automatisch de juiste provider kiest op basis van de aanvraag.
 
+### **externe api connection transport sequence diagram**
+
+![Dynamisch diagram Exerne api](../opdracht-diagrammen/sequenceDiagramTransport.png)
+
+Dit is het dynamische diagram dat hoort bij het externe API-component.
+De aanvraag komt vanuit de frontend en wordt doorgestuurd naar de backend.
+De backend roept de service aan, die een geschikte provider selecteert op basis van de aanvraag.
+De juiste adapter roept vervolgens de externe API aan en ontvangt een antwoord in een API-specifiek formaat.
+De adapter zet dit om naar een uniform formaat en stuurt het terug naar de service.
+De service handelt het verzoek verder af en stuurt de respons terug naar de gebruiker.
+
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
 
@@ -565,6 +576,83 @@ Door interfaces te gebruiken, wordt de **testbaarheid** aanzienlijk verbeterd, a
 
 **Datum:** `[27-03-2025]`
 **Auteur:** `[Rob Kokx]`
+
+# 8.6. ADR-006 Law of Demeter en Modulaire Architectuur
+
+## Status
+> Voorgesteld
+
+## Context
+Om een goed georganiseerde en onderhoudbare codebase te garanderen, hanteren we de **Law of Demeter (LoD)**. Deze ontwerpregel stelt dat een object alleen mag communiceren met zijn directe afhankelijkheden en niet met diep geneste objecten. Hierdoor blijft de code modulair en testbaar.
+
+## Alternatieven Overwogen
+- **Directe afhankelijkheden tussen alle klassen**  
+  ❌ Dit leidt tot strakke koppeling, vermindert modulariteit en testbaarheid, en maakt toekomstige wijzigingen complex.
+- **Strikte Layered Architecture zonder Dependency Injection**  
+  ✅ Biedt een helder gestructureerde laagverdeling, maar beperkt de flexibiliteit bij uitbreidingen.
+
+## Beslissing
+We implementeren **Facades en Dependency Injection** om de Law of Demeter te handhaven. Dit betekent dat:
+- **Services via interfaces werken** en niet direct communiceren met onderliggende implementaties.
+- **Controllers alleen de services aanroepen** en niet de interne methoden van meerdere klassen.
+- **Een TransportProviderSelector** wordt ingezet om afhankelijkheden te beheren in plaats van een directe koppeling met API’s.
+
+## Gevolgen
+
+### Voordelen
+- Verbeterde testbaarheid door minder en duidelijk afgebakende afhankelijkheden.
+- Makkelijker onderhoud en uitbreidbaarheid dankzij een duidelijke scheiding van verantwoordelijkheden.
+- Modulaire architectuur die toekomstige aanpassingen eenvoudiger maakt.
+
+### Nadelen
+- Meer code is nodig voor extra facades en interfaces.
+- Mogelijke performance-impact bij extreme abstractie.
+
+## Bronnen
+- [Law of Demeter – Wikipedia](https://en.wikipedia.org/wiki/Law_of_Demeter) :contentReference[oaicite:0]{index=0}
+
+**Datum:** `[28-03-2025]`
+**Auteur:** `[Jae Dreijling]`
+---
+
+# 8.7. ADR-007 TransportProviderSelector in plaats van een Hardcoded Switch
+
+## Status
+> Voorgesteld
+
+## Context
+Om een flexibele en uitbreidbare architectuur te garanderen, vermijden we het gebruik van hardcoded switch statements in de businesslogica. Een hardcoded aanpak beperkt de mogelijkheid om dynamisch nieuwe transportproviders te integreren en schaadt de onderhoudbaarheid.
+
+## Alternatieven Overwogen
+- **Hardcoded switch statements in de businesslogica**  
+  ❌ Vereist codewijzigingen voor elke nieuwe transportprovider en biedt geen automatische fallback bij provider-uitval.
+- **Dynamisch configuratiebestand zonder centrale selector**  
+  ✅ Biedt flexibiliteit, maar vraagt handmatige updates en mist de automatische afhandeling bij provider-problemen.
+
+## Beslissing
+We implementeren een centrale **TransportProviderSelector** die dynamisch bepaalt welke transportprovider wordt ingezet, gebaseerd op beschikbaarheid en prestaties. Deze aanpak maakt gebruik van configuratie en real-time health checks voor een betrouwbare selectie.
+
+## Gevolgen
+
+### Voordelen
+- Flexibel beheer van transportproviders zonder noodzaak tot frequente codewijzigingen.
+- Eenvoudige uitbreidbaarheid en automatische fallback bij provider-uitval.
+- Betere onderhoudbaarheid door duidelijke scheiding van verantwoordelijkheden.
+
+### Nadelen
+- Vereist real-time monitoring van de beschikbaarheid van transportproviders.
+- Extra configuratiecomplexiteit door het dynamisch beheren van afhankelijkheden.
+
+## Bronnen
+- [Dependency Injection – Martin Fowler](https://martinfowler.com/articles/injection.html)
+
+**Datum:** `[28-03-2025]`
+**Auteur:** `[Jae Dreijling]`
+
+---
+
+# 8.8. ADR-008 TITLE
+--- 
 
 ### 8.4. ADR-004 TITLE
 
