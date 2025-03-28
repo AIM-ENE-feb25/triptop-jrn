@@ -10,35 +10,34 @@ LAYOUT_WITH_LEGEND()
 SHOW_PERSON_OUTLINE()
 
 Person(Reiziger, "Reiziger", "Een reiziger die zonder zorgen op reis wil.")
-Person(Reisagent, "Reisagent", "Helpt met de reis plannen voor andere reizigers")
 
 Container_Ext(fbLogin, "Facebook Media API", "Zorgt voor het inloggen via Facebook")
-Container_Ext(fbVerify, "Facebook Graph API", "haalt de gegevens van fb op")
-
-
+Container_Ext(fbVerify, "Facebook Graph API", "Haalt de gegevens van fb op")
 
 System_Boundary(triptop_core, "TripTop") {
+    Container(triptop, "TripTop Frontend", "React", "User interface voor het plannen, boeken en bijhouden van vakanties")
     Container(backend, "TripTop Back-end", "Java", "Verwerken, controleren en aanpassen van API requests vanuit de web applicatie")
     Container(db, "TripTop Database", "MSSQL", "Opslag van gegevens")
-    Container(triptop, "TripTop Web Applicatie", "React", "User interface voor het plannen, boeken en bijhouden van vakanties")
-
 }
 
-Reiziger --> triptop : "Logt in op website (1)"
-triptop --> backend : "stuurt inloggegevens ter controle[Json](2)"
-backend --> db : "Controleerd inloggegevens(3)"
-backend --> triptop : "Slaat de JWT-token op in de Session(4, 5A)"
-triptop --> triptop : "laat de username zien, en vervangt de login voor logout.(5,6A)"
+' Standaard login flow (numeriek)
+Reiziger --> triptop : "1. Logt in op TripTop"
+triptop --> backend : "2. Stuurt inloggegevens (JSON) ter controle"
+backend --> db : "3. Controleert inloggegevens"
+backend --> triptop : "4/F. Geeft JWT-token terug en slaat op in Session"
+triptop --> triptop : "5/G. Toon username en wijzig login naar logout"
 
-Reisagent --> triptop : "Logt in op website(1)"
+' Facebook login flow (alfabetisch)
+Reiziger --> triptop : "A. Logt in via Facebook"
+triptop --> fbLogin : "B. Verifieert met FB access token"
+fbLogin --> backend : "C. Geeft access token door"
+backend --> fbVerify : "D. Controleert access token"
+fbVerify --> backend : "E. Bevestigt inlog en genereert JWT-token"
 
-
-Reiziger --> fbLogin : "Logt in via facebook(1A)"
-Reisagent --> fbLogin : "Logt in via Facebook(1A)"
-fbLogin --> fbVerify : "verifieerd met FBaccess token(2A)"
-fbVerify --> backend : "stuur gegevens door[Json](3A)"
-
-backend --> backend : "Genereert JWT na verificatie van facebook(4A)"
-
+' Layout positioning
+Reiziger -[hidden]-> triptop
+triptop -[hidden]-> backend
+backend -[hidden]-> db
+fbLogin -[hidden]-> fbVerify
 
 @enduml

@@ -14,7 +14,7 @@ Dit software guidebook geeft een overzicht van de Triptop-applicatie. Het bevat 
 ### 2.1 Gebruikers
 
 De gebruikers van het systeem zijn mensen die een reis willen plannen en boeken via Triptop. In het diagram worden zij aangeduid als **"reiziger"**.  
-Daarnaast zijn er medewerkers van (digitale) reisbureaus, aangeduid als **"reisagent"**, die reizigers ondersteunen bij het boeken van hun droomreis.  
+Daarnaast zijn er medewerkers van (digitale) reisbureaus, aangeduid als **"reisagent"**, die reizigers ondersteunen bij het boeken van hun droomreis. Gezien deze voor nu geen andere functionaliteit heeft word deze in de diagrammen niet weergegeven.  
 Uiteraard zijn er ook bezoekers die gewoon even komen kijken wat de website te bieden heeft. Deze laten we in deze context buiten beschouwing, omdat bijna alle functionaliteiten alleen van toepassing zijn als je daadwerkelijk inlogt en een vakantie boekt.  
 Verder geldt dit diagram enkel voor gebruikers; beheerders of andere betrokkenen hebben een andere context.
 
@@ -177,7 +177,7 @@ Proces:
 
 #### **extrene api connection container diagram**
 
-![Compnent diagram voor externe api's aansluiten](../opdracht-diagrammen/Componentdiagram-portsadapters.png)
+![Compnent diagram voor externe api's aansluiten](../opdracht-diagrammen/Componentdiagram-portsadapters.puml)
 
 Het bovenstaande diagram geeft weer hoe de componenten samenwerken voor het ophalen van informatie van externe API's. Hierbij wordt gebruikgemaakt van een interface met de naamconventie **port**. Voor elke externe API wordt een aparte **port**-interface gemaakt. Deze interface zorgt ervoor dat de adapter (aangegeven als **AdapterAPI**) de ontvangen data uit de API in het juiste formaat terugstuurt naar de service.
 
@@ -294,12 +294,15 @@ Hierdoor kunnen ook gebruikers zonder creditcard internationaal betalen.
 
 ## 5. Betalingsopties vergelijking
 
-| Forces              | iDEAL | PayPal | Bank |
-|---------------------|:-----:|:------:|:----:|
-| **Beschikbaarheid** | -   | ++     | 0    |
-| **Creditcards**     | --  | ++     | ++   |
-| **Betrouwbaarheid** | ++  | +      | ++   |
-| **Extra kosten**    | ?   | +      | +    |
+| Forces                          | iDEAL  | PayPal | Bank  |
+|----------------------------------|:------:|:------:|:-----:|
+| **Internationale beschikbaarheid** | --     | ++     | +     |
+| **Uptime**                       | ++     | ++     | +     |
+| **Creditcards**                  | --     | ++     | ++    |
+| **Betrouwbaarheid**              | ++     | +      | ++    |
+| **Beveiliging**                  | ++     | ++     | +     |
+| **Extra kosten**                 | 0      | +      | +     |
+
 
 ## 6. Consequenties
 
@@ -315,6 +318,7 @@ Ook heeft het enkele nadelen:
 
 - PayPal is opgericht door Elon Musk en heeft in het verleden kritiek gekregen op beleid en kosten.
 - Externe API vereist integratie en communicatie met andere API’s.
+- Het is een betaalde API en zal dus geld kosten.
 - Niet alle bedrijven accepteren PayPal.
 
 ## 7. Alternatieven overwogen
