@@ -1,4 +1,5 @@
-# Design Pattern
+# Design Pattern 
+## Ontwerpvraag: Hoe zorg je ervoor dat authenticatie en autorisatie consistent worden toegepast bij het communiceren met verschillende externe APIs?
 
 ## Status
 
