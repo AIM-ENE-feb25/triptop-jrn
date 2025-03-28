@@ -1,0 +1,59 @@
+@startuml
+' Define the interface for external transport data fetching
+interface TransportProviderPort {
+  +fetchData(request: TransportRequest): TransportResponse
+}
+
+' Abstract class that implements the template method pattern
+abstract class ApiCaller {
+  +callApi(request: TransportRequest): TransportResponse
+  -login(): void
+  -apiCall(): TransportResponse
+  -checkToken(): void
+}
+
+' Concrete adapter for Navitia API
+class NavitiaAdapter {
+  +fetchData(request: TransportRequest): TransportResponse
+}
+
+' Concrete adapter for Google Maps API
+class GoogleMapsAdapter {
+  +fetchData(request: TransportRequest): TransportResponse
+}
+
+' Concrete adapter for Skyscanner API
+class SkyscannerAdapter {
+  +fetchData(request: TransportRequest): TransportResponse
+}
+
+' Service class that handles transport data requests
+class TransportService {
+  +getTransportData(request: TransportRequest): TransportResponse
+}
+
+' Controller class that receives requests from the frontend
+class TransportController {
+  +getTransportOptions(request: TransportRequest): TransportResponse
+}
+
+' Selector class that determines the best transport provider
+class TransportProviderSelector {
+  +selectProvider(request: TransportRequest): TransportProviderPort
+}
+
+' Relationships
+TransportController --> TransportService : "calls"
+TransportService --> TransportProviderSelector : "uses"
+TransportProviderSelector --> TransportProviderPort : "selects"
+
+TransportService --> TransportProviderPort : "uses"
+NavitiaAdapter --|> ApiCaller
+GoogleMapsAdapter --|> ApiCaller
+SkyscannerAdapter --|> ApiCaller
+
+NavitiaAdapter ..|> TransportProviderPort
+GoogleMapsAdapter ..|> TransportProviderPort
+SkyscannerAdapter ..|> TransportProviderPort
+
+@enduml
