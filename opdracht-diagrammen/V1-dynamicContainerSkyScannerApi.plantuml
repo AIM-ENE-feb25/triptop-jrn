@@ -9,7 +9,6 @@ SHOW_PERSON_OUTLINE()
 
 ' Personen bovenaan
 Person(Reiziger, "Reiziger", "Een reiziger die vluchtinformatie zoekt.")
-Person(Reisagent, "Reisagent", "Assisteert bij het plannen van reizen voor anderen")
 
 ' TripTop system boundary in het midden
 System_Boundary(triptop_core, "TripTop") {
@@ -24,8 +23,6 @@ System_Ext(skyscanner, "Skyscanner API", "REST API", "Externe API voor vluchtinf
 
 ' Dynamische interacties met genummerde stappen
 Reiziger --> ui : (0) Vraagt vluchtinformatie op
-Reisagent --> ui : (0) Vraagt vluchtinformatie op voor anderen
-
 ui --> backend : (1) Verstuurd vluchtzoekverzoek (via TripTop API - JSON/HTTPS)
 backend --> db : (2) Controleert bestaande vlucht- of gebruikersdata (SQL/TCP)
 backend --> gateway : (3) Vraagt vluchtdata op bij externe service via API Gateway (JSON/HTTPS)

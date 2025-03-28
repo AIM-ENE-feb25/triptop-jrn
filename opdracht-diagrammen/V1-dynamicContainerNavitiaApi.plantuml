@@ -9,7 +9,6 @@ SHOW_PERSON_OUTLINE()
 
 ' Personen bovenaan
 Person(Reiziger, "Reiziger", "Een reiziger die routeplanning gebruikt.")
-Person(Reisagent, "Reisagent", "Helpt met het plannen van reizen voor anderen")
 
 ' TripTop system boundary in het midden
 System_Boundary(triptop_core, "TripTop") {
@@ -24,8 +23,6 @@ System_Ext(navitia, "Navitia API", "REST API", "Externe API voor multi-modale ro
 
 ' Dynamische interacties met genummerde stappen
 Reiziger --> ui : (0) Vraagt routeplanning aan
-Reisagent --> ui : (0) Vraagt routeplanning aan voor anderen
-
 ui --> backend : (1) Verstuurd routeverzoek (via TripTop API - JSON/HTTPS)
 backend --> db : (2) Controleert bestaande routegegevens of gebruikersdata (SQL/TCP)
 backend --> gateway : (3) Vraagt route op bij externe service via API Gateway (JSON/HTTPS)

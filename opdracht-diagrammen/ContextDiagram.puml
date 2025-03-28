@@ -1,14 +1,12 @@
 @startuml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
-
 title Context Diagram TripTop
 
 LAYOUT_WITH_LEGEND()
 
 SHOW_PERSON_OUTLINE()
 Person(Reiziger, "Reiziger", "Een reiziger die zonder zorgen op reis wil.")
-Person(Reisagent, "Reisagent", "Helpt met de reis plannen voor andere reizigers")
 
 System_Boundary(triptop_core, "TripTop") {
     System(triptop, "TripTop", "Reisplatform voor reisplanning.")
@@ -20,19 +18,17 @@ System_Ext(etenAanbieder, "EetAanbieder", "Heeft informatie over restaurants")
 System_Ext(AutoAanbieder, "AutoAanbieder", "Auto of fiets verhuur")
 System_Ext(Dagbesteding, "Dagbesteding", "Heeft tickets voor dagjes uit")
 System_Ext(ov, "openbaar vervoer", "Heeft schema's voor plaatselijk openbaar vervoer")
-System_Ext(GoogleMaps, "GoogleMaps", Heeft de kaart waar alles op gesplaatst kan worden)
-System_Ext(Acomodatie, "Accomodatie", heeft de overnachtingen en verblijfplaatsen te beschikking)
+System_Ext(GoogleMaps, "GoogleMaps", "Heeft de kaart waar alles op gesplaatst kan worden")
+System_Ext(Acomodatie, "Accomodatie", "Heeft de overnachtingen en verblijfplaatsen te beschikking")
 
 Reiziger --> triptop : Boekt reis
-Reisagent --> triptop : Boekt reis voor andere
-
 
 triptop --> betaalsysteem : Verwerkt betaling
 triptop --> reisAanbieder : Reserveert reis naar locatie
 triptop --> etenAanbieder : Laat info zien over restaurants in de buurt
 triptop --> AutoAanbieder : Kan een vervoer huren bij
-triptop --> Dagbesteding : kan dagjes plannen
-triptop --> GoogleMaps : laat activiateiten zien op
+triptop --> Dagbesteding : Kan dagjes plannen
+triptop --> GoogleMaps : Laat een kaart zien
 triptop --> Acomodatie : Kun je overnachting boeken bij
-triptop --> ov : laat openbaar vervoer schema's zien
+triptop --> ov : Laat openbaar vervoer schema's zien
 @enduml

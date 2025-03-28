@@ -14,7 +14,7 @@ Dit software guidebook geeft een overzicht van de Triptop-applicatie. Het bevat 
 ### 2.1 Gebruikers
 
 De gebruikers van het systeem zijn mensen die een reis willen plannen en boeken via Triptop. In het diagram worden zij aangeduid als **"reiziger"**.  
-Daarnaast zijn er medewerkers van (digitale) reisbureaus, aangeduid als **"reisagent"**, die reizigers ondersteunen bij het boeken van hun droomreis.  
+Daarnaast zijn er medewerkers van (digitale) reisbureaus, aangeduid als **"reisagent"**, die reizigers ondersteunen bij het boeken van hun droomreis. Gezien deze voor nu geen andere functionaliteit heeft word deze in de diagrammen niet weergegeven.  
 Uiteraard zijn er ook bezoekers die gewoon even komen kijken wat de website te bieden heeft. Deze laten we in deze context buiten beschouwing, omdat bijna alle functionaliteiten alleen van toepassing zijn als je daadwerkelijk inlogt en een vakantie boekt.  
 Verder geldt dit diagram enkel voor gebruikers; beheerders of andere betrokkenen hebben een andere context.
 
@@ -175,9 +175,9 @@ Proces:
     Zo nodig haalt de backend via de API Gateway vluchtinformatie op bij Skyscanner.
     De vluchtgegevens worden opgeslagen en teruggestuurd naar de gebruiker.
 
-#### **extrene api connection container diagram**
+#### **externe api connection restaurant en activiteit component diagram**
 
-![Compnent diagram voor externe api's aansluiten](../opdracht-diagrammen/Componentdiagram-portsadapters.png)
+![Compnent diagram voor externe api's aansluiten](../opdracht-diagrammen/Componentdiagram-portsadapters.puml)
 
 Het bovenstaande diagram geeft weer hoe de componenten samenwerken voor het ophalen van informatie van externe API's. Hierbij wordt gebruikgemaakt van een interface met de naamconventie **port**. Voor elke externe API wordt een aparte **port**-interface gemaakt. Deze interface zorgt ervoor dat de adapter (aangegeven als **AdapterAPI**) de ontvangen data uit de API in het juiste formaat terugstuurt naar de service.
 
@@ -204,7 +204,57 @@ Zoals te zien is komt de aanvraag uit de frontend en wordt doorgegeven door de b
 Zodra de adapter de aanvraag krijgt gaat hij de api aanroepen met de voorgaand genoemde stappen. De api geeft informatie terug in een format die kan verschillen per api. De adapter zet het daarna weer om naar de juiste format en geeft het terug aan de serive die de aanvraag deed.
 De service kan dan ermee doen wat het moet. Dit is verder voor het diagram niet meer van belang. Het gaat in deze om de werking van de connectie met de externe API's.
 
+#### **externe api connection transport component diagram**
 
+Het onderstaande diagram geeft weer hoe de componenten samenwerken voor het ophalen van informatie van externe API's binnen de TripTop-applicatie.
+
+![Compnent diagram voor travel externe api's aansluiten](../opdracht-diagrammen/TravelComponentDiagram.png)
+
+
+De TransportProviderPort interface definieert een standaard manier om transportdata op te halen, ongeacht de externe API. Elk van de API-adapters (NavitiaAdapter, GoogleMapsAdapter, SkyscannerAdapter) implementeert deze interface en zorgt ervoor dat de ontvangen data uit de API correct wordt geformatteerd voordat het naar de service wordt gestuurd.
+
+Omdat niet elke API dezelfde gegevensstructuur hanteert, hebben we deze gestandaardiseerde port-interface nodig. De adapters koppelen zich aan deze interface en halen ruwe API-data op, die vervolgens wordt geformatteerd, gesorteerd en gefilterd tot een bruikbaar DTO-object. Dit voorkomt dat de interne service direct afhankelijk is van specifieke API-details.
+
+Bij het aanroepen van API’s moeten altijd dezelfde basishandelingen worden uitgevoerd:
+
+    Inloggen,
+
+    De API aanroepen,
+
+    De token controleren.
+
+De ApiCaller abstracte klasse (zichtbaar in het diagram) zorgt ervoor dat deze stappen altijd in dezelfde volgorde worden uitgevoerd. Dit volgt het Template Method Pattern, waarbij een vaste functie de drie stappen in de juiste volgorde aanroept.
+
+Elke API-adapter, zoals NavitiaAdapter, GoogleMapsAdapter, en SkyscannerAdapter, extends de abstracte klasse ApiCaller. Hierdoor hoeven ontwikkelaars alleen de specifieke implementatie te schrijven voor elke externe API, terwijl de vaste volgorde behouden blijft. Dit maakt de code onderhoudbaar en uitbreidbaar.
+
+Het toevoegen van een nieuwe API vereist twee stappen:
+
+    Een nieuwe port-interface aanmaken als de API-functionaliteit afwijkt van bestaande ports.
+
+    Een nieuwe adapter schrijven die zowel TransportProviderPort implementeert als ApiCaller uitbreidt.
+
+Hierdoor blijft de architectuur modulair en flexibel, terwijl TransportService via TransportProviderSelector automatisch de juiste provider kiest op basis van de aanvraag.
+
+### **externe api connection transport sequence diagram**
+
+![Dynamisch diagram Exerne api](../opdracht-diagrammen/sequenceDiagramTransport.png)
+
+Dit is het dynamische diagram dat hoort bij het externe API-component.
+De aanvraag komt vanuit de frontend en wordt doorgestuurd naar de backend.
+De backend roept de service aan, die een geschikte provider selecteert op basis van de aanvraag.
+De juiste adapter roept vervolgens de externe API aan en ontvangt een antwoord in een API-specifiek formaat.
+De adapter zet dit om naar een uniform formaat en stuurt het terug naar de service.
+De service handelt het verzoek verder af en stuurt de respons terug naar de gebruiker.
+
+### **Consistente authorisatie en authenticatie**
+
+![img.png](img.png)
+
+> Om ervoor te zorgen dat de beveiliging consistent is wordt er gebruik gemaakt van een API Gateway. Deze gateway zorgt ervoor dat de communicatie met externe APIs uniform loopt. In de geval zijn er twee externe APIs geschetst. Dit zou uitgebreid kunnen worden naar hoeveel er nodig zijn. 
+
+![img_1.png](img_1.png)
+
+> In de dynamic diagram is te zien in welke volgorde de communicatie loopt. In deze diagram is de SecurityData apart gezet om in beeld te brengen hoe de API Gateway de security gegevens ophaalt. Voor dit prototype is er gekozen om de waardes hard coded op te slaan. Als dit daadwerkelijk in een project zou geïntegreerd worden dan zullen deze gegevens gehasht in een database moeten staan.
 
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
@@ -221,6 +271,16 @@ De implementatie van deze functies wordt gedaan per adaptor gezien elke externe 
 De service kan dus meerdere adaptors aanroepen. Om ons te houden aan het **open closed principale** wordt er binnen de service gebruik gemaakt van **program to an inferface principal**. In de service wordt niet elke vorm van bij restaurantPort los aangeroepen. Je roept hier alle restaurant ports aan door een simpele restaurantPort.fetchData().
 Zo hoeven we niet voor elke port een langer of nieuwe aanroep te maken in de service. Zo blijft de code onderhoudbaar en betrouwbaar omdat je geen aanpassingen kunt vergeten. Zoals eerder besproken heeft elke adaptor zijn eigen implementatie voor het formateren van de data.
 
+#### **class diagram transport api's**
+![Class diagram travel externe api's](../opdracht-diagrammen/classDiagramTravel.png)
+
+In dit klassediagram kijken we vooral naar de interacties tussen de interfaces, abstracte klassen en de concrete adapter-klassen. Dit diagram laat duidelijk zien hoe het Template Method Pattern wordt toegepast in de abstracte klasse ApiCaller. De functie callApi() wordt aangeroepen door de adaptors, en zorgt ervoor dat de volgorde van de aanroepen — login(), apiCall(), en checkToken() — consistent wordt uitgevoerd, ongeacht welke externe API wordt aangesproken. Elke concrete adapter, zoals NavitiaAdapter, GoogleMapsAdapter, en SkyscannerAdapter, zorgt ervoor dat de specifieke implementatie van deze stappen wordt uitgevoerd, afhankelijk van de API-vereisten.
+
+De TransportService klasse maakt gebruik van de TransportProviderPort interface, die door de concrete adaptors wordt geïmplementeerd. Deze interface zorgt ervoor dat de service kan communiceren met verschillende API-adapters zonder zich zorgen te maken over de specifieke implementatie van elke API. De service roept fetchData() aan via de TransportProviderPort interface, waardoor de code eenvoudig en uitbreidbaar blijft.
+
+Door gebruik te maken van het Program to an Interface Principle, zorgt de TransportService ervoor dat de communicatie met de adapters generiek en flexibel blijft. Dit betekent dat de service geen specifieke implementaties van API’s aanroept, maar alleen afhankelijk is van de interfaces. Dit voorkomt dat de service code moet worden aangepast voor elke nieuwe API, wat de code onderhoudbaar en betrouwbaar maakt.
+
+Tot slot, door deze ontwerpprincipes en patronen toe te passen, kunnen we de API’s in de toekomst gemakkelijk uitbreiden zonder dat de bestaande codebehoeften aangepast hoeven te worden, wat bijdraagt aan een schaalbaar en flexibel systeemontwerp.
 
 > [!IMPORTANT]
 > Voeg toe: Per ontwerpvraag een Class Diagram plus een Sequence Diagram van een aantal scenario's inclusief begeleidende tekst.
@@ -294,12 +354,15 @@ Hierdoor kunnen ook gebruikers zonder creditcard internationaal betalen.
 
 ## 5. Betalingsopties vergelijking
 
-| Forces              | iDEAL | PayPal | Bank |
-|---------------------|:-----:|:------:|:----:|
-| **Beschikbaarheid** | -   | ++     | 0    |
-| **Creditcards**     | --  | ++     | ++   |
-| **Betrouwbaarheid** | ++  | +      | ++   |
-| **Extra kosten**    | ?   | +      | +    |
+| Forces                          | iDEAL  | PayPal | Bank  |
+|----------------------------------|:------:|:------:|:-----:|
+| **Internationale beschikbaarheid** | --     | ++     | +     |
+| **Uptime**                       | ++     | ++     | +     |
+| **Creditcards**                  | --     | ++     | ++    |
+| **Betrouwbaarheid**              | ++     | +      | ++    |
+| **Beveiliging**                  | ++     | ++     | +     |
+| **Extra kosten**                 | 0      | +      | +     |
+
 
 ## 6. Consequenties
 
@@ -315,6 +378,7 @@ Ook heeft het enkele nadelen:
 
 - PayPal is opgericht door Elon Musk en heeft in het verleden kritiek gekregen op beleid en kosten.
 - Externe API vereist integratie en communicatie met andere API’s.
+- Het is een betaalde API en zal dus geld kosten.
 - Niet alle bedrijven accepteren PayPal.
 
 ## 7. Alternatieven overwogen
@@ -547,7 +611,170 @@ Door interfaces te gebruiken, wordt de **testbaarheid** aanzienlijk verbeterd, a
 **Datum:** `[27-03-2025]`
 **Auteur:** `[Rob Kokx]`
 
-### 8.4. ADR-004 TITLE
+# 8.6. ADR-006 Law of Demeter en Modulaire Architectuur
+
+## Status
+> Voorgesteld
+
+## Context
+Om een goed georganiseerde en onderhoudbare codebase te garanderen, hanteren we de **Law of Demeter (LoD)**. Deze ontwerpregel stelt dat een object alleen mag communiceren met zijn directe afhankelijkheden en niet met diep geneste objecten. Hierdoor blijft de code modulair en testbaar.
+
+## Alternatieven Overwogen
+- **Directe afhankelijkheden tussen alle klassen**  
+  ❌ Dit leidt tot strakke koppeling, vermindert modulariteit en testbaarheid, en maakt toekomstige wijzigingen complex.
+- **Strikte Layered Architecture zonder Dependency Injection**  
+  ✅ Biedt een helder gestructureerde laagverdeling, maar beperkt de flexibiliteit bij uitbreidingen.
+
+## Beslissing
+We implementeren **Facades en Dependency Injection** om de Law of Demeter te handhaven. Dit betekent dat:
+- **Services via interfaces werken** en niet direct communiceren met onderliggende implementaties.
+- **Controllers alleen de services aanroepen** en niet de interne methoden van meerdere klassen.
+- **Een TransportProviderSelector** wordt ingezet om afhankelijkheden te beheren in plaats van een directe koppeling met API’s.
+
+## Gevolgen
+
+### Voordelen
+- Verbeterde testbaarheid door minder en duidelijk afgebakende afhankelijkheden.
+- Makkelijker onderhoud en uitbreidbaarheid dankzij een duidelijke scheiding van verantwoordelijkheden.
+- Modulaire architectuur die toekomstige aanpassingen eenvoudiger maakt.
+
+### Nadelen
+- Meer code is nodig voor extra facades en interfaces.
+- Mogelijke performance-impact bij extreme abstractie.
+
+## Bronnen
+- [Law of Demeter – Wikipedia](https://en.wikipedia.org/wiki/Law_of_Demeter) :contentReference[oaicite:0]{index=0}
+
+**Datum:** `[28-03-2025]`
+**Auteur:** `[Jae Dreijling]`
+---
+
+# 8.7. ADR-007 TransportProviderSelector in plaats van een Hardcoded Switch
+
+## Status
+> Voorgesteld
+
+## Context
+Om een flexibele en uitbreidbare architectuur te garanderen, vermijden we het gebruik van hardcoded switch statements in de businesslogica. Een hardcoded aanpak beperkt de mogelijkheid om dynamisch nieuwe transportproviders te integreren en schaadt de onderhoudbaarheid.
+
+## Alternatieven Overwogen
+- **Hardcoded switch statements in de businesslogica**  
+  ❌ Vereist codewijzigingen voor elke nieuwe transportprovider en biedt geen automatische fallback bij provider-uitval.
+- **Dynamisch configuratiebestand zonder centrale selector**  
+  ✅ Biedt flexibiliteit, maar vraagt handmatige updates en mist de automatische afhandeling bij provider-problemen.
+
+## Beslissing
+We implementeren een centrale **TransportProviderSelector** die dynamisch bepaalt welke transportprovider wordt ingezet, gebaseerd op beschikbaarheid en prestaties. Deze aanpak maakt gebruik van configuratie en real-time health checks voor een betrouwbare selectie.
+
+## Gevolgen
+
+### Voordelen
+- Flexibel beheer van transportproviders zonder noodzaak tot frequente codewijzigingen.
+- Eenvoudige uitbreidbaarheid en automatische fallback bij provider-uitval.
+- Betere onderhoudbaarheid door duidelijke scheiding van verantwoordelijkheden.
+
+### Nadelen
+- Vereist real-time monitoring van de beschikbaarheid van transportproviders.
+- Extra configuratiecomplexiteit door het dynamisch beheren van afhankelijkheden.
+
+## Bronnen
+- [Dependency Injection – Martin Fowler](https://martinfowler.com/articles/injection.html)
+
+**Datum:** `[28-03-2025]`
+**Auteur:** `[Jae Dreijling]`
+
+---
+
+# 8.8. Design Pattern
+## Ontwerpvraag: Hoe zorg je ervoor dat authenticatie en autorisatie consistent worden toegepast bij het communiceren met verschillende externe APIs?
+
+## Status
+
+> Voorstel
+
+## Context
+
+> Voor het vinden van de beste oplossing voor het consistent toepassen van authorisatie en authenticatie moet een design pattern bepaald worden.
+
+## Beslissing
+
+> De gekozen design pattern is het adapter pattern. Dit is flexibel voor het toevoegen van nieuwe APIs en zorgt ervoor dat klasses één verantwoordelijkheid hebben
+
+## Alternatieven
+
+| **Criteria**             | **State Pattern** | **Strategy Pattern** | **Adapter Pattern** | **Facade Pattern** | **Factory Method Pattern** |
+|--------------------------|-------------------|-----------------------|----------------------|---------------------|----------------------------|
+| **Flexibiliteit**         | +                 | ++                    | ++                   | +                   | +                          |
+| **Onderhoudbaarheid**     | ++                | ++                    | ++                   | ++                  | ++                         |
+| **Schaling**              | +                 | +                     | ++                   | +                   | ++                         |
+| **Complexiteit**          | ++                | +                     | -                    | 0                   | +                          |
+| **Beveiliging**           | 0                 | 0                     | ++                   | 0                   | 0                          |
+
+## Gevolgen
+
+### Positief:
+
+- Uitbreidbaar. Makkelijk om nieuwe APIs toe te voegen.
+- Single Responsibility Principle. Elke adapter zorgt voor het omzetten voor één API.
+- Separation of Concerns. De adapters zorgen voor specifieke interactie met de APIs.
+- Open/Closed Principle. De applicatie staat open voor uitbreiding maar gesloten voor wijziging.
+- Consistentie. De adapters zorgen voor een gelijke manier om te communiceren met APIs.
+
+### Negatief:
+
+- De code wordt complex doordat er steeds nieuwe interfaces en klasses gemaakt moeten worden.
+
+---
+
+**Datum:** `[28-03-2025]`
+**Auteur:** `[Niels van Eck]`
+
+
+--- 
+
+### 8.9. API Gateway
+
+## Status
+
+> Voorstel
+
+## Context
+
+> Omdat er met meerdere externe APIs (zoals Booking.com en TripAdvisor) wordt gecommuniceert, is het belangrijk om een consistente en veilige manier te hebben om authenticatie en autorisatie toe te passen. Elke API past dit op zijn eigen manier toe (bijvoorbeeld API key, secret, of wachtwoord), waardoor dit ingewikkeld is.
+
+## Beslissing
+
+> We kiezen ervoor om een API Gateway te gebruiken. De API Gateway zal verantwoordelijk zijn voor:
+>
+- Het centraliseren van authenticatie en autorisatie.
+- Het gelijkmaken van API-aanroepen ongeacht de verschillen tussen de externe APIs.
+
+## Alternatieven
+
+| Criteria                 | API Gateway | Directe API-aanroepen | Switch-Case Statement |
+|--------------------------|------------|----------------------|-----------------------|
+| Consistente security     | ++         | --                   | +                     |
+| Beheerbaarheid           | ++         | --                   | +                     |
+| Flexibiliteit            | ++         | --                   | +                     |
+| Complexiteit             | -          | ++                   | 0                     |
+
+## Gevolgen
+
+### Voordelen
+
+- **Eenvoudiger beheer:** Authenticatie en autorisatie worden op één centrale plek afgehandeld.
+- **Schaalbaarheid:** Het systeem kan makkelijker worden uitgebreid met nieuwe externe APIs zonder aanpassingen.
+
+### Nadelen
+
+- **Single point of failure:** Als de API Gateway werkt, werkt de rest ook niet.
+- **Complexiteit:** Door een API Gateway toe te voegen heb je extra code waarmee je rekening moet houden.
+
+---
+
+**Datum:** `[27-03-2025]`
+**Auteur:** `[Niels van Eck]`
+
 
 > [!TIP]
 > These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)

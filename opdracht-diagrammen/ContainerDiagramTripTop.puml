@@ -9,12 +9,11 @@ LAYOUT_WITH_LEGEND()
 
 SHOW_PERSON_OUTLINE()
 
-' Definieer personen
+' Definieer persoon
 Person(Reiziger, "Reiziger", "Een reiziger die zonder zorgen op reis wil.")
-Person(Reisagent, "Reisagent", "Helpt met de reis plannen voor andere reizigers")
 
-' Definieer externe container voor IdentityProvider
-Container_Ext(FbLogin, "Facebook Media API", "Zorgt voor het inloggen via facebook")
+' Definieer externe Identity Provider (naast backend)
+Container_Ext(FbLogin, "Facebook Media API", "Zorgt voor het inloggen via Facebook")
 
 ' Definieer de interne systemen binnen de TripTop boundary
 System_Boundary(triptop_core, "TripTop") {
@@ -25,44 +24,36 @@ System_Boundary(triptop_core, "TripTop") {
 }
 
 ' Definieer externe systemen
-System_Ext(betaalsysteem, "Paypal API", "Externe betaalprovider met creditcards, ideal en wallet payments.")
-System_Ext(reisAanbieder, "Navitia API", "Busmaatschappij, Treinschema's voor lange reizen.")
-System_Ext(vluchtaanbieder, "SkyScanner API", "Vluchten bekijken en boeken ")
-System_Ext(etenAanbieder, "Uber Eats Scraper API", "Informatie over restaurants, locaties menu's en reviews")
+System_Ext(betaalsysteem, "Paypal API", "Externe betaalprovider met creditcards, iDEAL en wallet payments.")
+System_Ext(reisAanbieder, "Navitia API", "Busmaatschappij, treinschema's voor lange reizen.")
+System_Ext(vluchtaanbieder, "SkyScanner API", "Vluchten bekijken en boeken")
+System_Ext(etenAanbieder, "Uber Eats Scraper API", "Informatie over restaurants, locaties, menu’s en reviews")
 System_Ext(AutoAanbieder, "Booking.com API", "Verhuur van auto's of fietsen")
 System_Ext(Dagbesteding, "Booking.com API", "Biedt tickets voor dagjes uit")
-System_Ext(Ov, "public transport API", "Bied overzicht voor openbaar vervoer")
-System_Ext(GoogleMaps, "GoogleMaps API", "Kaartweergave")
-System_Ext(accommodatieAanbieder, "Booking.com API", "Externe accommodatie provider, zoals hotels en hostels")
+System_Ext(Ov, "Public Transport API", "Biedt overzicht voor openbaar vervoer")
+System_Ext(GoogleMaps, "Google Maps API", "Kaartweergave")
+System_Ext(accommodatieAanbieder, "Booking.com API", "Externe accommodatieprovider, zoals hotels en hostels")
 
 ' Definieer relaties
-Reiziger --> triptop : "Logt in via"
-Reisagent --> triptop : "Logt in via"
-Reiziger -->FbLogin : "logt in via facebook met"
-Reisagent -->FbLogin : "logt in via facebook met"
-
-FbLogin --> triptop : "Stuurt gebruiker door naar"
+Reiziger --> triptop : "Logt in en gebruikt de applicatie"
+Reiziger --> FbLogin : "Logt in via Facebook"
+FbLogin --> backend : "Verifieert login en verstrekt gebruikersinfo"
 
 triptop --> backend : "Stuurt API calls naar"
-backend --> db : "Halen/slaan gegevens op"
-backend --> gateway : "Geeft API calls door naar"
+backend --> db : "Leest/schrijft gegevens"
+backend --> gateway : "Stuurt externe API verzoeken"
 
-Rel(gateway, betaalsysteem, "Verwerkt betaling via", "HTTPS (REST API, JSON)")
-Rel(gateway, reisAanbieder, "Reserveringen plaatsen / beschikbaarheid ophalen", "HTTPS (REST API, JSON)")
-Rel(gateway, etenAanbieder, "Eten opties ophalen", "HTTPS (REST API, JSON)")
-Rel(gateway, AutoAanbieder, "Vervoer opties ophalen / huren", "HTTPS (REST API, JSON)")
-Rel(gateway, Dagbesteding, "Activiteiten inplannen", "HTTPS (REST API, JSON)")
-Rel(gateway, GoogleMaps, "Activiteiten tonen op kaart", "HTTPS (REST API, JSON)")
-Rel(gateway, accommodatieAanbieder, "Accommodatie opties ophalen / reserveren", "HTTPS (REST API, JSON)")
-Rel(gateway, Ov, "informatie ophalen omtrent lokaal ov", "HTTPS (REST API, JSON)")
-Rel(gateway, vluchtaanbieder, "zoek en boekt vlucht", "HTTPS (REST API, JSON)")
+Rel(gateway, betaalsysteem, "Verwerkt betalingen", "HTTPS (REST API, JSON)")
+Rel(gateway, reisAanbieder, "Reserveringen en beschikbaarheid", "HTTPS (REST API, JSON)")
+Rel(gateway, etenAanbieder, "Ophalen van eetopties", "HTTPS (REST API, JSON)")
+Rel(gateway, AutoAanbieder, "Verhuur van voertuigen", "HTTPS (REST API, JSON)")
+Rel(gateway, Dagbesteding, "Tickets voor activiteiten", "HTTPS (REST API, JSON)")
+Rel(gateway, GoogleMaps, "Kaartintegratie", "HTTPS (REST API, JSON)")
+Rel(gateway, accommodatieAanbieder, "Boeken van accommodaties", "HTTPS (REST API, JSON)")
+Rel(gateway, Ov, "Reisinformatie OV", "HTTPS (REST API, JSON)")
+Rel(gateway, vluchtaanbieder, "Vluchten zoeken en boeken", "HTTPS (REST API, JSON)")
 
-' keuzes:
-' geen bezoeker, moet altijd inloggen voor gebruik
-' scraper api uber eats. geen bestel app makkelijk beschikbaar, dit is alleen voor info
-' transport api niet gedefineerd. Moet verder uitontwikkeld worden of meerdere losse api's worden
-' meerdere booking.com api's. andere onderdelen van de api's worden aangeroepen. voor clearity zijn dit losse api's
-'
-
+' Facebook login gepositioneerd naast backend
+FbLogin -[hidden]-> backend
 
 @enduml
