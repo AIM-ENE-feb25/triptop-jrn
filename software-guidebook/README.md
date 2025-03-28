@@ -98,9 +98,9 @@ Voordat deze casusomschrijving tot stand kwam, heeft de opdrachtgever de volgend
 
 ###     7.1. Containers
 
-## Globale applicatie
+## Globale TripTop applicatie
 
-![Globale applicatie container diagram](../opdracht-diagrammen/ContainerDiagramTripTop.png)
+![Globale TripTop applicatie container diagram](../opdracht-diagrammen/ContainerDiagramTripTop.png)
 
 De gebruiker kan inloggen via 2 wegen. De eigen manier die binnen de triptop accplicatie ontwikkeld is. Of via de facebook API met een facebook account. Dit word verder uitgelegd in 7.2 in een dynamisch Container diagram.
 Zodra de gebruiker is ingelogd komt deze op de front-end van de applicatie. Hier aangegeven als 'TripTop web applicatie'. Hier worden de bouwblokken in een interface getoond aan de gebruiker om interactie mogelijk te maken.
