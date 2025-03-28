@@ -36,3 +36,8 @@
 
 - De code wordt complex doordat er steeds nieuwe interfaces en klasses gemaakt moeten worden.
 
+---
+
+  **Datum:** `[28-03-2025]`
+  **Auteur:** `[Niels van Eck]`
+

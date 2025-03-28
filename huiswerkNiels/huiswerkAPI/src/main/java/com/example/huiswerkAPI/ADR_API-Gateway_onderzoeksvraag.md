@@ -35,3 +35,8 @@
 
 - **Single point of failure:** Als de API Gateway werkt, werkt de rest ook niet.
 - **Complexiteit:** Door een API Gateway toe te voegen heb je extra code waarmee je rekening moet houden.
+
+---
+
+**Datum:** `[28-03-2025]`
+**Auteur:** `[Niels van Eck]`
