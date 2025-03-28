@@ -246,6 +246,16 @@ De juiste adapter roept vervolgens de externe API aan en ontvangt een antwoord i
 De adapter zet dit om naar een uniform formaat en stuurt het terug naar de service.
 De service handelt het verzoek verder af en stuurt de respons terug naar de gebruiker.
 
+### **Consistente authorisatie en authenticatie**
+
+![img.png](img.png)
+
+> Om ervoor te zorgen dat de beveiliging consistent is wordt er gebruik gemaakt van een API Gateway. Deze gateway zorgt ervoor dat de communicatie met externe APIs uniform loopt. In de geval zijn er twee externe APIs geschetst. Dit zou uitgebreid kunnen worden naar hoeveel er nodig zijn. 
+
+![img_1.png](img_1.png)
+
+> In de dynamic diagram is te zien in welke volgorde de communicatie loopt. In deze diagram is de SecurityData apart gezet om in beeld te brengen hoe de API Gateway de security gegevens ophaalt. Voor dit prototype is er gekozen om de waardes hard coded op te slaan. Als dit daadwerkelijk in een project zou geïntegreerd worden dan zullen deze gegevens gehasht in een database moeten staan.
+
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
 
@@ -651,10 +661,96 @@ We implementeren een centrale **TransportProviderSelector** die dynamisch bepaal
 
 ---
 
-# 8.8. ADR-008 TITLE
+# 8.8. Design Pattern
+## Ontwerpvraag: Hoe zorg je ervoor dat authenticatie en autorisatie consistent worden toegepast bij het communiceren met verschillende externe APIs?
+
+## Status
+
+> Voorstel
+
+## Context
+
+> Voor het vinden van de beste oplossing voor het consistent toepassen van authorisatie en authenticatie moet een design pattern bepaald worden.
+
+## Beslissing
+
+> De gekozen design pattern is het adapter pattern. Dit is flexibel voor het toevoegen van nieuwe APIs en zorgt ervoor dat klasses één verantwoordelijkheid hebben
+
+## Alternatieven
+
+| **Criteria**             | **State Pattern** | **Strategy Pattern** | **Adapter Pattern** | **Facade Pattern** | **Factory Method Pattern** |
+|--------------------------|-------------------|-----------------------|----------------------|---------------------|----------------------------|
+| **Flexibiliteit**         | +                 | ++                    | ++                   | +                   | +                          |
+| **Onderhoudbaarheid**     | ++                | ++                    | ++                   | ++                  | ++                         |
+| **Schaling**              | +                 | +                     | ++                   | +                   | ++                         |
+| **Complexiteit**          | ++                | +                     | -                    | 0                   | +                          |
+| **Beveiliging**           | 0                 | 0                     | ++                   | 0                   | 0                          |
+
+## Gevolgen
+
+### Positief:
+
+- Uitbreidbaar. Makkelijk om nieuwe APIs toe te voegen.
+- Single Responsibility Principle. Elke adapter zorgt voor het omzetten voor één API.
+- Separation of Concerns. De adapters zorgen voor specifieke interactie met de APIs.
+- Open/Closed Principle. De applicatie staat open voor uitbreiding maar gesloten voor wijziging.
+- Consistentie. De adapters zorgen voor een gelijke manier om te communiceren met APIs.
+
+### Negatief:
+
+- De code wordt complex doordat er steeds nieuwe interfaces en klasses gemaakt moeten worden.
+
+---
+
+**Datum:** `[28-03-2025]`
+**Auteur:** `[Niels van Eck]`
+
+
 --- 
 
-### 8.4. ADR-004 TITLE
+### 8.9. API Gateway
+
+## Status
+
+> Voorstel
+
+## Context
+
+> Omdat er met meerdere externe APIs (zoals Booking.com en TripAdvisor) wordt gecommuniceert, is het belangrijk om een consistente en veilige manier te hebben om authenticatie en autorisatie toe te passen. Elke API past dit op zijn eigen manier toe (bijvoorbeeld API key, secret, of wachtwoord), waardoor dit ingewikkeld is.
+
+## Beslissing
+
+> We kiezen ervoor om een API Gateway te gebruiken. De API Gateway zal verantwoordelijk zijn voor:
+>
+- Het centraliseren van authenticatie en autorisatie.
+- Het gelijkmaken van API-aanroepen ongeacht de verschillen tussen de externe APIs.
+
+## Alternatieven
+
+| Criteria                 | API Gateway | Directe API-aanroepen | Switch-Case Statement |
+|--------------------------|------------|----------------------|-----------------------|
+| Consistente security     | ++         | --                   | +                     |
+| Beheerbaarheid           | ++         | --                   | +                     |
+| Flexibiliteit            | ++         | --                   | +                     |
+| Complexiteit             | -          | ++                   | 0                     |
+
+## Gevolgen
+
+### Voordelen
+
+- **Eenvoudiger beheer:** Authenticatie en autorisatie worden op één centrale plek afgehandeld.
+- **Schaalbaarheid:** Het systeem kan makkelijker worden uitgebreid met nieuwe externe APIs zonder aanpassingen.
+
+### Nadelen
+
+- **Single point of failure:** Als de API Gateway werkt, werkt de rest ook niet.
+- **Complexiteit:** Door een API Gateway toe te voegen heb je extra code waarmee je rekening moet houden.
+
+---
+
+**Datum:** `[27-03-2025]`
+**Auteur:** `[Niels van Eck]`
+
 
 > [!TIP]
 > These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
