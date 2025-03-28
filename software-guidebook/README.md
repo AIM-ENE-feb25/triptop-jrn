@@ -175,7 +175,7 @@ Proces:
     Zo nodig haalt de backend via de API Gateway vluchtinformatie op bij Skyscanner.
     De vluchtgegevens worden opgeslagen en teruggestuurd naar de gebruiker.
 
-#### **extrene api connection container diagram**
+#### **externe api connection restaurant en activiteit component diagram**
 
 ![Compnent diagram voor externe api's aansluiten](../opdracht-diagrammen/Componentdiagram-portsadapters.png)
 
@@ -204,7 +204,47 @@ Zoals te zien is komt de aanvraag uit de frontend en wordt doorgegeven door de b
 Zodra de adapter de aanvraag krijgt gaat hij de api aanroepen met de voorgaand genoemde stappen. De api geeft informatie terug in een format die kan verschillen per api. De adapter zet het daarna weer om naar de juiste format en geeft het terug aan de serive die de aanvraag deed.
 De service kan dan ermee doen wat het moet. Dit is verder voor het diagram niet meer van belang. Het gaat in deze om de werking van de connectie met de externe API's.
 
+#### **externe api connection transport component diagram**
 
+Het onderstaande diagram geeft weer hoe de componenten samenwerken voor het ophalen van informatie van externe API's binnen de TripTop-applicatie.
+
+![Compnent diagram voor travel externe api's aansluiten](../opdracht-diagrammen/TravelComponentDiagram.png)
+
+
+De TransportProviderPort interface definieert een standaard manier om transportdata op te halen, ongeacht de externe API. Elk van de API-adapters (NavitiaAdapter, GoogleMapsAdapter, SkyscannerAdapter) implementeert deze interface en zorgt ervoor dat de ontvangen data uit de API correct wordt geformatteerd voordat het naar de service wordt gestuurd.
+
+Omdat niet elke API dezelfde gegevensstructuur hanteert, hebben we deze gestandaardiseerde port-interface nodig. De adapters koppelen zich aan deze interface en halen ruwe API-data op, die vervolgens wordt geformatteerd, gesorteerd en gefilterd tot een bruikbaar DTO-object. Dit voorkomt dat de interne service direct afhankelijk is van specifieke API-details.
+
+Bij het aanroepen van API’s moeten altijd dezelfde basishandelingen worden uitgevoerd:
+
+    Inloggen,
+
+    De API aanroepen,
+
+    De token controleren.
+
+De ApiCaller abstracte klasse (zichtbaar in het diagram) zorgt ervoor dat deze stappen altijd in dezelfde volgorde worden uitgevoerd. Dit volgt het Template Method Pattern, waarbij een vaste functie de drie stappen in de juiste volgorde aanroept.
+
+Elke API-adapter, zoals NavitiaAdapter, GoogleMapsAdapter, en SkyscannerAdapter, extends de abstracte klasse ApiCaller. Hierdoor hoeven ontwikkelaars alleen de specifieke implementatie te schrijven voor elke externe API, terwijl de vaste volgorde behouden blijft. Dit maakt de code onderhoudbaar en uitbreidbaar.
+
+Het toevoegen van een nieuwe API vereist twee stappen:
+
+    Een nieuwe port-interface aanmaken als de API-functionaliteit afwijkt van bestaande ports.
+
+    Een nieuwe adapter schrijven die zowel TransportProviderPort implementeert als ApiCaller uitbreidt.
+
+Hierdoor blijft de architectuur modulair en flexibel, terwijl TransportService via TransportProviderSelector automatisch de juiste provider kiest op basis van de aanvraag.
+
+### **externe api connection transport sequence diagram**
+
+![Dynamisch diagram Exerne api](../opdracht-diagrammen/sequenceDiagramTransport.png)
+
+Dit is het dynamische diagram dat hoort bij het externe API-component.
+De aanvraag komt vanuit de frontend en wordt doorgestuurd naar de backend.
+De backend roept de service aan, die een geschikte provider selecteert op basis van de aanvraag.
+De juiste adapter roept vervolgens de externe API aan en ontvangt een antwoord in een API-specifiek formaat.
+De adapter zet dit om naar een uniform formaat en stuurt het terug naar de service.
+De service handelt het verzoek verder af en stuurt de respons terug naar de gebruiker.
 
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
@@ -221,6 +261,16 @@ De implementatie van deze functies wordt gedaan per adaptor gezien elke externe 
 De service kan dus meerdere adaptors aanroepen. Om ons te houden aan het **open closed principale** wordt er binnen de service gebruik gemaakt van **program to an inferface principal**. In de service wordt niet elke vorm van bij restaurantPort los aangeroepen. Je roept hier alle restaurant ports aan door een simpele restaurantPort.fetchData().
 Zo hoeven we niet voor elke port een langer of nieuwe aanroep te maken in de service. Zo blijft de code onderhoudbaar en betrouwbaar omdat je geen aanpassingen kunt vergeten. Zoals eerder besproken heeft elke adaptor zijn eigen implementatie voor het formateren van de data.
 
+#### **class diagram transport api's**
+![Class diagram travel externe api's](../opdracht-diagrammen/classDiagramTravel.png)
+
+In dit klassediagram kijken we vooral naar de interacties tussen de interfaces, abstracte klassen en de concrete adapter-klassen. Dit diagram laat duidelijk zien hoe het Template Method Pattern wordt toegepast in de abstracte klasse ApiCaller. De functie callApi() wordt aangeroepen door de adaptors, en zorgt ervoor dat de volgorde van de aanroepen — login(), apiCall(), en checkToken() — consistent wordt uitgevoerd, ongeacht welke externe API wordt aangesproken. Elke concrete adapter, zoals NavitiaAdapter, GoogleMapsAdapter, en SkyscannerAdapter, zorgt ervoor dat de specifieke implementatie van deze stappen wordt uitgevoerd, afhankelijk van de API-vereisten.
+
+De TransportService klasse maakt gebruik van de TransportProviderPort interface, die door de concrete adaptors wordt geïmplementeerd. Deze interface zorgt ervoor dat de service kan communiceren met verschillende API-adapters zonder zich zorgen te maken over de specifieke implementatie van elke API. De service roept fetchData() aan via de TransportProviderPort interface, waardoor de code eenvoudig en uitbreidbaar blijft.
+
+Door gebruik te maken van het Program to an Interface Principle, zorgt de TransportService ervoor dat de communicatie met de adapters generiek en flexibel blijft. Dit betekent dat de service geen specifieke implementaties van API’s aanroept, maar alleen afhankelijk is van de interfaces. Dit voorkomt dat de service code moet worden aangepast voor elke nieuwe API, wat de code onderhoudbaar en betrouwbaar maakt.
+
+Tot slot, door deze ontwerpprincipes en patronen toe te passen, kunnen we de API’s in de toekomst gemakkelijk uitbreiden zonder dat de bestaande codebehoeften aangepast hoeven te worden, wat bijdraagt aan een schaalbaar en flexibel systeemontwerp.
 
 > [!IMPORTANT]
 > Voeg toe: Per ontwerpvraag een Class Diagram plus een Sequence Diagram van een aantal scenario's inclusief begeleidende tekst.
@@ -526,6 +576,83 @@ Door interfaces te gebruiken, wordt de **testbaarheid** aanzienlijk verbeterd, a
 
 **Datum:** `[27-03-2025]`
 **Auteur:** `[Rob Kokx]`
+
+# 8.6. ADR-006 Law of Demeter en Modulaire Architectuur
+
+## Status
+> Voorgesteld
+
+## Context
+Om een goed georganiseerde en onderhoudbare codebase te garanderen, hanteren we de **Law of Demeter (LoD)**. Deze ontwerpregel stelt dat een object alleen mag communiceren met zijn directe afhankelijkheden en niet met diep geneste objecten. Hierdoor blijft de code modulair en testbaar.
+
+## Alternatieven Overwogen
+- **Directe afhankelijkheden tussen alle klassen**  
+  ❌ Dit leidt tot strakke koppeling, vermindert modulariteit en testbaarheid, en maakt toekomstige wijzigingen complex.
+- **Strikte Layered Architecture zonder Dependency Injection**  
+  ✅ Biedt een helder gestructureerde laagverdeling, maar beperkt de flexibiliteit bij uitbreidingen.
+
+## Beslissing
+We implementeren **Facades en Dependency Injection** om de Law of Demeter te handhaven. Dit betekent dat:
+- **Services via interfaces werken** en niet direct communiceren met onderliggende implementaties.
+- **Controllers alleen de services aanroepen** en niet de interne methoden van meerdere klassen.
+- **Een TransportProviderSelector** wordt ingezet om afhankelijkheden te beheren in plaats van een directe koppeling met API’s.
+
+## Gevolgen
+
+### Voordelen
+- Verbeterde testbaarheid door minder en duidelijk afgebakende afhankelijkheden.
+- Makkelijker onderhoud en uitbreidbaarheid dankzij een duidelijke scheiding van verantwoordelijkheden.
+- Modulaire architectuur die toekomstige aanpassingen eenvoudiger maakt.
+
+### Nadelen
+- Meer code is nodig voor extra facades en interfaces.
+- Mogelijke performance-impact bij extreme abstractie.
+
+## Bronnen
+- [Law of Demeter – Wikipedia](https://en.wikipedia.org/wiki/Law_of_Demeter) :contentReference[oaicite:0]{index=0}
+
+**Datum:** `[28-03-2025]`
+**Auteur:** `[Jae Dreijling]`
+---
+
+# 8.7. ADR-007 TransportProviderSelector in plaats van een Hardcoded Switch
+
+## Status
+> Voorgesteld
+
+## Context
+Om een flexibele en uitbreidbare architectuur te garanderen, vermijden we het gebruik van hardcoded switch statements in de businesslogica. Een hardcoded aanpak beperkt de mogelijkheid om dynamisch nieuwe transportproviders te integreren en schaadt de onderhoudbaarheid.
+
+## Alternatieven Overwogen
+- **Hardcoded switch statements in de businesslogica**  
+  ❌ Vereist codewijzigingen voor elke nieuwe transportprovider en biedt geen automatische fallback bij provider-uitval.
+- **Dynamisch configuratiebestand zonder centrale selector**  
+  ✅ Biedt flexibiliteit, maar vraagt handmatige updates en mist de automatische afhandeling bij provider-problemen.
+
+## Beslissing
+We implementeren een centrale **TransportProviderSelector** die dynamisch bepaalt welke transportprovider wordt ingezet, gebaseerd op beschikbaarheid en prestaties. Deze aanpak maakt gebruik van configuratie en real-time health checks voor een betrouwbare selectie.
+
+## Gevolgen
+
+### Voordelen
+- Flexibel beheer van transportproviders zonder noodzaak tot frequente codewijzigingen.
+- Eenvoudige uitbreidbaarheid en automatische fallback bij provider-uitval.
+- Betere onderhoudbaarheid door duidelijke scheiding van verantwoordelijkheden.
+
+### Nadelen
+- Vereist real-time monitoring van de beschikbaarheid van transportproviders.
+- Extra configuratiecomplexiteit door het dynamisch beheren van afhankelijkheden.
+
+## Bronnen
+- [Dependency Injection – Martin Fowler](https://martinfowler.com/articles/injection.html)
+
+**Datum:** `[28-03-2025]`
+**Auteur:** `[Jae Dreijling]`
+
+---
+
+# 8.8. ADR-008 TITLE
+--- 
 
 ### 8.4. ADR-004 TITLE
 
