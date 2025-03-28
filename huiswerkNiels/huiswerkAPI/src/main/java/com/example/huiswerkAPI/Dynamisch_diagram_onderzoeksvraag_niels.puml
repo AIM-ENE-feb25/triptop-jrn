@@ -1,30 +1,30 @@
 @startuml
 !include <C4/C4_Component>
 
-title C4 Component Diagram voor FabLab
+title C4 Dynamic Diagram voor FabLab
 
 System_Boundary(triptop_core, "TripTop") {
 
 Component(HotelController, "HotelController", "Spring Boot Java Class", "Controller voor het vinden van hotels")
-Component(HotelService, "HotelService", "Spring Boot Java Class", "Service voor het verwerken van een API aanroep naar de endpoint")
-Component(API_Gateway, "API Gateway", "Spring Boot Java Class", "Klasse om ervoor te zorgen dat de API Request correct wordt gestuurd met juiste gegevens")
-Component(BookingRepo, "BookingRepo", "Spring Boot Java Class", "Klasse voor het ophalen van gegevens uit de Booking.com API")
-Component(TripAdvisorRepo, "TripAdvisorRepo", "Spring Boot Java Class", "Klasse voor het ophalen van gegevens uit de Trip Advisor API")
+Component(HotelService, "HotelService", "Spring Boot Java Class", "Service voor het verwerken van API-aanroepen naar de endpoint")
+Component(API_Gateway, "API Gateway", "Spring Boot Java Class", "Klasse die zorgt voor de correcte API-aanroep met de juiste gegevens")
+Component(BookingRepo, "BookingRepo", "Spring Boot Java Class", "Repo voor het ophalen van gegevens uit de Booking.com API")
+Component(TripAdvisorRepo, "TripAdvisorRepo", "Spring Boot Java Class", "Repo voor het ophalen van gegevens uit de Trip Advisor API")
 }
 
 System_Ext(Booking, "Booking.com API", "Externe API voor het ophalen van hotelgegevens")
 System_Ext(TripAdvisor, "Trip Advisor API", "Externe API voor het ophalen van hotelgegevens")
 
-Rel("HotelController", "HotelService", "Geeft de API request door naar de service [1]")
-Rel("HotelService", "API_Gateway", "Geeft de (aangepaste) API request door aan de API Gateway [2]")
-Rel("API_Gateway", "BookingRepo", "Geeft de API request op de juiste manier door zodat de externe API er wat aan heeft [3]")
-Rel("API_Gateway", "TripAdvisorRepo", "Geeft de API request op de juiste manier door zodat de externe API er wat aan heeft [7]")
-Rel("BookingRepo", "Booking", "Vraagt gegevens uit [4]")
-Rel("Booking", "BookingRepo", "Geeft gegevens aan [5]")
-Rel("TripAdvisorRepo", "TripAdvisor", "Vraagt gegevens uit [8]")
-Rel("TripAdvisor", "TripAdvisorRepo", "Geeft gegevens terug [9]")
-Rel("BookingRepo", "API_Gateway", "Geef gegevens door naar [6]")
-Rel("TripAdvisorRepo", "API_Gateway", "Geef gegevens door naar [10]")
-Rel("API_Gateway", "HotelService", "Geef gegevens door naar")
-Rel("HotelService", "HotelController", "Geef gegevens door naar")
+Rel("HotelController", "HotelService", "Verstuurt request voor hotels op basis van locatie [1]")
+Rel("HotelService", "API_Gateway", "Verstuurt API-aanroep naar API Gateway [2]")
+Rel("API_Gateway", "BookingRepo", "Verstuurt verzoek naar BookingRepo voor hotelinformatie [3]")
+Rel("API_Gateway", "TripAdvisorRepo", "Verstuurt verzoek naar TripAdvisorRepo voor hotelinformatie [4]")
+Rel("BookingRepo", "Booking", "Verzoekt hotelgegevens uit Booking API [5]")
+Rel("Booking", "BookingRepo", "Retourneert hotelgegevens aan BookingRepo [6]")
+Rel("TripAdvisorRepo", "TripAdvisor", "Verzoekt hotelgegevens uit TripAdvisor API [7]")
+Rel("TripAdvisor", "TripAdvisorRepo", "Retourneert hotelgegevens aan TripAdvisorRepo [8]")
+Rel("BookingRepo", "API_Gateway", "Retourneert hotelgegevens naar API Gateway [9]")
+Rel("TripAdvisorRepo", "API_Gateway", "Retourneert hotelgegevens naar API Gateway [10]")
+Rel("API_Gateway", "HotelService", "Retourneert verwerkte hotelgegevens naar HotelService [11]")
+Rel("HotelService", "HotelController", "Retourneert verwerkte hotelgegevens naar HotelController [12]")
 @enduml
