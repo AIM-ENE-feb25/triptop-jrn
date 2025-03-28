@@ -1,0 +1,37 @@
+@startuml
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container("frontend", "TripTop Web App", "Container met React.js", "Zorgt voor frontend en de gebruikersinterfaces")
+
+System_Boundary(triptop_core, "TripTop") {
+  Component("transportController", "TransportController", "SpringBoot.java", "Controller voor routeplanning en transportinformatie")
+  Component("transportService", "TransportService", "SpringBoot.java", "Verwerkt transport- en routeplanningslogica")
+  Component("TransportProviderSelector", "TransportProviderSelector", "Java Class", "Selecteert de best beschikbare adapter voor API-aanroepen")
+  Component("ApiCaller", "ApiCaller (abstract)", "Java Abstract Class", "Beheert de vaste volgorde: inloggen, API aanroepen, token checken")
+  Component("TransportProviderPort", "TransportProviderPort", "Java interface", "Definieert de standaard interface voor transport API's")
+  Component("NavitiaAdapter", "NavitiaAdapter", "Java Class", "Haalt data op uit Navitia API en formatteert naar Port formaat")
+  Component("GoogleMapsAdapter", "GoogleMapsAdapter", "Java Class", "Haalt data op uit Google Maps API en formatteert naar Port formaat")
+  Component("SkyscannerAdapter", "SkyscannerAdapter", "Java Class", "Haalt data op uit Skyscanner API en formatteert naar Port formaat")
+}
+
+System_Ext("NavitiaAPI", "Navitia API", "REST API", "Externe API voor multi-modale routeplanning")
+System_Ext("GoogleMapsAPI", "Google Maps API", "REST API", "Externe API voor routeplanning en alternatieve route-opties")
+System_Ext("SkyscannerAPI", "Skyscanner API", "REST API", "Externe API voor vluchtinformatie en prijsdata")
+
+frontend --> transportController : "Roept aan met CRUD"
+transportController --> transportService : "vraagt logica"
+transportService --> TransportProviderSelector : "Verzoekt data via Port"
+TransportProviderSelector --> TransportProviderPort : "Selecteert adapter"
+NavitiaAdapter --> ApiCaller : "extends"
+GoogleMapsAdapter --> ApiCaller : "extends"
+SkyscannerAdapter --> ApiCaller : "extends"
+NavitiaAdapter --> TransportProviderPort : "implements"
+GoogleMapsAdapter --> TransportProviderPort : "implements"
+SkyscannerAdapter --> TransportProviderPort : "implements"
+NavitiaAdapter --> "NavitiaAPI" : "[JSON]"
+GoogleMapsAdapter --> "GoogleMapsAPI" : "[JSON]"
+SkyscannerAdapter --> "SkyscannerAPI" : "[JSON]"
+
+@enduml

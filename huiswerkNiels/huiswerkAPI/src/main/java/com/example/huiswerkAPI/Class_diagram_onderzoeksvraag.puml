@@ -1,0 +1,42 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class HotelController {
+    - HotelService hotelService
+    getHotelsInArea(int: locationId): List<Hotel>
+}
+
+class HotelService{
+    - API_Gateway gateway
+    getHotelsInArea(int: locationId): List<Hotel>
+}
+
+interface API_Gateway{
+    getHotelsInArea(int: locationId, headers): List<Hotel>
+}
+
+interface HotelRepository {
+    getHotelsInArea(int: locationId, headers): List<Hotel>
+}
+
+class BookingRepo {
+    getHotelsInArea(int: locationId, headers): List<Hotel>
+}
+
+class TripAdvisorRepo {
+    getHotelsInArea(int: locationId, headers): List<Hotel>
+}
+
+class SecurityRepo{
++ BookingSecurity[]
++ TripAdvisorSecurity[]
+}
+
+HotelController --> HotelService
+HotelService --> API_Gateway
+API_Gateway --> SecurityRepo
+API_Gateway --> HotelRepository
+BookingRepo ..|> HotelRepository
+TripAdvisorRepo ..|> HotelRepository
+
+@enduml

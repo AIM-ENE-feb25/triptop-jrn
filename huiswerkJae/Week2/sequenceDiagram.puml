@@ -1,0 +1,36 @@
+@startuml
+
+actor User
+participant TransportController
+participant TransportService
+participant TransportProviderSelector
+participant TransportProviderPort
+
+participant NavitiaAdapter
+participant GoogleMapsAdapter
+participant SkyscannerAdapter
+
+User -> TransportController: getTransportOptions(request)
+TransportController -> TransportService: getTransportData(request)
+TransportService -> TransportProviderSelector: selectProvider(request)
+TransportProviderSelector -> TransportProviderPort: select(request)
+
+alt NavitiaProvider selected
+    TransportProviderPort -> NavitiaAdapter: fetchData(request)
+    NavitiaAdapter -> TransportService: TransportResponse
+end
+
+alt GoogleMapsProvider selected
+    TransportProviderPort -> GoogleMapsAdapter: fetchData(request)
+    GoogleMapsAdapter -> TransportService: TransportResponse
+end
+
+alt SkyscannerProvider selected
+    TransportProviderPort -> SkyscannerAdapter: fetchData(request)
+    SkyscannerAdapter -> TransportService: TransportResponse
+end
+
+TransportService -> TransportController: TransportResponse
+TransportController -> User: TransportResponse
+
+@enduml
