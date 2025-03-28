@@ -34,7 +34,4 @@
 ### Nadelen
 
 - **Single point of failure:** Als de API Gateway werkt, werkt de rest ook niet.
-
-## Decision Outcome
-
-> Door de voordelen op het gebied van security, beheerbaarheid en flexibiliteit kiezen we voor een API Gateway als de beste oplossing voor dit project.
+- **Complexiteit:** Door een API Gateway toe te voegen heb je extra code waarmee je rekening moet houden.
