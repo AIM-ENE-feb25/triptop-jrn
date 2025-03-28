@@ -1,0 +1,18 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!include <C4/C4_Component>
+
+title C4 Component Diagram voor FabLab
+
+System_Boundary(triptop_core, "TripTop") {
+
+Component(MessageController, "MessageController", "Java Class", "Controller voor het beheren van endpoints")
+Component(MessageService, "MessageService", "Java Class", "Service voor het verwerken van een API aanroep naar de endpoint")
+Component(MessageRepo, "MessageRepository", "Java Class", "Zorgt voor communicatie met de database")
+Component(Message, "Message", "Java Class", "Domeinklasse voor een bericht")
+}
+
+Rel("MessageController", "MessageService", "Geeft de API request door naar de service")
+Rel("MessageService", "MessageRepo", "Geeft de API request door naar de repo met eventuele aanpassingen")
+Rel("MessageRepo", "Message", "Gebruikt de message domeinklasse om een message altijd juist aan te maken")
+@enduml
