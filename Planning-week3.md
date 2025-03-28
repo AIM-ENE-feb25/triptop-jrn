@@ -52,3 +52,35 @@
 
 - Laatste puntjes op de i waar nodig.
 - Code integreren met de andere code van groepsgenoten.
+
+
+---
+
+## Jae's Week Planning
+
+**Maandag:**
+
+- Opzetten van de basisstructuur van het prototype op basis van het klassediagram.
+- Het framework en de benodigde tools instellen.
+- Start met de implementatie van de eerste adapter (navitia)
+
+**Dinsdag:**
+
+- Integreren van de eerste API in het prototype.
+- Aantoonbaar in Postman: Test een basis API-aanroep.
+- Begin met de tweede adapter (google maps)
+
+**Woensdag:**
+- Test de functionaliteit van beide API’s en adapter-integraties.
+- Werk aan het formatteren van de ontvangen data naar het juiste formaat.
+- Update Software Guidebook met de API-integratie en aanpassingen.
+
+**Donderdag:**
+- Implementeer de selector voor het kiezen van de juiste transportprovider.
+- Test de samenwerking tussen controllers, services, en adapters.
+- Vraag en verwerk feedback van het team en voer eventuele verbeteringen door.
+
+**Vrijdag:**
+- Laatste controles en afronding van het prototype.
+- Integratie met andere teamleden voor gezamenlijke tests en feedback.
+- Documentatie bijwerken en presentatie voorbereiden.
