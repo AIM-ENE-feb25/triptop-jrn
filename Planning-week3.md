@@ -53,7 +53,6 @@
 - Laatste puntjes op de i waar nodig.
 - Code integreren met de andere code van groepsgenoten.
 
-
 ---
 
 ## Jae's Week Planning
@@ -84,3 +83,4 @@
 - Laatste controles en afronding van het prototype.
 - Integratie met andere teamleden voor gezamenlijke tests en feedback.
 - Documentatie bijwerken en presentatie voorbereiden.
+
