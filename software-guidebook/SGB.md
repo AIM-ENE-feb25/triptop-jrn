@@ -403,108 +403,128 @@ Vooral landen die nog niet echt klaar zijn voor grote vakantieganger
 
 ToDo: Toevoegen bronnen
 
-### 8.3. ADR-003 Integratie van de Skyscanner API voor Vluchtinformatie
+## ADR-003: Integratie van Flightinformatie API’s voor Vluchtinformatie
 
-## 1. Titel
-**Integratie van de Skyscanner API voor Vluchtinformatie**
+### 1. Titel
+**Integratie van Flightinformatie API’s: Skyscanner, Kiwi.com en Amadeus API**
 
-## 2. Status
+### 2. Status
 **Voorstel**
 
-## 3. Context
-Onze applicatie moet vluchtinformatie kunnen ophalen voor het plannen van reizen. Skyscanner API biedt uitgebreide vluchtdata. Alternatieven, zoals Kiwi.com of niet-publieke oplossingen zoals Google Flights, zijn minder geschikt voor onze toepassing.
+### 3. Context
+Onze applicatie moet vluchtinformatie ophalen voor het plannen van reizen. Het is van belang dat de bron betrouwbaar, actueel en eenvoudig te integreren is. We overwegen daarom de volgende drie API-opties:
 
-## 4. Beslissing
-Wij kiezen voor de Skyscanner API vanwege:
-- **Uitgebreide data:** Betrouwbare en actuele vluchtinformatie.
-- **Toegankelijkheid:** Eenvoudige integratie met de API.
-- **Focus op reisdata:** Specifiek ontworpen voor vluchtzoekopdrachten.
+- **Skyscanner API:** Biedt uitgebreide en gedetailleerde vluchtdata en heeft een goede reputatie in de reisbranche.
+- **Kiwi.com API:** Een alternatief met redelijke datakwaliteit, maar met minder uitgebreide documentatie en support.
+- **Amadeus API:** Een bijkomende optie met competitieve kosten en uitgebreide functionaliteiten. Let wel: Google Flights is geen optie, aangezien Google geen publieke API aanbiedt voor vluchtinformatie ([Google Flights](https://www.google.com/flights)).
 
-## 5. Consequenties
+### 4. Beslissing
+Wij kiezen als primaire bron voor vluchtinformatie voor de **Skyscanner API** vanwege:
 
-### Voordelen:
-- Kwalitatieve en gedetailleerde vluchtinformatie.
-- Eenvoudige API-integratie binnen de Spring Boot applicatie.
-- Ondersteuning voor meerdere datapunten zoals prijs en luchtvaartmaatschappij.
+- **Uitgebreide en betrouwbare data:** Skyscanner levert een rijke dataset en real-time informatie ([Skyscanner API Documentation](https://developers.skyscanner.net)).
+- **Eenvoudige integratie:** Duidelijke en gestructureerde documentatie maakt de implementatie soepel.
+- **Marktleiderschap en transparantie:** De API is breed geaccepteerd binnen de reisindustrie.
 
-### Nadelen:
-- Mogelijke beperkingen in verzoeken afhankelijk van het contract.
-- Afhankelijkheid van externe data voor kritieke functionaliteit.
+Als secundaire bronnen worden **Kiwi.com API** en **Amadeus API** overwogen. Deze alternatieven helpen om afhankelijkheidsrisico’s te spreiden en bieden potentieel interessante prijs- en functionaliteitsprofielen ([Kiwi.com API Documentatie](https://docs.kiwi.com), [Amadeus for Developers](https://developers.amadeus.com)).
 
-## 6. Alternatieven Overwogen
+### 5. Consequenties
 
-| Kenmerk                  | Skyscanner  | Kiwi.com | 
-|--------------------------|-------------|----------|
-| **Data Nauwkeurigheid**  | ++          | +        | 
-| **Toegankelijkheid**     | ++          | +        | 
-| **Documentatie**         | ++          | +        | 
-| **Kosten/Kwota**         | +           | ?        |
+#### Voordelen
+- **Skyscanner API:**
+  - Hoge nauwkeurigheid en uitgebreide data.
+  - Eenvoudige integratie binnen onze applicatie.
+- **Kiwi.com API:**
+  - Kan een kosteneffectief alternatief bieden.
+- **Amadeus API:**
+  - Competitief prijsmodel en uitgebreide functies.
 
+#### Nadelen
+- **Skyscanner API:**
+  - Mogelijke beperkingen in request quotas en contractuele voorwaarden.
+- **Kiwi.com API:**
+  - Minder uitgebreide documentatie en support.
+- **Amadeus API:**
+  - Minder bekend binnen onze markt, wat invloed kan hebben op adoptie en integratie.
+
+### 6. Alternatieven Overwogen
+
+| Kenmerk                  | Skyscanner        | Kiwi.com           | Amadeus API          |
+|--------------------------|-------------------|--------------------|----------------------|
+| **Data Nauwkeurigheid**  | ++                | +                  | ++                   |
+| **Toegankelijkheid**     | ++                | +                  | +                    |
+| **Documentatie**         | ++                | +                  | +                    |
+| **Kosten/Kwota**         | +                 | ?                  | +                    |
+
+### 7. Bronnen
+- [Skyscanner API Documentation](https://developers.skyscanner.net)
+- [Kiwi.com API Documentatie](https://docs.kiwi.com)
+- [Amadeus for Developers](https://developers.amadeus.com)
+- Google Flights biedt geen publieke API voor vluchtinformatie ([Google Flights](https://www.google.com/flights))
 
 **Datum:** 21-03-2025  
 **Auteur:** Jae Dreijling
---- 
 
-### 8.4. ADR-004 Vergelijking tussen Navitia en Google Maps
+---
 
-## 1. Titel
+## ADR-004: Routeplanning – Vergelijking tussen Navitia en Google Maps
+
+### 1. Titel
 **Routeplanning: Vergelijking tussen Navitia en Google Maps**
 
-## 2. Status
-**> Voorstel**
+### 2. Status
+**Voorstel**
 
-## 3. Context
-Voor de routeplanning in onze applicatie is het noodzakelijk om gebruikers meerdere reismogelijkheden te bieden (zoals auto, openbaar vervoer, fietsen en wandelen). Er zijn twee hoofdopties overwogen:
+### 3. Context
+Voor de routeplanning in onze applicatie willen we gebruikers meerdere vervoersmogelijkheden bieden (auto, openbaar vervoer, fietsen en wandelen). De twee hoofdopties die we overwegen zijn:
 
-- **Google Maps API (specifiek de Google Directions API / Routes API):**  
-  Bekend om zijn uitgebreide wereldwijde dekking, hoge nauwkeurigheid en uitgebreide documentatie, maar met hogere kosten bij intensief gebruik. Deze API biedt gedetailleerde routeinformatie voor verschillende vervoerswijzen, met name gericht op auto en openbaar vervoer.
-
+- **Google Maps API (Directions/Routes API):**  
+  Bekend om zijn wereldwijde dekking, hoge nauwkeurigheid en uitgebreide documentatie. Echter, deze optie kent hogere kosten en een complexere prijsstructuur.
 - **Navitia API:**  
-  Een open platform dat zich richt op multi-modale reisdata, vaak tegen lagere kosten (inclusief een gratis tier) maar met een mogelijk beperkter dekkingsgebied en minder gedetailleerde wereldwijde data.
+  Een open platform dat specifiek is gericht op multi-modale reisdata. Navitia biedt een aantrekkelijk prijsmodel (inclusief een gratis tier) en is ideaal voor regionale toepassingen. Hoewel de wereldwijde dekking beperkter is, levert Navitia kwalitatieve data voor de primaire markten waarvoor wij ontwikkelen. Bovendien kan de relatief lagere bekendheid van Navitia bijdragen aan een kostenefficiënte oplossing ([Navitia API](https://www.navitia.io)).
 
-## 4. Beslissing
-Wij kiezen voor de integratie van **Navitia API** als primaire routeplanner, met de mogelijkheid om de **Google Directions API / Routes API** als fallback of aanvullende bron te gebruiken indien er specifieke, wereldwijde data nodig is. Deze beslissing is gebaseerd op de volgende overwegingen:
+### 4. Beslissing
+Wij kiezen voor de integratie van de **Navitia API** als primaire routeplanner, met de mogelijkheid om de **Google Directions API** als fallback in te zetten wanneer er specifieke, wereldwijde data nodig is. Deze keuze is gebaseerd op:
 
-- **Kosten:** Navitia biedt een aantrekkelijk gratis tier en lagere instapkosten, wat ideaal is voor de initiële ontwikkelfase.
-- **Multi-modale routeplanning:** Navitia is specifiek ontworpen voor routes met meerdere vervoerswijzen, wat aansluit bij onze functionele eisen.
-- **Uitbreidbaarheid:** Indien we later internationale of zeer gedetailleerde route-informatie nodig hebben, kan de Google Directions API als aanvullende service worden geïntegreerd.
+- **Kostenefficiëntie:** Navitia’s gratis tier en lagere instapkosten maken het aantrekkelijk, zeker in de ontwikkelingsfase.
+- **Multi-modale routeplanning:** Navitia is specifiek ontworpen voor routes met diverse vervoerswijzen (auto, openbaar vervoer, fietsen, wandelen).
+- **Vergelijkbare kwaliteit:** Voor onze regionale toepassingen levert Navitia kwalitatieve data, terwijl Google Maps API extra waarde biedt als aanvullende bron voor internationale of zeer gedetailleerde informatie ([Google Maps Platform](https://cloud.google.com/maps-platform)).
 
-## 5. Consequenties
+### 5. Consequenties
 
-### Voordelen:
-- **Navitia:**
-    - Kostenefficiënt voor laag tot matig gebruik.
-    - Uitstekende ondersteuning voor multi-modale routes.
-    - Flexibele integratie met een duidelijke focus op openbaar vervoer en lokale routes.
+#### Voordelen
+- **Navitia API:**
+  - Zeer kostenefficiënt dankzij een gratis tier en lage instapkosten.
+  - Sterke ondersteuning voor multi-modale routes.
+  - Kwalitatieve data voor regionale toepassingen.
+- **Google Directions API (als fallback):**
+  - Biedt wereldwijde dekking en zeer gedetailleerde route-informatie.
+  - Uitgebreide en robuuste documentatie en ondersteuning.
 
-- **Google Directions API / Routes API (als fallback):**
-    - Hoogwaardige en nauwkeurige data met wereldwijde dekking.
-    - Uitgebreide documentatie en ondersteuning.
+#### Nadelen
+- **Navitia API:**
+  - Beperkte wereldwijde dekking in vergelijking met Google.
+  - Documentatie en support zijn minder uitgebreid.
+- **Google Directions API:**
+  - Hogere kosten en een complexere prijsstructuur bij intensief gebruik.
+  - Focus op auto- en openbaar vervoer kan integratie-uitdagingen geven voor multi-modale toepassingen.
 
-### Nadelen:
-- **Navitia:**
-    - Beperkte wereldwijde dekking vergeleken met Google Maps.
-    - Mogelijk minder gedetailleerde data in sommige regio’s.
+### 6. Alternatieven Overwogen
 
-- **Google Directions API / Routes API:**
-    - Hogere kosten bij intensief gebruik.
-    - Complexere prijsstructuur en quota-beperkingen.
+| Kenmerk                         | Navitia                            | Google Directions API                         |
+|---------------------------------|------------------------------------|-----------------------------------------------|
+| **Kosten**                      | Laag/Gratis tier                   | Hoger (betaal per gebruik)                    |
+| **Multi-modale routeplanning**  | Uitstekend voor diverse vervoerswijzen | Goed voor auto en openbaar vervoer, minder multi-modal |
+| **Wereldwijde dekking**         | Regionaal sterk                    | Uitgebreide wereldwijde dekking               |
+| **Nauwkeurigheid en details**   | Goede kwaliteit voor regionale data| Zeer gedetailleerd en accuraat                |
+| **Documentatie & Support**      | Voldoende, maar minder uitgebreid  | Uitgebreide en robuuste documentatie          |
 
-## 6. Alternatieven Overwogen
+### 7. Bronnen
+- [Navitia API](https://www.navitia.io)
+- [Google Maps Platform](https://cloud.google.com/maps-platform)
 
-| Kenmerk                         | Navitia                                                          | Google  Routes API                                                                                  |
-|---------------------------------|------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| **Kosten**                      | Laag/Gratis tier                                                 | Duurder (betaal per gebruik)                                                                        |
-| **Multi-modale routeplanning**  | Uitstekend, specifiek gericht op openbaar vervoer, fietsen, etc. | Ondersteuning voor auto en openbaar vervoer, maar minder gespecialiseerd in multi-modale integratie |
-| **Wereldwijde dekking**         | Regionaal sterk, maar beperkt buiten Europa                      | Uitgebreide wereldwijde dekking                                                                     |
-| **Nauwkeurigheid en details**   | Goed, met focus op openbaar vervoer                              | Zeer gedetailleerd en accuraat                                                                      |
-| **Documentatie & Support**      | Voldoende, maar minder uitgebreid dan Google Maps                | Uitgebreide en robuuste documentatie en ondersteuning                                               |
-
-
-## ADR Info
 **Datum:** 21-03-2025  
 **Auteur:** Jae Dreijling
---- 
+
 
 
 > [!TIP]
