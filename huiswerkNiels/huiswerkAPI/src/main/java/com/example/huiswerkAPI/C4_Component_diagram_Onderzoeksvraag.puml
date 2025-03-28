@@ -1,7 +1,7 @@
 @startuml
 !include <C4/C4_Component>
 
-title C4 Component Diagram voor FabLab
+title C4 Component Diagram voor TripTop
 
 System_Boundary(triptop_core, "TripTop") {
 
