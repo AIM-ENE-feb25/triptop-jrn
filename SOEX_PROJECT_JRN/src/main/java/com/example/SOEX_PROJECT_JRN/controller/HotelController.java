@@ -1,6 +1,6 @@
-package com.example.SOEX_PROJECT_JRN.Niels.controller;
+package com.example.SOEX_PROJECT_JRN.controller;
 
-import com.example.SOEX_PROJECT_JRN.Niels.service.HotelService;
+import com.example.SOEX_PROJECT_JRN.service.HotelService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
