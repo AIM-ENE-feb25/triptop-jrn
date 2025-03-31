@@ -14,11 +14,11 @@ public class RestaurantService {
 
     List<IRestaurantPort> restaurantPorts;
     public RestaurantService() {
-        restaurantPorts.add(new UberEatsScraperAdapt());
+        restaurantPorts.add(new UberEatsScraperAdapt());  //Reflection & introspection
     }
 
     public List<RestaurantDTO> getAllRestaurants() {
-        List<RestaurantDTO> returnList = new Set<RestaurantDTO>();
+        List<RestaurantDTO> returnList = new ArrayList<RestaurantDTO>(); //set implementation (mogelijk hashSet) javaDoc java set
         for(IRestaurantPort restaurant : restaurantPorts){
             returnList.addAll(restaurant.retrieveData());
         }

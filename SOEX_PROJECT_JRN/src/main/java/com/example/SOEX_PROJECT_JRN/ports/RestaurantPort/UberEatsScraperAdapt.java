@@ -25,6 +25,7 @@ public class UberEatsScraperAdapt extends ApiCaller implements IRestaurantPort{
     @Override
     public List<RestaurantDTO> retrieveData() {
 
+        return List.of();
     }
 
 }
