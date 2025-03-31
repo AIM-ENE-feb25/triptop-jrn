@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+
+Container("frontend", "Frontend", "React.js", "Provides user interfaces for flight searches")
+
+System_Boundary(triptop_core, "TripTop") {
+    Component("FlightController", "FlightController", "SpringBoot", "Handles flight search requests")
+    Component("FlightService", "FlightService", "SpringBoot", "Contains business logic for flight searches")
+    Component("ApiCaller", "ApiCaller (abstract)", "Java Abstract Class", "Ensures proper API call sequencing")
+    Component("FlightPort", "FlightPort", "Java Interface", "Defines the contract for flight data formatting")
+    Component("SkyscannerAdapter", "SkyscannerAdapter", "Java Class", "Fetches and transforms data from Skyscanner API")
+}
+
+System_Ext("SkyscannerAPI", "Skyscanner API", "Provides flight information and pricing data")
+
+frontend --> FlightController : "Sends flight search requests"
+FlightController --> FlightService : "Delegates to business logic"
+FlightService --> SkyscannerAdapter : "Requests flight data"
+
+SkyscannerAdapter --> ApiCaller : "Extends"
+SkyscannerAdapter --> FlightPort : "Implements"
+
+SkyscannerAdapter --> SkyscannerAPI : "Fetches flight data [JSON]"
+@enduml

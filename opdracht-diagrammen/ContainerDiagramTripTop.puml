@@ -1,0 +1,59 @@
+@startuml
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!include <C4/C4_Container>
+
+title C4 Container Diagram voor TripTop
+
+LAYOUT_WITH_LEGEND()
+
+SHOW_PERSON_OUTLINE()
+
+' Definieer persoon
+Person(Reiziger, "Reiziger", "Een reiziger die zonder zorgen op reis wil.")
+
+' Definieer externe Identity Provider (naast backend)
+Container_Ext(FbLogin, "Facebook Media API", "Zorgt voor het inloggen via Facebook")
+
+' Definieer de interne systemen binnen de TripTop boundary
+System_Boundary(triptop_core, "TripTop") {
+    Container(triptop, "TripTop Web Applicatie", "React", "User interface voor het plannen, boeken en bijhouden van vakanties")
+    Container(backend, "TripTop Back-end", "Java", "Verwerken, controleren en aanpassen van API requests vanuit de web applicatie")
+    Container(db, "TripTop Database", "MSSQL", "Opslag van gegevens")
+    Container(gateway, "API Gateway", "React", "Handelen van API calls")
+}
+
+' Definieer externe systemen
+System_Ext(betaalsysteem, "Paypal API", "Externe betaalprovider met creditcards, iDEAL en wallet payments.")
+System_Ext(reisAanbieder, "Navitia API", "Busmaatschappij, treinschema's voor lange reizen.")
+System_Ext(vluchtaanbieder, "SkyScanner API", "Vluchten bekijken en boeken")
+System_Ext(etenAanbieder, "Uber Eats Scraper API", "Informatie over restaurants, locaties, menu’s en reviews")
+System_Ext(AutoAanbieder, "Booking.com API", "Verhuur van auto's of fietsen")
+System_Ext(Dagbesteding, "Booking.com API", "Biedt tickets voor dagjes uit")
+System_Ext(Ov, "Public Transport API", "Biedt overzicht voor openbaar vervoer")
+System_Ext(GoogleMaps, "Google Maps API", "Kaartweergave")
+System_Ext(accommodatieAanbieder, "Booking.com API", "Externe accommodatieprovider, zoals hotels en hostels")
+
+' Definieer relaties
+Reiziger --> triptop : "Logt in en gebruikt de applicatie"
+Reiziger --> FbLogin : "Logt in via Facebook"
+FbLogin --> backend : "Verifieert login en verstrekt gebruikersinfo"
+
+triptop --> backend : "Stuurt API calls naar"
+backend --> db : "Leest/schrijft gegevens"
+backend --> gateway : "Stuurt externe API verzoeken"
+
+Rel(gateway, betaalsysteem, "Verwerkt betalingen", "HTTPS (REST API, JSON)")
+Rel(gateway, reisAanbieder, "Reserveringen en beschikbaarheid", "HTTPS (REST API, JSON)")
+Rel(gateway, etenAanbieder, "Ophalen van eetopties", "HTTPS (REST API, JSON)")
+Rel(gateway, AutoAanbieder, "Verhuur van voertuigen", "HTTPS (REST API, JSON)")
+Rel(gateway, Dagbesteding, "Tickets voor activiteiten", "HTTPS (REST API, JSON)")
+Rel(gateway, GoogleMaps, "Kaartintegratie", "HTTPS (REST API, JSON)")
+Rel(gateway, accommodatieAanbieder, "Boeken van accommodaties", "HTTPS (REST API, JSON)")
+Rel(gateway, Ov, "Reisinformatie OV", "HTTPS (REST API, JSON)")
+Rel(gateway, vluchtaanbieder, "Vluchten zoeken en boeken", "HTTPS (REST API, JSON)")
+
+' Facebook login gepositioneerd naast backend
+FbLogin -[hidden]-> backend
+
+@enduml

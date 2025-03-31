@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+
+Container("frontend", "Frontend", "React.js", "Provides user interfaces for trip planning")
+
+System_Boundary(triptop_core, "TripTop") {
+    Component("RouteController", "RouteController", "SpringBoot", "Handles route planning requests")
+    Component("RouteService", "RouteService", "SpringBoot", "Contains business logic for route planning")
+    Component("ApiCaller", "ApiCaller (abstract)", "Java Abstract Class", "Ensures proper API call sequencing")
+    Component("RoutePort", "RoutePort", "Java Interface", "Defines the contract for route data formatting")
+    Component("NavitiaAdapter", "NavitiaAdapter", "Java Class", "Fetches and transforms data from Navitia API")
+}
+
+System_Ext("NavitiaAPI", "Navitia API", "Provides multi-modal route planning data")
+
+frontend --> RouteController : "Sends route planning requests"
+RouteController --> RouteService : "Delegates to business logic"
+RouteService --> NavitiaAdapter : "Requests route data"
+
+NavitiaAdapter --> ApiCaller : "Extends"
+NavitiaAdapter --> RoutePort : "Implements"
+
+NavitiaAdapter --> NavitiaAPI : "Fetches route data [JSON]"
+@enduml

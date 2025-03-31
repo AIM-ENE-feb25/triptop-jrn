@@ -1,0 +1,66 @@
+@startuml
+
+abstract class ApiCaller {
+    + roepExternaApiAan()
+    Login() {abstract}
+    ApiCal() {abstract}
+    TokenCheck() {abstract}
+}
+
+interface RestaurentPort {
+  + formatData() : object
+}
+
+interface ActiviteitenPort {
+  + formatData() : object
+}
+
+class RestaurentController {
+  - restaurentService
+  + getRestaurantData(opt String zoekwoord)
+}
+
+class ActiviteitenController {
+  - ActiviteitenService
+  + getActivities(opt String zoekwoord)
+}
+
+class RestaurentService {
+  + processRestaurantData()
+}
+
+class ActiviteitenService {
+  + processActivityData()
+}
+
+class RestaurantApi1Implementatie {
+  + fetchData() :object
+}
+
+class RestaurantApi1_2Implementatie {
+  + fetchData():object
+}
+
+class Api2Implementatie {
+  + fetchData():object
+}
+
+Frontend ..> RestaurentController : "calls"
+Frontend ..> ActiviteitenController : "calls"
+
+RestaurentController --> RestaurentService : "has"
+ActiviteitenController --> ActiviteitenService : "has"
+
+RestaurentService --> RestaurantApi1Implementatie : "queries"
+RestaurentService --> RestaurantApi1_2Implementatie : "queries"
+ActiviteitenService --> Api2Implementatie : "queries"
+
+RestaurantApi1Implementatie ..|> RestaurentPort : "implements"
+RestaurantApi1_2Implementatie ..|> RestaurentPort : "implements"
+Api2Implementatie ..|> ActiviteitenPort : "implements"
+
+RestaurantApi1Implementatie --|> ApiCaller : "extends"
+RestaurantApi1_2Implementatie --|> ApiCaller : "extends"
+Api2Implementatie --|> ApiCaller : "extends"
+
+@enduml

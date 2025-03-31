@@ -1,0 +1,44 @@
+@startuml
+
+interface AuthManager {
+    String authenticate(String username, String password)
+    boolean validateToken(String token)
+}
+
+interface TokenStorage {
+    void saveToken(String userId, String token)
+    String getToken(String userId)
+}
+
+interface ApiRequestHandler {
+    ApiResponse sendRequest(ApiRequest request)
+}
+
+class AuthManagerImpl implements AuthManager {
+    - TokenStorage tokenStorage
+    + AuthManagerImpl(TokenStorage tokenStorage)
+    + String authenticate(String username, String password)
+    + boolean validateToken(String token)
+}
+
+class ApiRequestHandlerImpl implements ApiRequestHandler {
+    - TokenStorage tokenStorage
+    - AuthorizationHandler authHandler
+    - AuthManagerImpl auth
+    + ApiRequestHandlerImpl(TokenStorage tokenStorage, AuthorizationHandler authHandler)
+    + ApiResponse sendRequest(ApiRequest request)
+}
+
+class ApiRequest {
+    + String getUserId()
+    + String getPermission()
+}
+
+AuthManager <|.. AuthManagerImpl
+ApiRequestHandler <|.. ApiRequestHandlerImpl
+TokenStorage <|.. AuthManagerImpl
+TokenStorage <|.. ApiRequestHandlerImpl
+ApiRequestHandlerImpl --> ApiRequest
+ApiRequestHandlerImpl --> AuthManagerImpl
+
+@enduml

@@ -1,0 +1,32 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+LAYOUT_TOP_DOWN()
+
+' Define people
+Person(person, "User", "A general user of the system")
+Person(teacher, "Teacher", "A teacher who creates and manages content")
+
+' Define the system boundary and containers
+System_Boundary(system, "ANS System") {
+  Container(frontend, "Frontend (WebApp)", "Angular/React/Vue", "Allows users to interact with the system")
+  Container(backend, "Backend (API)", "Spring Boot/Node.js", "Handles business logic and API requests")
+  Container(gateway, "API Service / Gateway", "API Gateway", "Routes and manages API calls to the backend and external services")
+  Container(database, "Database", "SQL/NoSQL Database", "Stores application data")
+}
+
+' Define external systems
+System_Ext(surfConnect, "SurfConnect", "Authentication System", "Provides user authentication services")
+System_Ext(osiris, "Osiris", "Student Records System", "Contains registered student information and records")
+System_Ext(schoolyear, "SchoolYear", "Browser Safety System", "Ensures secure usage environment for the system")
+
+' Define relationships
+Rel(person, frontend, "Uses", "HTTPS")
+Rel(teacher, frontend, "Uses and administers", "HTTPS")
+Rel(frontend, backend, "Sends API calls", "HTTPS/REST")
+Rel(gateway, backend, "Routes requests to", "HTTPS/REST")
+Rel(backend, database, "Reads from and writes to", "JDBC/SQL")
+Rel(backend, surfConnect, "Authenticates via", "HTTPS/REST")
+Rel(backend, osiris, "Exports grades and verifies student registration with", "HTTPS/REST")
+Rel(backend, schoolyear, "Checks browser safety via", "HTTPS/REST")
+
+@enduml
