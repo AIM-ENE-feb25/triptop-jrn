@@ -12,19 +12,19 @@ class HotelService{
 }
 
 interface API_Gateway{
-    getHotelsInArea(int: locationId, headers): List<Hotel>
+    getHotelsInArea(int: locationId, securityTokens): List<Hotel>
 }
 
 interface HotelRepository {
-    getHotelsInArea(int: locationId, headers): List<Hotel>
+    getHotelsInArea(int: locationId, securityTokens): List<Hotel>
 }
 
 class BookingRepo {
-    getHotelsInArea(int: locationId, headers): List<Hotel>
+    getHotelsInArea(int: locationId, securityTokens): List<Hotel>
 }
 
 class TripAdvisorRepo {
-    getHotelsInArea(int: locationId, headers): List<Hotel>
+    getHotelsInArea(int: locationId, securityTokens): List<Hotel>
 }
 
 class SecurityRepo{
