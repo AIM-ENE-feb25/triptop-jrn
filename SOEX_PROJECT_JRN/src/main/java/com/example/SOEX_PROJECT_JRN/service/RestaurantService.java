@@ -2,19 +2,20 @@ package com.example.SOEX_PROJECT_JRN.service;
 
 import com.example.SOEX_PROJECT_JRN.domein.RestaurantDTO;
 import com.example.SOEX_PROJECT_JRN.ports.RestaurantPort.IRestaurantPort;
-import com.example.SOEX_PROJECT_JRN.ports.RestaurantPort.UberEatsScraperAdapt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class RestaurantService {
 
     List<IRestaurantPort> restaurantPorts;
-    public RestaurantService() {
-        restaurantPorts.add(new UberEatsScraperAdapt());  //Reflection & introspection
+
+    @Autowired
+    public RestaurantService(List<IRestaurantPort> restaurantPorts) {
+        this.restaurantPorts = restaurantPorts;  //Reflection & introspection
     }
 
     public List<RestaurantDTO> getAllRestaurants() {

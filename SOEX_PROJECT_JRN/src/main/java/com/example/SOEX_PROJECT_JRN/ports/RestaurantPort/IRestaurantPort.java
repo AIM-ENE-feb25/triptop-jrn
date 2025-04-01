@@ -7,11 +7,4 @@ import java.util.List;
 public interface IRestaurantPort {
     public List<RestaurantDTO> retrieveData();
 
-    //data om mee te nemen
-    //naam
-    //longditude, langidtude
-    //city
-    // soort eten/ quisine
-    //voor in een dto wel heel handig
-
 }

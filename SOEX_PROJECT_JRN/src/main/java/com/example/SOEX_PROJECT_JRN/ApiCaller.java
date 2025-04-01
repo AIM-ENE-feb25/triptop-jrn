@@ -2,13 +2,14 @@ package com.example.SOEX_PROJECT_JRN;
 
 public abstract class ApiCaller {
 
-    public void makeApiCall() {
+    public String makeApiCall() {
         loginAPI();
-        callAPI();
+        String response = callAPI();
         checkToken();
+        return response;
     }
 
     public abstract void loginAPI();
-    public abstract void callAPI();
+    public abstract String callAPI();
     public abstract void checkToken();
 }
