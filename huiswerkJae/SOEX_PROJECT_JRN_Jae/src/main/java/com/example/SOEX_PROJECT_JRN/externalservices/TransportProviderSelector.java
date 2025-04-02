@@ -9,21 +9,28 @@ public class TransportProviderSelector {
 
     private final FakeTransportAdapter fakeTransportAdapter;
     private final WikiRoutesAdapter wikiRoutesAdapter;
-    // Future adapters (GoogleMapsAdapter, NavitiaAdapter, etc.) will be put here
+    private final NavitimeAdapter navitimeAdapter;
+    private final BusMapsAdapter busMapsAdapter;
 
     @Autowired
-    public TransportProviderSelector(FakeTransportAdapter fakeTransportAdapter,  WikiRoutesAdapter wikiRoutesAdapter) {
+    public TransportProviderSelector(FakeTransportAdapter fakeTransportAdapter,
+                                     WikiRoutesAdapter wikiRoutesAdapter,
+                                     NavitimeAdapter navitimeAdapter,
+                                     BusMapsAdapter busMapsAdapter) {
         this.fakeTransportAdapter = fakeTransportAdapter;
         this.wikiRoutesAdapter = wikiRoutesAdapter;
+        this.navitimeAdapter = navitimeAdapter;
+        this.busMapsAdapter = busMapsAdapter;
     }
 
     public TransportProviderPort selectProvider(TransportRequest request) {
-        // For now, simple criteria for which adaptor is used.
-        // For instance, if the origin contains "wiki", use WikiRoutesAdapter; otherwise, default to FakeTransportAdapter.
-        if (request.getOrigin().toLowerCase().contains("wiki")) {
-            return wikiRoutesAdapter;
-        }
-//        return fakeTransportAdapter;
-        return wikiRoutesAdapter;
+        // Example selection logic based on request properties.
+        // For now, you can choose a default provider or use custom logic.
+        // This sample always returns the FakeTransportAdapter.
+        //return fakeTransportAdapter;
+        //return wikiRoutesAdapter;
+        //return navitimeAdapter;
+        return busMapsAdapter;
+        // To use, say, the NavitimeAdapter, return navitimeAdapter instead.
     }
 }
