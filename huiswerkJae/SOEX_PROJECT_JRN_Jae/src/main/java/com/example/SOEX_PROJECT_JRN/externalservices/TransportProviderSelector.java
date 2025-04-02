@@ -8,16 +8,22 @@ import org.springframework.stereotype.Component;
 public class TransportProviderSelector {
 
     private final FakeTransportAdapter fakeTransportAdapter;
+    private final WikiRoutesAdapter wikiRoutesAdapter;
     // Future adapters (GoogleMapsAdapter, NavitiaAdapter, etc.) will be put here
 
     @Autowired
-    public TransportProviderSelector(FakeTransportAdapter fakeTransportAdapter) {
+    public TransportProviderSelector(FakeTransportAdapter fakeTransportAdapter,  WikiRoutesAdapter wikiRoutesAdapter) {
         this.fakeTransportAdapter = fakeTransportAdapter;
+        this.wikiRoutesAdapter = wikiRoutesAdapter;
     }
 
     public TransportProviderPort selectProvider(TransportRequest request) {
-        // Selection logic can be extended here.
-        // For now, we default to the fake adapter.
-        return fakeTransportAdapter;
+        // For now, simple criteria for which adaptor is used.
+        // For instance, if the origin contains "wiki", use WikiRoutesAdapter; otherwise, default to FakeTransportAdapter.
+        if (request.getOrigin().toLowerCase().contains("wiki")) {
+            return wikiRoutesAdapter;
+        }
+//        return fakeTransportAdapter;
+        return wikiRoutesAdapter;
     }
 }
