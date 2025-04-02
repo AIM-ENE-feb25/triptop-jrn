@@ -2,12 +2,17 @@ package com.example.SOEX_PROJECT_JRN.ports.RestaurantPort;
 
 import com.example.SOEX_PROJECT_JRN.ApiCaller;
 import com.example.SOEX_PROJECT_JRN.domein.RestaurantDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -44,6 +49,7 @@ public class UberEatsScraperAdapt extends ApiCaller implements IRestaurantPort{
         Unirest.shutDown();
 
         return result;
+
     }
 
 
@@ -56,41 +62,17 @@ public class UberEatsScraperAdapt extends ApiCaller implements IRestaurantPort{
     public List<RestaurantDTO> retrieveData() {
         List<RestaurantDTO> responseList = new ArrayList<>();
 
-        // Call the API to get the response
         String response = makeApiCall();
         System.out.println("Response: " + response);
 
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            // Convert the response to a JSON object for easier parsing
-            JsonNode jsonNode = new JsonNode(response);
+            List<RestaurantDTO> restaurants = Arrays.asList(objectMapper.readValue(response, RestaurantDTO[].class));
 
-            // Access the data array inside the 'returnvalue' key
-            JsonNode restaurantsData = jsonNode.getObject().get("returnvalue").getObject().get("data");
-
-            // Iterate through the array of restaurant data
-            for (JsonNode restaurantNode : restaurantsData) {
-                String title = restaurantNode.getObject().get("title").asText();  // Get the title
-                List<String> cuisineList = new ArrayList<>();
-
-                // Extract the cuisine list
-                JsonNode cuisinesNode = restaurantNode.getObject().get("cuisineList");
-                for (JsonNode cuisine : cuisinesNode) {
-                    cuisineList.add(cuisine.asText());
-                }
-
-                // Extract latitude and longitude
-                double latitude = restaurantNode.getObject().get("location").getObject().get("latitude").asDouble();
-                double longitude = restaurantNode.getObject().get("location").getObject().get("longitude").asDouble();
-
-                // Create a RestaurantDTO object with the extracted data
-                RestaurantDTO restaurantDTO = new RestaurantDTO(title, cuisineList, latitude, longitude);
-                responseList.add(restaurantDTO);
-            }
-        } catch (Exception e) {
-            System.out.println("Error parsing API response: " + e.getMessage());
+            responseList.addAll(restaurants);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
         return responseList;
     }
-
 }
