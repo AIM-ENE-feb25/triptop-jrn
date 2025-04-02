@@ -5,7 +5,7 @@ import com.example.SOEX_PROJECT_JRN.model.TransportResponse;
 import org.springframework.stereotype.Service;
 
 @Service
-public class NavitiaAdapter extends ApiCaller implements TransportProviderPort {
+public class SkyscannerAdapter extends ApiCaller implements TransportProviderPort {
 
     @Override
     public TransportResponse fetchData(TransportRequest request) {
@@ -14,7 +14,9 @@ public class NavitiaAdapter extends ApiCaller implements TransportProviderPort {
 
     @Override
     protected TransportResponse apiCall(TransportRequest request) {
-        // Simulate API call for Navitia
-        return new TransportResponse("Navitia data for " + request.getOrigin() + " to " + request.getDestination());
+        // Simulate API call for Skyscanner
+        return new TransportResponse("Skyscanner data for " + request.getOrigin() + " to " + request.getDestination());
     }
+
+
 }
