@@ -2,18 +2,13 @@ package com.example.SOEX_PROJECT_JRN.ports.RestaurantPort;
 
 import com.example.SOEX_PROJECT_JRN.ApiCaller;
 import com.example.SOEX_PROJECT_JRN.domein.RestaurantDTO;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class UberEatsScraperAdapt extends ApiCaller implements IRestaurantPort{
@@ -40,7 +35,7 @@ public class UberEatsScraperAdapt extends ApiCaller implements IRestaurantPort{
 
         String result;
         if (response.isSuccess()) {
-            result = response.getBody().toPrettyString(); // Get JSON response as formatted string
+            result = response.getBody().toString(); // Get JSON response as formatted string
         } else {
             result = "Error: " + response.getStatus() + " - " + response.getStatusText();
         }
@@ -59,20 +54,12 @@ public class UberEatsScraperAdapt extends ApiCaller implements IRestaurantPort{
     }
 
     @Override
-    public List<RestaurantDTO> retrieveData() {
-        List<RestaurantDTO> responseList = new ArrayList<>();
-
-        String response = makeApiCall();
-        System.out.println("Response: " + response);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            List<RestaurantDTO> restaurants = Arrays.asList(objectMapper.readValue(response, RestaurantDTO[].class));
-
-            responseList.addAll(restaurants);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return responseList;
+    public List<RestaurantDTO> retrieveData(String query, String address) {
+        Map<String, String> parameters = Map.of("query", query, "address", address);
+        String response = executeAPICall(parameters);
+        List<Restaurant> restaurantList = new ArrayList<>();
+        JSONObject jsonObject = new JSONObject(response);
+        JSONObject returnValue = jsonObject.optJSONObject("returnvalue");
+        JSONArray restaurants = returnValue.optJSONArray("data");    if (restaurants == null || restaurants.length() == 0) {        throw new RuntimeException("Er zijn geen restaurants gevonden.");    }    for (int i = 0; i < restaurants.length(); i++) {        JSONObject restaurant = restaurants.getJSONObject(i);        JSONObject location = restaurant.getJSONObject("location");        Restaurant restaurantObject = new Restaurant(restaurant.getString("uuid"),                restaurant.getString("title"), location.getString("address"));        restaurantList.add(restaurantObject);    }    System.out.println(restaurantList);    return restaurantList;}
     }
 }
