@@ -45,8 +45,18 @@ public class BookingRepo implements HotelRepository {
 
         JsonNode resultArray = response.getBody().get("result");
 
-        JsonNode firstHotel = resultArray.get(0);
+        if (resultArray != null && resultArray.isArray() && resultArray.size() > 0) {
+            JsonNode firstHotel = resultArray.get(0);
+            JsonNode hotelNameNode = firstHotel.get("hotel_name_trans");
 
-        return firstHotel;
+            if (hotelNameNode != null) {
+                System.out.println("Booking com request complete");
+                return hotelNameNode;
+            }
+        }
+
+        System.out.println("Booking com request complete");
+
+        return response.getBody();
     }
 }

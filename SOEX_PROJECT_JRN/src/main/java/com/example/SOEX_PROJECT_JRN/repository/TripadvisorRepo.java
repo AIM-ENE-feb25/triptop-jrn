@@ -26,10 +26,21 @@ public class TripadvisorRepo implements HotelRepository {
 
         ResponseEntity<JsonNode> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, JsonNode.class);
 
-        JsonNode resultArray = response.getBody().get("data");
+        // voor het gemak alleen de titel van het eerste hotel ophalen
+        JsonNode resultArray = response.getBody().get("data").get("data");
 
-        JsonNode firstHotel = resultArray.get(0);
+        if (resultArray != null && resultArray.isArray() && resultArray.size() > 0) {
+            JsonNode firstHotel = resultArray.get(0);
+            JsonNode titleNode = firstHotel.get("title");
 
-        return firstHotel;
+            if (titleNode != null) {
+                System.out.println("Tripadvisor request complete");
+                return titleNode;
+            }
+        }
+
+        System.out.println("Tripadvisor request complete");
+
+        return response.getBody();
     }
 }
