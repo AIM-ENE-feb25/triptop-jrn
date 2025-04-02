@@ -5,6 +5,6 @@ import com.example.SOEX_PROJECT_JRN.domein.RestaurantDTO;
 import java.util.List;
 
 public interface IRestaurantPort {
-    public List<RestaurantDTO> retrieveData();
+     List<RestaurantDTO> retrieveData();
 
 }

@@ -15,7 +15,7 @@ public class RestaurantController {
     RestaurantService restaurantService;
 
     @GetMapping("/getAllRestaurents")
-    public List<RestaurantDTO> getAllRestaurantsInArea(){
+    public List<RestaurantDTO> getAllRestaurantsInArea() {
         List<RestaurantDTO> result = restaurantService.getAllRestaurants();
         System.out.println(result);
         return result;

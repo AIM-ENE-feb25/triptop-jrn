@@ -6,7 +6,7 @@ public record RestaurantDTO(String restaurant_name,
         double latitude,
         double longitude,
         String cityName,
-        List<String> cuisine
+        String getPhoneNumber
 ) {
 
     public String getRestaurant_name() {
@@ -25,7 +25,7 @@ public record RestaurantDTO(String restaurant_name,
         return cityName;
     }
 
-    public List<String> getCuisine() {
-        return cuisine;
+    public String getPhoneNumber() {
+        return getPhoneNumber;
     }
 }
