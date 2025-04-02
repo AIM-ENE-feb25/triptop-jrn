@@ -1,6 +1,6 @@
 package com.example.SOEX_PROJECT_JRN.repository;
 
-import com.example.SOEX_PROJECT_JRN.SecurityData;
+import com.example.SOEX_PROJECT_JRN.security.BookingData;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Repository
 public class BookingRepo implements HotelRepository {
+    private final BookingData securityData = new BookingData();
     private final RestTemplate restTemplate = new RestTemplate();
     private final String BASE_URL = "https://booking-com.p.rapidapi.com/v1/hotels/search-by-coordinates";
 
@@ -38,8 +39,8 @@ public class BookingRepo implements HotelRepository {
                 .toUriString();
 
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-        headers.set(securityData.getBookingData(0, 0), securityData.getBookingData(0, 1));
-        headers.set(securityData.getBookingData(1, 0), securityData.getBookingData(1, 1));
+        headers.set(securityData.getSecurityData(0, 0), securityData.getSecurityData(0, 1));
+        headers.set(securityData.getSecurityData(1, 0), securityData.getSecurityData(1, 1));
 
         ResponseEntity<JsonNode> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, JsonNode.class);
 
@@ -50,7 +51,7 @@ public class BookingRepo implements HotelRepository {
             JsonNode hotelNameNode = firstHotel.get("hotel_name_trans");
 
             if (hotelNameNode != null) {
-                System.out.println("Booking com request complete");
+                System.out.println("Booking com first hotel request complete");
                 return hotelNameNode;
             }
         }
