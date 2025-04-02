@@ -13,11 +13,11 @@ public abstract class ApiCaller {
 
     protected abstract TransportResponse apiCall(TransportRequest request);
 
-    private void login() {
-        // Common login logic if required
+    protected void login() {
+        // Common login logic, if necessary.
     }
 
-    private void checkToken() {
-        // Common token checking logic if required
+    protected void checkToken() {
+        // Common token verification logic, if necessary.
     }
 }

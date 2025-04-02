@@ -17,4 +17,3 @@ public class TransportResponse {
         this.data = data;
     }
 }
-

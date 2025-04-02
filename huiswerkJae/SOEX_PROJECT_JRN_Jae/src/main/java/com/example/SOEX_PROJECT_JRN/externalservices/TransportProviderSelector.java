@@ -7,21 +7,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class TransportProviderSelector {
 
-    private final NavitiaAdapter navitiaAdapter;
-    private final GoogleMapsAdapter googleMapsAdapter;
-    private final SkyscannerAdapter skyscannerAdapter;
+    private final FakeTransportAdapter fakeTransportAdapter;
+    // Future adapters (GoogleMapsAdapter, NavitiaAdapter, etc.) will be put here
 
     @Autowired
-    public TransportProviderSelector(NavitiaAdapter navitiaAdapter,
-                                     GoogleMapsAdapter googleMapsAdapter,
-                                     SkyscannerAdapter skyscannerAdapter) {
-        this.navitiaAdapter = navitiaAdapter;
-        this.googleMapsAdapter = googleMapsAdapter;
-        this.skyscannerAdapter = skyscannerAdapter;
+    public TransportProviderSelector(FakeTransportAdapter fakeTransportAdapter) {
+        this.fakeTransportAdapter = fakeTransportAdapter;
     }
 
     public TransportProviderPort selectProvider(TransportRequest request) {
-        // Logic to choose provider; here we default to GoogleMapsAdapter for demonstration
-        return googleMapsAdapter;
+        // Selection logic can be extended here.
+        // For now, we default to the fake adapter.
+        return fakeTransportAdapter;
     }
 }
