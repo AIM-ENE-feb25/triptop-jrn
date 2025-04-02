@@ -5,7 +5,7 @@ import java.util.List;
 public record RestaurantDTO(String restaurant_name,
         double latitude,
         double longitude,
-        String cityName,
+        String address,
         String getPhoneNumber
 ) {
 
@@ -21,8 +21,8 @@ public record RestaurantDTO(String restaurant_name,
         return longitude;
     }
 
-    public String getCityName() {
-        return cityName;
+    public String address() {
+        return address;
     }
 
     public String getPhoneNumber() {

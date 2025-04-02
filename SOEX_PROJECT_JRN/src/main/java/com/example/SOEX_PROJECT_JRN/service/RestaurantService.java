@@ -21,7 +21,9 @@ public class RestaurantService {
     public List<RestaurantDTO> getAllRestaurants() {
         List<RestaurantDTO> returnList = new ArrayList<RestaurantDTO>(); //set implementation (mogelijk hashSet) javaDoc java set
         for(IRestaurantPort restaurant : restaurantPorts){
-            returnList.addAll(restaurant.retrieveData());
+            if(restaurant != null) {
+                returnList.addAll(restaurant.retrieveData());
+            }
         }
         return returnList;
     }

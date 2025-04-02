@@ -12,19 +12,18 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Component
-public class UberEatsScraperAdapt extends ApiCaller implements IRestaurantPort{
+public class TripAdvicorScraperAdapt extends ApiCaller implements IRestaurantPort{
 
-    private static final String API_URL = "https://uber-eats-scraper-api.p.rapidapi.com/api/job/";
-    private static final String API_HOST = "uber-eats-scraper-api.p.rapidapi.com";
-    private static final String API_KEY = "f59f41d84amsh9e1aa2f556b69f5p1c6b08jsnc559d2c68cc7";
+    private static final String API_URL = "https://real-time-tripadvisor-scraper-api.p.rapidapi.com/tripadvisor_restaurants_search_v2?location=new%20york";
+    private static final String API_HOST = "real-time-tripadvisor-scraper-api.p.rapidapi.com";
+    private static final String API_KEY = "a7b69bc686msh68ba58f492aa838p19463djsn64a146bb579d";
 
     String key;
 
     @Override
     public void loginAPI() {
-    key = API_KEY;
+        key = API_KEY;
     }
 
     @Override
@@ -35,11 +34,11 @@ public class UberEatsScraperAdapt extends ApiCaller implements IRestaurantPort{
     @Override
     public String callAPI() {
 
-        HttpResponse<JsonNode> response = Unirest.post(API_URL)
+        HttpResponse<JsonNode> response = Unirest.get(API_URL)
                 .header("x-rapidapi-key", key)
                 .header("x-rapidapi-host", API_HOST)
+                .header("Accept", "application/json")
                 .header("Content-Type", "application/json")
-                .body("{\"scraper\":{\"maxRows\":15,\"query\":\"Pizza\",\"address\":\"1600 Pennsylvania Avenue, Washington DC\",\"locale\":\"en-US\",\"page\":1}}")
                 .asJson();
 
         String result;
@@ -48,35 +47,28 @@ public class UberEatsScraperAdapt extends ApiCaller implements IRestaurantPort{
         } else {
             result = "Error: " + response.getStatus() + " - " + response.getStatusText();
         }
-
         // Best practice: Shut down Unirest when done
         Unirest.shutDown();
 
         return result;
-//        return null;
     }
-
-
 
     @Override
     public List<RestaurantDTO> retrieveData() {
-//        List<RestaurantDTO> testList = new ArrayList<>();
-//        RestaurantDTO testDTO = new RestaurantDTO("Roko's bbq", 48.8566, 2.3522, "Onder de eifeltoren 23, Parijs", "+11 9654721");
-//        testList.add(testDTO);
         String response = makeApiCall();
 
         List<RestaurantDTO> restaurantList = new ArrayList<>();
         JSONObject jsonObject = new JSONObject(response);
-        JSONObject returnValue = jsonObject.optJSONObject("returnvalue");
-        JSONArray restaurants = returnValue.optJSONArray("data");
+        JSONArray jsonArray = jsonObject.getJSONArray("data");
 
-        for (int i = 0; i < restaurants.length(); i++) {
-            JSONObject restaurant = restaurants.getJSONObject(i);
-            JSONObject location = restaurant.getJSONObject("location");
-            RestaurantDTO restaurantObject = new RestaurantDTO(restaurant.getString("title"),location.getInt("latitude"), location.getInt("longitude"), location.getString("address"), restaurant.getString("phoneNumber"));
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject restaurant = jsonArray.getJSONObject(i);
+            JSONObject address = restaurant.getJSONObject("address");
+            RestaurantDTO restaurantObject = new RestaurantDTO(restaurant.getString("name"), address.getInt("latitude"),  address.getInt("longitude"), address.getString("fullAddress"), restaurant.getString("telephone"));
             restaurantList.add(restaurantObject);
         }
+
         return restaurantList;
-//        return testList;
+
     }
 }
