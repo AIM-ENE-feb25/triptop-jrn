@@ -15,17 +15,18 @@ public class TripadvisorRepo implements HotelRepository {
     private final RestTemplate restTemplate = new RestTemplate();
     private final String BASE_URL = "https://tripadvisor16.p.rapidapi.com/api/v1/hotels/searchHotelsByLocation?";
     @Override
-    public JsonNode getHotelsInArea(String latitude, String longitude, HttpHeaders headers) {
+    public JsonNode getHotelsInArea(String latitude, String longitude) {
 
         String url = BASE_URL + "latitude=" + latitude + "&longitude=" + longitude + "&pageNumber=1&currencyCode=USD&checkIn=2025-09-25&checkOut=2025-09-26";
 
+        HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
         headers.set(securityData.getSecurityData(0,0), securityData.getSecurityData(0,1));
         headers.set(securityData.getSecurityData(1,0), securityData.getSecurityData(1,1));
 
         ResponseEntity<JsonNode> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, JsonNode.class);
 
-        // voor het gemak alleen de titel van het eerste hotel ophalen
+        // voor het gemak alleen de titel van het eerste hotel teruggeven
         JsonNode resultArray = response.getBody().get("data").get("data");
 
         if (resultArray != null && resultArray.isArray() && resultArray.size() > 0) {

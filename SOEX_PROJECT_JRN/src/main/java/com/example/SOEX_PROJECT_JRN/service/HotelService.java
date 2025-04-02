@@ -3,8 +3,6 @@ package com.example.SOEX_PROJECT_JRN.service;
 import com.example.SOEX_PROJECT_JRN.repository.BookingRepo;
 import com.example.SOEX_PROJECT_JRN.repository.TripadvisorRepo;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,10 +18,9 @@ public class HotelService {
     }
 
     public List<JsonNode> getHotelsInArea(String latitude, String longitude) {
-        HttpHeaders headers = new HttpHeaders();
 
-        JsonNode bookingHotels = bookingRepo.getHotelsInArea(latitude, longitude, headers);
-        JsonNode tripadvisorHotels = tripadvisorRepo.getHotelsInArea(latitude, longitude, headers);
+        JsonNode bookingHotels = bookingRepo.getHotelsInArea(latitude, longitude);
+        JsonNode tripadvisorHotels = tripadvisorRepo.getHotelsInArea(latitude, longitude);
 
         return List.of(bookingHotels, tripadvisorHotels);
     }

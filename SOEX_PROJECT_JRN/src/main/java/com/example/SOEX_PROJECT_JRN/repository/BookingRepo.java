@@ -17,7 +17,7 @@ public class BookingRepo implements HotelRepository {
     private final String BASE_URL = "https://booking-com.p.rapidapi.com/v1/hotels/search-by-coordinates";
 
     @Override
-    public JsonNode getHotelsInArea(String latitude, String longitude, HttpHeaders headers) {
+    public JsonNode getHotelsInArea(String latitude, String longitude) {
 
         String url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
                 .queryParam("children_ages", "5,0")
@@ -38,6 +38,7 @@ public class BookingRepo implements HotelRepository {
                 .encode()
                 .toUriString();
 
+        HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
         headers.set(securityData.getSecurityData(0, 0), securityData.getSecurityData(0, 1));
         headers.set(securityData.getSecurityData(1, 0), securityData.getSecurityData(1, 1));
@@ -45,6 +46,8 @@ public class BookingRepo implements HotelRepository {
         ResponseEntity<JsonNode> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, JsonNode.class);
 
         JsonNode resultArray = response.getBody().get("result");
+
+        // voor het gemak alleen de titel van het eerste hotel teruggeven
 
         if (resultArray != null && resultArray.isArray() && resultArray.size() > 0) {
             JsonNode firstHotel = resultArray.get(0);
