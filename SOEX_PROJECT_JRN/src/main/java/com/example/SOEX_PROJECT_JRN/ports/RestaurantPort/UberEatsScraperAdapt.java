@@ -2,12 +2,17 @@ package com.example.SOEX_PROJECT_JRN.ports.RestaurantPort;
 
 import com.example.SOEX_PROJECT_JRN.ApiCaller;
 import com.example.SOEX_PROJECT_JRN.domein.RestaurantDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -44,6 +49,7 @@ public class UberEatsScraperAdapt extends ApiCaller implements IRestaurantPort{
         Unirest.shutDown();
 
         return result;
+
     }
 
 
@@ -55,8 +61,18 @@ public class UberEatsScraperAdapt extends ApiCaller implements IRestaurantPort{
     @Override
     public List<RestaurantDTO> retrieveData() {
         List<RestaurantDTO> responseList = new ArrayList<>();
+
         String response = makeApiCall();
         System.out.println("Response: " + response);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            List<RestaurantDTO> restaurants = Arrays.asList(objectMapper.readValue(response, RestaurantDTO[].class));
+
+            responseList.addAll(restaurants);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return responseList;
     }
 }
