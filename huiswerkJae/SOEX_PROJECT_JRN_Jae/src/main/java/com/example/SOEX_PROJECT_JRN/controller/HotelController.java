@@ -18,8 +18,4 @@ public class HotelController {
         this.hotelService = hotelService;
     }
 
-    @GetMapping("by-location")
-    public String getHotelsByLocation(@RequestParam String from, @RequestParam String to) {
-        return hotelService.getHotelsByLocation(from, to);
-    }
 }
