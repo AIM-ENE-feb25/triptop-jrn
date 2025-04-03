@@ -1,0 +1,89 @@
+@startuml
+' Define interface for transport provider port
+interface TransportProviderPort {
+    + fetchData(request: TransportRequest) : TransportResponse
+}
+
+' Define abstract ApiCaller (Template Method Pattern)
+abstract class ApiCaller {
+    + callApi(request: TransportRequest) : TransportResponse
+    - login()
+    - checkToken()
+    # abstract apiCall(request: TransportRequest) : TransportResponse
+}
+
+' Concrete Adapter for Fake API
+class FakeTransportAdapter {
+    + fetchData(request: TransportRequest) : TransportResponse
+    + apiCall(request: TransportRequest) : TransportResponse
+}
+FakeTransportAdapter --|> ApiCaller
+FakeTransportAdapter ..|> TransportProviderPort
+
+' Concrete Adapter for WikiRoutes API
+class WikiRoutesAdapter {
+    + fetchData(request: TransportRequest) : TransportResponse
+    + apiCall(request: TransportRequest) : TransportResponse
+}
+WikiRoutesAdapter --|> ApiCaller
+WikiRoutesAdapter ..|> TransportProviderPort
+
+' Concrete Adapter for Navitime API
+class NavitimeAdapter {
+    + fetchData(request: TransportRequest) : TransportResponse
+    + apiCall(request: TransportRequest) : TransportResponse
+}
+NavitimeAdapter --|> ApiCaller
+NavitimeAdapter ..|> TransportProviderPort
+
+' Concrete Adapter for BusMaps API
+class BusMapsAdapter {
+    + fetchData(request: TransportRequest) : TransportResponse
+    + apiCall(request: TransportRequest) : TransportResponse
+}
+BusMapsAdapter --|> ApiCaller
+BusMapsAdapter ..|> TransportProviderPort
+
+' Selector class for choosing an adapter dynamically
+class TransportProviderSelector {
+    - fakeTransportAdapter: FakeTransportAdapter
+    - wikiRoutesAdapter: WikiRoutesAdapter
+    - navitimeAdapter: NavitimeAdapter
+    - busMapsAdapter: BusMapsAdapter
+    + selectProvider(request: TransportRequest) : TransportProviderPort
+}
+
+' Service class that handles business logic
+class TransportService {
+    - providerSelector: TransportProviderSelector
+    + getTransportData(request: TransportRequest) : TransportResponse
+}
+
+' REST Controller that exposes endpoints
+class TransportController {
+    - transportService: TransportService
+    + getTransportOptions(request: TransportRequest) : TransportResponse
+}
+
+' Data Model classes
+class TransportRequest {
+    + origin: String
+    + destination: String
+    + provider: String
+}
+
+class TransportResponse {
+    + data: String
+}
+
+' Application entry point
+class SoexProjectJrnApplication {
+    + main(args: String[])
+}
+
+' Relationships
+TransportController --> TransportService : uses
+TransportService --> TransportProviderSelector : uses
+TransportProviderSelector --> TransportProviderPort : selects
+SoexProjectJrnApplication --> TransportController : starts
+@enduml
