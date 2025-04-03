@@ -32,7 +32,7 @@ class BookingData{
 + String getSecurityData(int index, int index2)
 }
 
-class TripAdvisorRepo{
+class TripAdvisorData{
 - String[][] TripadvisorData
 + String getSecurityData(int index, int index2)
 }
