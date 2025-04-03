@@ -200,7 +200,7 @@ Omdat deze volgorde vastligt, hoeft in de adapter alleen nog maar de implementat
 Het is dus van belang dat je bij het aanmaken van een adaptor zowel de port-interface implementeert en de APICaller extend. Zo krijg je de volledige implementatie voor het toevoegen van een nieuwe API.
 Mocht er een compleet nieuwe functionaliteit komen met een nieuwe api is het wel van belang dat er dus een nieuwe port-interface aangemaakt wordt!
 
-### **externe api connection dynamisch diagram**
+### **externe api connection dynamisch en sequentie diagram**
 
 ![Dynamisch diagram Exerne api](../opdracht-diagrammen/Dynamisch%20diagram%20externe%20api's.png)
 
@@ -208,6 +208,14 @@ Dit is het Dynamische diagram dat hoort bij het externe api component diagram.
 Zoals te zien is komt de aanvraag uit de frontend en wordt doorgegeven door de backend tot de service. Deze roept 1 of meerdere adapters aan afhankelijk van de hoeveelheid api's en of dat er een specefieke gevraagd wordt.
 Zodra de adapter de aanvraag krijgt gaat hij de api aanroepen met de voorgaand genoemde stappen. De api geeft informatie terug in een format die kan verschillen per api. De adapter zet het daarna weer om naar de juiste format en geeft het terug aan de serive die de aanvraag deed.
 De service kan dan ermee doen wat het moet. Dit is verder voor het diagram niet meer van belang. Het gaat in deze om de werking van de connectie met de externe API's.
+
+![Sequentie diagram voor het aanroepen van de externe API's](../opdracht-diagrammen/SequentieDiagramApiCall.svg.png)
+In dit voorbeeld is gebruik gemaakt van UberEats en TripTop. Dit is uitbreidbaar of verwisselbaar.
+
+In dit diagram is te zien dat de data die de adapters ophalen in dit voorbeeld beide een JSON-object zijn. Binnen de Adapters worden alle antwoorden omgezet naar een String om zo alle vormen van returnwaarde te kunnen gebruiken. Als alles omgezet is tot een String zet de functie dit om naar een **RestaurantDTO** met daarin de informatie die we willen laten zien in aan de gebruiker.
+Als de data in een DTO zit worden deze toegevoegd aan de Lijst die uiteindelijk teruggegeven wordt aan de service.
+
+Verder is goed te zien dat het een for-loop is die de adapters afloopt en de data aan de lijst toevoegd. Voor latere implementatie is een **ASync** iets wat ge-implementeert moet worden. Zo hoeft de gebruiker niet te wachten op 1 langezame API. 
 
 #### **externe api connection transport component diagram**
 
