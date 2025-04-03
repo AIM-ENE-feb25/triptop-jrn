@@ -175,9 +175,14 @@ Proces:
     Zo nodig haalt de backend via de API Gateway vluchtinformatie op bij Skyscanner.
     De vluchtgegevens worden opgeslagen en teruggestuurd naar de gebruiker.
 
-#### **externe api connection restaurant en activiteit component diagram**
+#### **externe api connection restaurant en activiteit component/ Container diagram**
 
-![Compnent diagram voor externe api's aansluiten](../opdracht-diagrammen/Componentdiagram-portsadapters.puml)
+![Container Diagram Voor externa api's aansluiten](../opdracht-diagrammen/ContainerDiagramRestaurantAPI.png)
+
+Een simpel container diagram waarin de reiziger een aanvraag doet via de frontend voor een lijst met restaurants en de bijpassende informatie. De frontend verwerkt deze aanvraag en geeft deze met eventuele parameters voor aan de backend. 
+Hier wordt gekeken welke API's er beschikbaar zijn en deze worden aangeroepen en de informatie wordt opgehaald en getoond aan de reiziger. Het aantal Api's wat hier gebruikt kan worden is eindeloos.
+
+![Compnent diagram voor externe api's aansluiten](../opdracht-diagrammen/Componentdiagram-portsadapters.png)
 
 Het bovenstaande diagram geeft weer hoe de componenten samenwerken voor het ophalen van informatie van externe API's. Hierbij wordt gebruikgemaakt van een interface met de naamconventie **port**. Voor elke externe API wordt een aparte **port**-interface gemaakt. Deze interface zorgt ervoor dat de adapter (aangegeven als **AdapterAPI**) de ontvangen data uit de API in het juiste formaat terugstuurt naar de service.
 
