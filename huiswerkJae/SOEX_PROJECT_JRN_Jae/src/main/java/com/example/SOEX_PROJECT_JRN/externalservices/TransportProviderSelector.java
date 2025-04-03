@@ -24,13 +24,20 @@ public class TransportProviderSelector {
     }
 
     public TransportProviderPort selectProvider(TransportRequest request) {
-        // Example selection logic based on request properties.
-        // For now, you can choose a default provider or use custom logic.
-        // This sample always returns the FakeTransportAdapter.
-        //return fakeTransportAdapter;
-        //return wikiRoutesAdapter;
-        //return navitimeAdapter;
-        return busMapsAdapter;
-        // To use, say, the NavitimeAdapter, return navitimeAdapter instead.
+        String provider = request.getProvider();
+        if (provider != null) {
+            switch (provider.toUpperCase()) {
+                case "WIKIROUTES":
+                    return wikiRoutesAdapter;
+                case "NAVITIME":
+                    return navitimeAdapter;
+                case "BUSMAPS":
+                    return busMapsAdapter;
+                case "FAKE":
+                default:
+                    return fakeTransportAdapter;
+            }
+        }
+        return fakeTransportAdapter;
     }
 }

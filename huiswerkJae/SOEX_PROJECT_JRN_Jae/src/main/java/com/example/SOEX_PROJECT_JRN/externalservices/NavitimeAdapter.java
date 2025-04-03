@@ -23,8 +23,13 @@ public class NavitimeAdapter extends ApiCaller implements TransportProviderPort 
     @Override
     protected TransportResponse apiCall(TransportRequest request) {
         try {
-            // Here, the URL uses fixed parameters based on the sample code.
-            String url = "https://navitime-route-totalnavi.p.rapidapi.com/route_transit?start=35.665251%2C139.712092&goal=35.661971%2C139.703795&datum=wgs84&term=1440&limit=5&start_time=2020-08-19T10%3A00%3A00&coord_unit=degree";
+            // For demonstration, we'll use custom origin/destination in a similar fashion.
+            String origin = request.getOrigin();
+            String destination = request.getDestination();
+
+            String url = "https://navitime-route-totalnavi.p.rapidapi.com/route_transit?start="
+                    + origin + "&goal=" + destination
+                    + "&datum=wgs84&term=1440&limit=5&start_time=2020-08-19T10:00:00&coord_unit=degree";
 
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -37,7 +42,7 @@ public class NavitimeAdapter extends ApiCaller implements TransportProviderPort 
             return new TransportResponse(response.body());
         } catch (Exception e) {
             e.printStackTrace();
-            return new TransportResponse("Error occurred: " + e.getMessage());
+            return new TransportResponse("Error: " + e.getMessage());
         }
     }
 }

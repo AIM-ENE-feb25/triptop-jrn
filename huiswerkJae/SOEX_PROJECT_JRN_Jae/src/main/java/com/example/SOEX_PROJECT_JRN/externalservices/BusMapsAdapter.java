@@ -23,8 +23,12 @@ public class BusMapsAdapter extends ApiCaller implements TransportProviderPort {
     @Override
     protected TransportResponse apiCall(TransportRequest request) {
         try {
-            // URL based on the provided sample with fixed parameters.
-            String url = "https://busmaps-gtfs-api.p.rapidapi.com/routes?origin=51.507198%2C-0.136512&destination=51.505983%2C-0.017931&departureTime=2025-02-11T09%3A06%3A00&arrivalTime=2025-02-11T09%3A06%3A00&transfers=1";
+            String origin = request.getOrigin();
+            String destination = request.getDestination();
+
+            String url = "https://busmaps-gtfs-api.p.rapidapi.com/routes?origin="
+                    + origin + "&destination=" + destination
+                    + "&departureTime=2025-02-11T09:06:00&arrivalTime=2025-02-11T09:06:00&transfers=1";
 
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -37,7 +41,7 @@ public class BusMapsAdapter extends ApiCaller implements TransportProviderPort {
             return new TransportResponse(response.body());
         } catch (Exception e) {
             e.printStackTrace();
-            return new TransportResponse("Error occurred: " + e.getMessage());
+            return new TransportResponse("Error: " + e.getMessage());
         }
     }
 }
