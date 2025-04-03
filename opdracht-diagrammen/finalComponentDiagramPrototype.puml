@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container("frontend", "TripTop Web App", "React.js", "Frontend for user interface")
+
+System_Boundary(triptop_core, "TripTop") {
+    Component("transportController", "TransportController", "Spring Boot Controller", "Handles HTTP requests for transport data")
+    Component("transportService", "TransportService", "Spring Boot Service", "Processes transport and route planning logic")
+    Component("TransportProviderSelector", "TransportProviderSelector", "Java Class", "Dynamically selects the appropriate adapter based on the request")
+    Component("ApiCaller", "ApiCaller (abstract)", "Java Abstract Class", "Manages the common API call workflow (login, token check, API call)")
+    Component("TransportProviderPort", "TransportProviderPort", "Java Interface", "Defines the standard interface for external transport APIs")
+    Component("FakeTransportAdapter", "FakeTransportAdapter", "Java Class", "Simulates an API response for testing purposes")
+    Component("WikiRoutesAdapter", "WikiRoutesAdapter", "Java Class", "Handles API calls to the WikiRoutes API")
+    Component("NavitimeAdapter", "NavitimeAdapter", "Java Class", "Handles API calls to the Navitime API")
+    Component("BusMapsAdapter", "BusMapsAdapter", "Java Class", "Handles API calls to the BusMaps API")
+}
+
+System_Ext("WikiRoutesAPI", "WikiRoutes API", "REST API", "External API for WikiRoutes")
+System_Ext("NavitimeAPI", "Navitime API", "REST API", "External API for transit routes in Japan")
+System_Ext("BusMapsAPI", "BusMaps API", "REST API", "External API for bus route information")
+
+frontend --> transportController : "Sends HTTP requests"
+transportController --> transportService : "Invokes business logic"
+transportService --> TransportProviderSelector : "Requests API adapter based on custom request"
+TransportProviderSelector --> TransportProviderPort : "Selects adapter\n(Fake, WikiRoutes, Navitime, BusMaps)"
+WikiRoutesAdapter ..|> TransportProviderPort
+NavitimeAdapter ..|> TransportProviderPort
+BusMapsAdapter ..|> TransportProviderPort
+FakeTransportAdapter ..|> TransportProviderPort
+WikiRoutesAdapter --> ApiCaller : "extends"
+NavitimeAdapter --> ApiCaller : "extends"
+BusMapsAdapter --> ApiCaller : "extends"
+WikiRoutesAdapter --> "WikiRoutesAPI" : "HTTP GET [JSON]"
+NavitimeAdapter --> "NavitimeAPI" : "HTTP GET [JSON]"
+BusMapsAdapter --> "BusMapsAPI" : "HTTP GET [JSON]"
+@enduml
