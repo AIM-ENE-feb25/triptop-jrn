@@ -1,0 +1,6 @@
+TODO vrijdag 4 april op school:
+
+- nieuwe klassediagram in SGB
+- nieuwe component diagram en dynamic component diagram in SGB
+- sequence diagram in SGB
+- AD API gateway afwijzen met reden in SGB zetten
