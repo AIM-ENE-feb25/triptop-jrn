@@ -1,0 +1,28 @@
+@startuml
+actor Frontend
+participant "TransportController" as TC
+participant "TransportService" as TS
+participant "TransportProviderSelector" as TPS
+participant "Chosen Adapter" as CA
+participant "External API" as API
+
+Frontend -> TC: HTTP POST /api/transport/getOptions\n{origin, destination, provider}
+TC -> TS: getTransportData(request)
+TS -> TPS: selectProvider(request)
+alt Provider = WIKIROUTES
+    TPS --> CA: WikiRoutesAdapter
+else if Provider = NAVITIME
+    TPS --> CA: NavitimeAdapter
+else if Provider = BUSMAPS
+    TPS --> CA: BusMapsAdapter
+else
+    TPS --> CA: FakeTransportAdapter
+end
+TS -> CA: fetchData(request)
+CA -> CA: callApi(request)
+CA -> API: HTTP GET (with RapidAPI headers)\nURL constructed from request\n(using provided API key)
+API --> CA: JSON response
+CA --> TS: TransportResponse(response)
+TS --> TC: TransportResponse
+TC --> Frontend: HTTP response with TransportResponse
+@enduml
