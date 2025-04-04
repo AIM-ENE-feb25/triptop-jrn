@@ -396,10 +396,9 @@ In de dynamic diagram is te zien in welke volgorde de communicatie loopt. In dez
 
 ![img_3.png](img_3.png)
 
-*Class Diagram voor consistente autorisatie en authenticatie*
+*Sequence Diagram voor consistente autorisatie en authenticatie*
 
 Hier is te zien in welke volgorde communicatie verloopt. In dit geval is ervoor gekozen om eerst Booking aan te roepen en daarna Tripadvisor. Dit zou later ook in een andere volgorde kunnen of synchroon.
-
 
 ###     7.3. Design & Code
 
@@ -438,6 +437,8 @@ In dit klassediagram wordt duidelijk hoe we zorgen voor consistentie in communic
 - Externe API 2 verwacht: Key + User + Password
 
 Houd er ook rekening mee dat de security gegevens hier hardcoded in de BookingData en TripadvisorData staan. Dit is gedaan omdat dit een **prototype** is. Mocht dit later in een project geïmplemteerd worden, dan zal het gehasht in een database moeten staan.
+
+In de code is ervoor gekozen om alleen het eerste hotel te retoureren van de response van Booking.com en Tripadvisor. Dit is gedaan om het testen overzichtelijk te houden.
 
 ## 8. Architectural Decision Records
 
@@ -969,10 +970,19 @@ We hebben besloten om drie alternatieve externe API's te integreren (**WikiRoute
 
 ## 9. Deployment, Operation and Support
 
+Opstarten
+
+Stap 1: Open de SOEX_PROJECT_JRN map in een IDE
+
+Stap 2: Run de SoexProjectJrnApplication
+
 ### protoType RestaurantAPI met ports/adapters
 
 1. Run prototype code base
 2. Maak get-aanroep naar: http://localhost:8080/getAllRestaurents
+
+expected result: 
+Lijst met restaurants met naam, locatie en telefoonnummer
 
 ### Prototype verschillende transport opties
 
@@ -994,12 +1004,6 @@ endpoint:
 "http://localhost:8080/api/transport/getOptions"
 
 ### Prototype: Consistentie autorisatie en authenticatie
-
-Opstarten
-
-Stap 1: Open de SOEX_PROJECT_JRN map in een IDE
-
-Stap 2: Run de SoexProjectrnApplication
 
 Testen in postman:
 
