@@ -1,0 +1,23 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Client -> HotelController: getHotelsInArea("51.98", "5.91111")
+HotelController -> HotelService: getHotelsInArea("51.98", "5.91111")
+
+HotelService -> BookingRepo: getHotelsInArea("51.98", "5.91111")
+BookingRepo -> BookingData: getSecurityData()
+BookingRepo -> ExternalAPI_Booking: fetchHotels()
+ExternalAPI_Booking --> BookingRepo: JSON Response
+BookingRepo --> HotelService: return list<JsonNode>
+
+HotelService -> TripadvisorRepo: getHotelsInArea("51.98", "5.91111")
+TripadvisorRepo -> TripAdvisorData: getSecurityData()
+TripadvisorRepo -> ExternalAPI_Tripadvisor: fetchHotels()
+ExternalAPI_Tripadvisor --> TripadvisorRepo: JSON Response
+TripadvisorRepo --> HotelService: return list<JsonNode>
+
+HotelService --> HotelController: List of hotel names
+HotelController --> Client: JSON Response
+@enduml
