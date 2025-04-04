@@ -6,7 +6,7 @@ participant "TransportProviderSelector" as TPS
 participant "Chosen Adapter" as CA
 participant "External API" as API
 
-Frontend -> TC: HTTP POST /api/transport/getOptions\n{origin, destination, provider}
+Frontend -> TC: HTTP POST /api/transport/getOptions/{origin, destination, provider}
 TC -> TS: getTransportData(request)
 TS -> TPS: selectProvider(request)
 alt Provider = WIKIROUTES
@@ -20,7 +20,7 @@ else
 end
 TS -> CA: fetchData(request)
 CA -> CA: callApi(request)
-CA -> API: HTTP GET (with RapidAPI headers)\nURL constructed from request\n(using provided API key)
+CA -> API: HTTP GET (with API key)
 API --> CA: JSON response
 CA --> TS: TransportResponse(response)
 TS --> TC: TransportResponse

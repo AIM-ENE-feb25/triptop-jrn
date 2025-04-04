@@ -73,7 +73,7 @@ class TransportRequest {
 }
 
 class TransportResponse {
-    + data: String
+    + data: Object
 }
 
 ' Application entry point
