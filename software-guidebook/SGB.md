@@ -320,15 +320,35 @@ Dit prototype is een evolutionary prototype, wat betekent dat het in de uiteinde
 
 ![Class Diagram Prototype](../opdracht-diagrammen/finalClassDiagramPrototype.png)
 
-Het class diagram toont de opbouw van de adapters en de onderliggende interfaces. De TransportProviderPort interface zorgt voor een generieke manier om transportdata op te vragen, terwijl de adapters de specifieke API-implementaties afhandelen.
+Het klassendiagram illustreert de integratie van meerdere aanbieders van transportgegevens met behulp van de ontwerppatronen Adapter en Template Method. Deze structuur zorgt voor flexibiliteit en onderhoudbaarheid bij interactie met verschillende transport API's.
+
+Sommige delen zijn bekend, maar we zullen iets meer beschrijven over de volgende delen:
+
+-  TransportProviderPort - Definieert een standaard interface voor alle transportproviders, zodat elke implementatie een uniform contract volgt.
+
+- ApiCaller (Abstracte klasse) - Implementeert het Template Methode Patroon door een callApi() methode aan te bieden die gebruikelijke authenticatiestappen bevat (login() en checkToken()) voordat het eigenlijke API-verzoek wordt gedelegeerd naar apiCall(), die subklassen moeten implementeren.
+
+- Concrete Adapters (FakeTransportAdapter, WikiRoutesAdapter, NavitimeAdapter, BusMapsAdapter) - Deze klassen breiden ApiCaller uit en implementeren TransportProviderPort, en dienen als adapters voor verschillende transport providers. Elke adapter implementeert fetchData(), die delegeert naar zijn apiCall() methode voor interactie met de specifieke API.
+
+- TransportProviderSelector - Beheert beschikbare transportproviders en selecteert dynamisch de juiste adapter op basis van het TransportRequest.
 
 ### Sequence Diagram
 
 ![Plaats hier de sequence diagram afbeelding](../opdracht-diagrammen/finalSequenceDiagramPrototype.png)
 
-Scenario: Bryan plant een reis
+Procesonderverdeling:
 
-Bryan woont in Nederland en wil zijn oom in Duitsland bezoeken. Hij voert zijn vertrekpunt en bestemming in de TripTop Web App in.
+1. Initiatie gebruikersverzoek - Een gebruiker dient een reisverzoek in via de frontend, met vermelding van de herkomst, bestemming en gewenste vervoerder.
+2. Afhandeling TransportController - De aanvraag bereikt TransportController, die deze valideert en doorstuurt naar TransportService. 
+3. Een aanbieder selecteren - TransportService delegeert de aanbiedersselectie naar TransportProviderSelector, die de juiste adapter bepaalt op basis van het verzoek. 
+4. Gegevens ophalen bij de provider - De geselecteerde adapter (bijv. WikiRoutesAdapter, NavitimeAdapter) breidt ApiCaller uit en zorgt voor authenticatie (login() en checkToken()) voordat het eigenlijke API-verzoek wordt gedaan. 
+5. Antwoord verwerken en terugsturen - Het antwoord van de provider wordt verwerkt en teruggestuurd via TransportService naar TransportController, die het naar de frontend stuurt.
+
+**Scenario**
+
+Om een duidelijk beeld te krijgen, volgen we deze scenario als voorbeeld:
+
+>Bryan woont in Nederland en wil zijn oom in Duitsland bezoeken. Hij voert zijn vertrekpunt en bestemming in de TripTop Web App in.
 
 1. De frontend stuurt een verzoek naar TransportController.
 
