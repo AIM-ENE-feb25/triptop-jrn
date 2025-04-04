@@ -400,8 +400,6 @@ In de dynamic diagram is te zien in welke volgorde de communicatie loopt. In dez
 
 Hier is te zien in welke volgorde communicatie verloopt. In dit geval is ervoor gekozen om eerst Booking aan te roepen en daarna Tripadvisor. Dit zou later ook in een andere volgorde kunnen of synchroon.
 
-> [!IMPORTANT]
-> Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
 
 ###     7.3. Design & Code
 
@@ -415,7 +413,7 @@ De implementatie van deze functies wordt gedaan per adaptor gezien elke externe 
 De service kan dus meerdere adaptors aanroepen. Om ons te houden aan het **open closed principale** wordt er binnen de service gebruik gemaakt van **program to an inferface principal**. In de service wordt niet elke vorm van bij restaurantPort los aangeroepen. Je roept hier alle restaurant ports aan door een simpele restaurantPort.fetchData().
 Zo hoeven we niet voor elke port een langer of nieuwe aanroep te maken in de service. Zo blijft de code onderhoudbaar en betrouwbaar omdat je geen aanpassingen kunt vergeten. Zoals eerder besproken heeft elke adaptor zijn eigen implementatie voor het formateren van de data.
 
-De activiteiten-Kant van het diagram is niet geimplementeerd in het proto-type. Dit heeft als reden dat het geen betrekking had op verder bewijs of de **adapter pattern** voldeed aan de verwachten die waren gesteld in ADR (XXXXXXX). Het is wel opgenomen in het klassediagram omdat het wel goed laat zien hoe er nog andere soorten api's makkelijk geimplementeerd kunnen worden en dat de apiCaller een algemene klasse is voor alle klasse die een api aan gaan roepen.
+De activiteiten-Kant van het diagram is niet geimplementeerd in het proto-type. Dit heeft als reden dat het geen betrekking had op verder bewijs of de **adapter pattern** voldeed aan de verwachten die waren gesteld in [makkelijk uitbreiden externe API's](#adr-004-makkelijk-uitbreiden-externe-apis). Het is wel opgenomen in het klassediagram omdat het wel goed laat zien hoe er nog andere soorten api's makkelijk geimplementeerd kunnen worden en dat de apiCaller een algemene klasse is voor alle klasse die een api aan gaan roepen.
 
 
 #### **class diagram transport api's**
@@ -439,13 +437,7 @@ In dit klassediagram wordt duidelijk hoe we zorgen voor consistentie in communic
 
 Houd er ook rekening mee dat de security gegevens hier hardcoded in de BookingData en TripadvisorData staan. Dit is gedaan omdat dit een **prototype** is. Mocht dit later in een project geïmplemteerd worden, dan zal het gehasht in een database moeten staan.
 
-> [!IMPORTANT]
-> Voeg toe: Per ontwerpvraag een Class Diagram plus een Sequence Diagram van een aantal scenario's inclusief begeleidende tekst.
-
 ## 8. Architectural Decision Records
-
-> [!IMPORTANT]
-> Voeg toe: 3 tot 5 ADR's die beslissingen beschrijven die zijn genomen tijdens het ontwerpen en bouwen van de software.
 
 ### 8.1. Eten
 
@@ -560,10 +552,6 @@ Vooral landen die nog niet echt klaar zijn voor grote vakantieganger
 ### **Bankoverschrijvingen**
 - **Voordeel:** Werkt (bijna) overal en is een directe manier van betalen.
 - **Nadeel:** Vereist directe bankgegevens en extra beveiligingsmaatregelen.
-
-### 8.2.1 bronnen
-
-ToDo: Toevoegen bronnen
 
 ## ADR-003: Integratie van Flightinformatie API’s voor Vluchtinformatie
 
@@ -688,8 +676,7 @@ Wij kiezen voor de integratie van de **Navitia API** als primaire routeplanner, 
 **Auteur:** Jae Dreijling
 
 
-
-# Architecture Decision Record 005(ADR)
+## ADR-004 makkelijk uitbreiden externe API's
 
 ## 1. Titel
 **Het makkelijk uitbreiden van de applicatie met nieuwe externe API's**
@@ -978,66 +965,52 @@ We hebben besloten om drie alternatieve externe API's te integreren (**WikiRoute
 **Datum:** `[04-04-2025]`
 **Auteur:** `[Jae Dreijling]`
 
-
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
-
-#### Context
-
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
-
-#### Considered Options
-
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
-
-#### Decision
-
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
-
-#### Status
-
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
-
-#### Consequences
-
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
-
-### 8.5. ADR-005 TITLE
-
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
-
-#### Context
-
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
-
-#### Considered Options
-
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
-
-#### Decision
-
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
-
-#### Status
-
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
-
-#### Consequences
-
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
-
 ## 9. Deployment, Operation and Support
 
-> [!TIP]
-> Zelf beschrijven van wat je moet doen om de software te installeren en te kunnen runnen.
+### protoType RestaurantAPI met ports/adapters
+
+1. Run prototype code base
+2. Maak get-aanroep naar: http://localhost:8080/getAllRestaurents
+
+### Prototype verschillende transport opties
+
+option 1:
+"{
+"origin": "59.971326,30.259275",
+"destination": "59.933005,30.345936",
+"provider": "WIKIROUTES"
+}
+"
+option 2:
+"{
+"origin": "35.665251,139.712092",
+"destination": "35.661971,139.703795",
+"provider": "NAVITIME"
+}
+"
+endpoint:
+"http://localhost:8080/api/transport/getOptions"
+
+### Prototype: Consistentie autorisatie en authenticatie
+
+Opstarten
+
+Stap 1: Open de SOEX_PROJECT_JRN map in een IDE
+
+Stap 2: Run de SoexProjectrnApplication
+
+Testen in postman:
+
+Doe een get request naar http://localhost:8080/api/hotels/by-location?latitude=51.98&longitude=5.91111
+
+De output zou er zo uit moeten zien: [
+
+    "Bastion Hotel Arnhem",
+
+    "1. Walburgis Residenties"
+
+]
+
+Je kunt met verschillende coördinaten testen door de latitude en longitude parameters aan te passen
+
+ 
