@@ -431,6 +431,8 @@ Tot slot, door deze ontwerpprincipes en patronen toe te passen, kunnen we de API
 
 ![img_1.png](img_1.png)
 
+De keuzes die gemaakt zijn omtrent deze ontwerpvraag zijn te vinden in [Design Pattern](#88-design-pattern)
+
 In dit klassediagram wordt duidelijk hoe we zorgen voor consistentie in communicatie tussen service en repository. Hiervoor is een HotelRepository interface geïmplementeerd. Hierdoor kun je met dezelfde functie verschillende repositories aanroepen. De reden dat dit gemaakt is, is omdat niet elke externe API dezelfde securitygegevens verwacht. Bijvoorbeeld:
 - Externe API 1 verwacht: Token + Key
 - Externe API 2 verwacht: Key + User + Password
