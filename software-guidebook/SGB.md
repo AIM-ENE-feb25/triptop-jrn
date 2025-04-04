@@ -974,6 +974,9 @@ We hebben besloten om drie alternatieve externe API's te integreren (**WikiRoute
 1. Run prototype code base
 2. Maak get-aanroep naar: http://localhost:8080/getAllRestaurents
 
+expected result: 
+Lijst met restaurants met naam, locatie en telefoonnummer
+
 ### Prototype verschillende transport opties
 
 option 1:
