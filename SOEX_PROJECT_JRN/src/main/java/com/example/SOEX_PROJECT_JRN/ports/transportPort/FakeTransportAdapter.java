@@ -1,7 +1,8 @@
-package com.example.SOEX_PROJECT_JRN.externalservices;
+package com.example.SOEX_PROJECT_JRN.ports.transportPort;
 
 import com.example.SOEX_PROJECT_JRN.ApiCaller;
-import com.example.SOEX_PROJECT_JRN.model.TransportRequest;
+import com.example.SOEX_PROJECT_JRN.domein.TransportRequest;
+import com.example.SOEX_PROJECT_JRN.domein.TransportResponse;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,8 +33,9 @@ public class FakeTransportAdapter extends ApiCaller implements TransportProvider
     }
 
     @Override
-    public String fetchData(TransportRequest request) {
+    public TransportResponse fetchData(TransportRequest request) {
         setRequest(request);
-        return makeApiCall();
+        String responseString = makeApiCall();
+        return new TransportResponse(responseString);
     }
 }

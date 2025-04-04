@@ -1,7 +1,8 @@
-package com.example.SOEX_PROJECT_JRN.externalservices;
+package com.example.SOEX_PROJECT_JRN.ports.transportPort;
 
 import com.example.SOEX_PROJECT_JRN.ApiCaller;
-import com.example.SOEX_PROJECT_JRN.model.TransportRequest;
+import com.example.SOEX_PROJECT_JRN.domein.TransportRequest;
+import com.example.SOEX_PROJECT_JRN.domein.TransportResponse;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -35,14 +36,11 @@ public class BusMapsAdapter extends ApiCaller implements TransportProviderPort {
             return "No request provided";
         }
         try {
-            String origin = request.getOrigin();       // Expected format: "51.507198,-0.136512"
-            String destination = request.getDestination(); // Expected format: "51.505983,-0.017931"
-
-            // Construct URL using dynamic parameters
+            String origin = request.getOrigin();
+            String destination = request.getDestination();
             String url = "https://busmaps-gtfs-api.p.rapidapi.com/routes?origin="
                     + origin + "&destination=" + destination
                     + "&departureTime=2025-02-11T09:06:00&arrivalTime=2025-02-11T09:06:00&transfers=1";
-
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -50,7 +48,6 @@ public class BusMapsAdapter extends ApiCaller implements TransportProviderPort {
                     .header("x-rapidapi-host", API_HOST)
                     .GET()
                     .build();
-
             HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             return response.body();
         } catch (Exception e) {
@@ -60,8 +57,9 @@ public class BusMapsAdapter extends ApiCaller implements TransportProviderPort {
     }
 
     @Override
-    public String fetchData(TransportRequest request) {
+    public TransportResponse fetchData(TransportRequest request) {
         setRequest(request);
-        return makeApiCall();
+        String responseString = makeApiCall();
+        return new TransportResponse(responseString);
     }
 }

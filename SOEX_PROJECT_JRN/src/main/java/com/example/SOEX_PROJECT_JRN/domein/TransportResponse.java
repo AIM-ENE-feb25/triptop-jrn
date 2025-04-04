@@ -1,4 +1,4 @@
-package com.example.SOEX_PROJECT_JRN.model;
+package com.example.SOEX_PROJECT_JRN.domein;
 
 public class TransportResponse {
     private String data;

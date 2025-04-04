@@ -1,7 +1,7 @@
 package com.example.SOEX_PROJECT_JRN.controller;
 
-import com.example.SOEX_PROJECT_JRN.model.TransportRequest;
-import com.example.SOEX_PROJECT_JRN.model.TransportResponse;
+import com.example.SOEX_PROJECT_JRN.domein.TransportRequest;
+import com.example.SOEX_PROJECT_JRN.domein.TransportResponse;
 import com.example.SOEX_PROJECT_JRN.service.TransportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

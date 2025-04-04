@@ -1,7 +1,8 @@
-package com.example.SOEX_PROJECT_JRN.externalservices;
+package com.example.SOEX_PROJECT_JRN.ports.transportPort;
 
 import com.example.SOEX_PROJECT_JRN.ApiCaller;
-import com.example.SOEX_PROJECT_JRN.model.TransportRequest;
+import com.example.SOEX_PROJECT_JRN.domein.TransportRequest;
+import com.example.SOEX_PROJECT_JRN.domein.TransportResponse;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -21,13 +22,11 @@ public class WikiRoutesAdapter extends ApiCaller implements TransportProviderPor
 
     @Override
     public void loginAPI() {
-        // No specific login required for WikiRoutes API
         System.out.println("WikiRoutesAdapter: loginAPI executed.");
     }
 
     @Override
     public void checkToken() {
-        // No token check required for WikiRoutes API
         System.out.println("WikiRoutesAdapter: checkToken executed.");
     }
 
@@ -37,15 +36,11 @@ public class WikiRoutesAdapter extends ApiCaller implements TransportProviderPor
             return "No request provided";
         }
         try {
-            // Extract dynamic parameters from request
             String origin = request.getOrigin();
             String destination = request.getDestination();
-
-            // Construct the URL using the dynamic parameters
             String url = "https://wikiroutes-api.p.rapidapi.com/routes?origin="
                     + origin + "&destination=" + destination
                     + "&departureTime=2025-01-20T13:01:00&arrivalTime=2025-01-20T13:01:00&transfers=1";
-
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -53,7 +48,6 @@ public class WikiRoutesAdapter extends ApiCaller implements TransportProviderPor
                     .header("x-rapidapi-host", API_HOST)
                     .GET()
                     .build();
-
             HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             return response.body();
         } catch (Exception e) {
@@ -63,8 +57,9 @@ public class WikiRoutesAdapter extends ApiCaller implements TransportProviderPor
     }
 
     @Override
-    public String fetchData(TransportRequest request) {
+    public TransportResponse fetchData(TransportRequest request) {
         setRequest(request);
-        return makeApiCall();
+        String responseString = makeApiCall();
+        return new TransportResponse(responseString);
     }
 }

@@ -1,6 +1,6 @@
-package com.example.SOEX_PROJECT_JRN.externalservices;
+package com.example.SOEX_PROJECT_JRN.ports.transportPort;
 
-import com.example.SOEX_PROJECT_JRN.model.TransportRequest;
+import com.example.SOEX_PROJECT_JRN.domein.TransportRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
