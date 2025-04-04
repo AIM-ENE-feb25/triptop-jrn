@@ -7,7 +7,7 @@ abstract class ApiCaller {
     TokenCheck() {abstract}
 }
 
-interface RestaurentPort {
+interface RestaurantPort {
   +  retrieveData() : List<RestaurantDTO>
 }
 
@@ -15,7 +15,7 @@ interface ActiviteitenPort {
   +  retrieveData() : List<AcitivteitDTO>
 }
 
-class RestaurentController {
+class RestaurantController {
   - restaurentService
   + getAllRestaurantsInArea(): List<RestaurantDTO>
 }
@@ -25,7 +25,7 @@ class ActiviteitenController {
   + getActivities(opt String zoekwoord)
 }
 
-class RestaurentService {
+class RestaurantService {
   - restaurantports:List<IRestaurantPort>
   + getAllRestaurants():List<RestaurantDTO>
 }
@@ -37,7 +37,7 @@ class ActiviteitenService {
 class UberEatsScraperAdapt  {
 }
 
-class TripAdvicorScraperAdapt  {
+class TripAdvisorScraperAdapt  {
 }
 
 class ActiviteitenAdapt {
@@ -51,25 +51,25 @@ class RestaurantDTO{
     + phoneNumber: String
 }
 
-Frontend ..> RestaurentController : "calls"
+Frontend ..> RestaurantController : "calls"
 Frontend ..> ActiviteitenController : "calls"
 
-RestaurentController --> RestaurentService : "heeft"
+RestaurantController --> RestaurantService : "heeft"
 ActiviteitenController --> ActiviteitenService : "heeft"
 
-RestaurentService --> UberEatsScraperAdapt  : "queries"
-RestaurentService --> TripAdvicorScraperAdapt : "queries"
+RestaurantService --> UberEatsScraperAdapt  : "queries"
+RestaurantService --> TripAdvisorScraperAdapt : "queries"
 ActiviteitenService --> ActiviteitenAdapt : "queries"
 
-UberEatsScraperAdapt  ..|> RestaurentPort : "implements"
-TripAdvicorScraperAdapt ..|> RestaurentPort : "implements"
+UberEatsScraperAdapt  ..|> RestaurantPort : "implements"
+TripAdvisorScraperAdapt ..|> RestaurantPort : "implements"
 ActiviteitenAdapt ..|> ActiviteitenPort : "implements"
 
 UberEatsScraperAdapt  --|> ApiCaller : "extends"
-TripAdvicorScraperAdapt --|> ApiCaller : "extends"
+TripAdvisorScraperAdapt --|> ApiCaller : "extends"
 ActiviteitenAdapt --|> ApiCaller : "extends"
 
-RestaurentPort --> RestaurantDTO : maakt aan
+RestaurantPort --> RestaurantDTO : maakt aan
 ActiviteitenPort --> ActivteitenDTO: maakt aan
 
 @enduml
