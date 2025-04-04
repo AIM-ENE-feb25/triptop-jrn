@@ -340,12 +340,17 @@ Tot slot, door deze ontwerpprincipes en patronen toe te passen, kunnen we de API
 - TripAdviser haalt wereldwijd restaurants op. Zo kunnen over restaurant opties worden weergegeven.
 - Betrouwbaarheid van gegevens. Tripadvisor heeft een 100% Service Level. Ook is Tripadvisor een bekend bedrijf waardoor je betrouwbare informatie kan verwachten.
 - Tripadvisor biedt ook de mogelijkheid om vliegvelden, vluchten, autoverhuur en hotels. Hierdoor heb je eventueel geen andere API's hiervoor nodig.
+
 ### Negatieve gevolgen
 
 - Bij het ophalen van een restaurant wordt veel informatie opgehaald. Deze informatie is vaak niet allemaal nodig waardoor je eigenlijk te veel gegevens ophaald.
 - Voor het vinden van restaurants moet je een locationId meegeven. Hierdoor moet je twee GET requests doen. Eén voor het ophalen van de locationId en één voor het ophalen van de restaurants in die omgeving.
 - Het is afhankelijk van een locationId. Hierdoor moet je precies weten waar de gebruiker wilt zoeken en kan je niet algemeen zoeken zoals een land of regio.
 
+---
+
+**Datum:** `[21-03-2025]`
+**Auteur:** `[Niels van Eck]`
 
 
 
@@ -749,10 +754,13 @@ We implementeren een centrale **TransportProviderSelector** die dynamisch bepaal
 --- 
 
 ### 8.9. API Gateway
+> Onderzoeksvraag: Hoe zorg je ervoor dat authenticatie  en authorisatie consistent worden toegepast bij het communiceren met verschillende externe api's?
 
 ## Status
 
-> Voorstel
+> Afgewezen
+
+Reden: Tijdens het implementeren van de code waaronder de API gateway viel het op dat de API gateway niet gebruikt werd en dus niet nodig was. Het probleem is opgevangen door een andere interface. Daarom is besloten om de API gateway te verwijderen.
 
 ## Context
 
@@ -761,7 +769,7 @@ We implementeren een centrale **TransportProviderSelector** die dynamisch bepaal
 ## Beslissing
 
 > We kiezen ervoor om een API Gateway te gebruiken. De API Gateway zal verantwoordelijk zijn voor:
->
+
 - Het centraliseren van authenticatie en autorisatie.
 - Het gelijkmaken van API-aanroepen ongeacht de verschillen tussen de externe APIs.
 
