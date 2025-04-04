@@ -259,15 +259,25 @@ De juiste adapter roept vervolgens de externe API aan en ontvangt een antwoord i
 De adapter zet dit om naar een uniform formaat en stuurt het terug naar de service.
 De service handelt het verzoek verder af en stuurt de respons terug naar de gebruiker.
 
-### **Consistente authorisatie en authenticatie**
+### **Consistente autorisatie en authenticatie**
+
+![img_2.png](img_2.png)
+
+*Component Diagram voor consistente autorisatie en authenticatie*
+
+Er is een HotelRepository geïmplementeerd zodat de service op een uniforme manier met de repositories kan communiceren. De rest werkt als een gewone CRUD applicatie.
 
 ![img.png](img.png)
 
-> Om ervoor te zorgen dat de beveiliging consistent is wordt er gebruik gemaakt van een API Gateway. Deze gateway zorgt ervoor dat de communicatie met externe APIs uniform loopt. In de geval zijn er twee externe APIs geschetst. Dit zou uitgebreid kunnen worden naar hoeveel er nodig zijn. 
+*Dynamic Component Diagram voor consistente autorisatie en authenticatie*
 
-![img_1.png](img_1.png)
+In de dynamic diagram is te zien in welke volgorde de communicatie loopt. In deze diagram is de SecurityData apart gezet om in beeld te brengen hoe de repositories de security gegevens ophalen. Voor dit prototype is er gekozen om de waardes hard coded op te slaan. Als dit daadwerkelijk in een project zou geïntegreerd worden dan zullen deze gegevens gehasht in een database moeten staan.
 
-> In de dynamic diagram is te zien in welke volgorde de communicatie loopt. In deze diagram is de SecurityData apart gezet om in beeld te brengen hoe de API Gateway de security gegevens ophaalt. Voor dit prototype is er gekozen om de waardes hard coded op te slaan. Als dit daadwerkelijk in een project zou geïntegreerd worden dan zullen deze gegevens gehasht in een database moeten staan.
+![img_3.png](img_3.png)
+
+*Class Diagram voor consistente autorisatie en authenticatie*
+
+Hier is te zien in welke volgorde communicatie verloopt. In dit geval is ervoor gekozen om eerst Booking aan te roepen en daarna Tripadvisor. Dit zou later ook in een andere volgorde kunnen of synchroon.
 
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
@@ -297,6 +307,16 @@ De TransportService klasse maakt gebruik van de TransportProviderPort interface,
 Door gebruik te maken van het Program to an Interface Principle, zorgt de TransportService ervoor dat de communicatie met de adapters generiek en flexibel blijft. Dit betekent dat de service geen specifieke implementaties van API’s aanroept, maar alleen afhankelijk is van de interfaces. Dit voorkomt dat de service code moet worden aangepast voor elke nieuwe API, wat de code onderhoudbaar en betrouwbaar maakt.
 
 Tot slot, door deze ontwerpprincipes en patronen toe te passen, kunnen we de API’s in de toekomst gemakkelijk uitbreiden zonder dat de bestaande codebehoeften aangepast hoeven te worden, wat bijdraagt aan een schaalbaar en flexibel systeemontwerp.
+
+#### **Class Diagram Consistente Autorisatie en Authenticatie**
+
+![img_1.png](img_1.png)
+
+In dit klassediagram wordt duidelijk hoe we zorgen voor consistentie in communicatie tussen service en repository. Hiervoor is een HotelRepository interface geïmplementeerd. Hierdoor kun je met dezelfde functie verschillende repositories aanroepen. De reden dat dit gemaakt is, is omdat niet elke externe API dezelfde securitygegevens verwacht. Bijvoorbeeld:
+- Externe API 1 verwacht: Token + Key
+- Externe API 2 verwacht: Key + User + Password
+
+Houd er ook rekening mee dat de security gegevens hier hardcoded in de BookingData en TripadvisorData staan. Dit is gedaan omdat dit een **prototype** is. Mocht dit later in een project geïmplemteerd worden, dan zal het gehasht in een database moeten staan.
 
 > [!IMPORTANT]
 > Voeg toe: Per ontwerpvraag een Class Diagram plus een Sequence Diagram van een aantal scenario's inclusief begeleidende tekst.
@@ -548,12 +568,7 @@ Wij kiezen voor de integratie van de **Navitia API** als primaire routeplanner, 
 
 
 
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
-
-# Architecture Decision Record (ADR)
-
-### 8.5. implemtentatie nieuwe externe API's
+# Architecture Decision Record 005(ADR)
 
 ## 1. Titel
 **Het makkelijk uitbreiden van de applicatie met nieuwe externe API's**
@@ -578,16 +593,16 @@ Het gebruik van ports en adapters waarbij we een interface implementeren die de 
 **2. Switch-case voor afhandeling data abstractie**  
 Binnen de service wordt een switch-case gebruikt om alle inkomende datatypes per API te verwerken. De code wordt geformatteerd naar een voor de frontend bruikbare vorm binnen de switch-case.
 
-**3. Geen abstractie, switch-case per API**  
-Een switch-case in de service die per API de data doorgeeft zoals deze aankomt. In de frontend wordt een switch-case gebruikt die het type data detecteert en in het juiste formaat toont, afhankelijk van de API.
+**3. Facade door API-Gateway**  
+Eén centrale plek waar alle API-calls worden afgehandeld en de data wordt omgezet naar de DTO's die de service verwacht.
 
 **De opties zijn bekeken en hieruit is de volgende tabel gekomen:**
 
-| **Optie** | **Impact op onderhoudbaarheid** | **Impact op testbaarheid** | **Impact op schaalbaarheid** | **Impact op leesbaarheid** | **Impact op Betrouwbaarheid** |
-|-----------|---------------------------------|-----------------------------|------------------------------|----------------------------|----------------------------|
-| **1. Hexagonaal ontwerp (Ports en Adapters)** | ++ | ++ | ++ | - | ++ |
-| **2. Gebruik van een switch-case voor verschillende datatypes** | - | - | - | + | - |
-| **3. Directe integratie in de controller (zonder abstractie)** | -- | -- | -- | -- | -- |
+| **Optie**                                                       | **Impact op onderhoudbaarheid** | **Impact op testbaarheid** | **Impact op schaalbaarheid** | **Impact op leesbaarheid** | **Impact op Betrouwbaarheid** |
+|-----------------------------------------------------------------|--------------------------------|----------------------------|------------------------------|----------------------------|-------------------------------|
+| **1. Hexagonaal ontwerp (Ports en Adapters)**                   | ++                             | ++                         | ++                           | -                          | ++                            |
+| **2. Gebruik van een switch-case voor verschillende datatypes** | -                              | -                          | -                            | +                          | -                             |
+| **3. Facade Door API-Gateway**                                  | -                              | +                          | -                            | +                          | ++                            |
 
 ### **Hexagonaal ontwerp (Ports en Adapters)**
 
@@ -610,27 +625,24 @@ Een switch-case in de service die per API de data doorgeeft zoals deze aankomt. 
 - De switch-cases kunnen erg groot worden voor grotere API's.
 - De service wordt verantwoordelijk voor te veel taken, wat **Separation of Concerns** schendt.
 
-### **Geen abstractie**
+### **API-GateWay**
 
 **Voordelen:**
-- Geen extra omzetting van data nodig; de data komt direct van de API.
+- Eén plek waar alle API-calls worden afgehandeld
+- Goed overzicht van welke api's er allemaal aangeroepen worden.
 
 **Nadelen:**
-- De code wordt moeilijk te onderhouden door lange switch-cases in zowel de backend als frontend.
-- De frontend is niet altijd goed voorbereid op alle vormen van inkomende data.
-- Aanpassingen moeten in meerdere plekken worden doorgevoerd, wat de kans op fouten vergroot.
+- Niet open/closed
+- Is verantwoordelijk  voor alle datavervorming uit alle api's. geen **Separation of Concerns**.
+- Veel bloatcode
 
 ## 6. Onderbouwing
 De keuze voor het **hexagonaal ontwerp** levert de beste resultaten op het gebied van onderhoudbaarheid, testbaarheid en schaalbaarheid. Het gebruik van abstractie en het ontwerpen op basis van interfaces maakt het mogelijk om de code uit te breiden zonder bestaande functionaliteiten te breken. Dit ondersteunt drie belangrijke principes uit SOLID: **Separation of Concerns**, **Open/Closed principle** en **Programming for an Interface**.
 
 Hoewel het gebruik van een hexagonaal ontwerp een hogere leercurve met zich meebrengt, is de lange termijnwinst veel groter dan de korte termijnkosten. De tijd die nodig is om deze architectuur te begrijpen en toe te passen is verwaarloosbaar in vergelijking met de tijd die verloren zou gaan door het onderhoud van complexe switch-cases en de risico's van fouten bij wijzigingen.
 
-Door interfaces te gebruiken, wordt de **testbaarheid** aanzienlijk verbeterd, aangezien we niet voor elke nieuwe API een test hoeven te schrijven, maar alleen de implementatie van de interface moeten testen.
-
----
-
-**Datum:** `[27-03-2025]`
-**Auteur:** `[Rob Kokx]`
+Hoewel een API Gateway een goed alternatief leek, hebben we ervoor gekozen om het adapter pattern te gebruiken vanwege het gebrek aan Separation of Concerns en de hoeveelheid extra code die een API Gateway met zich meebrengt.
+Door interfaces te gebruiken, verbeteren we de **testbaarheid** aanzienlijk: voor elke nieuwe API hoeft alleen de implementatie van de interface getest te worden, niet de hele structuur.
 
 # 8.6. ADR-006 Law of Demeter en Modulaire Architectuur
 

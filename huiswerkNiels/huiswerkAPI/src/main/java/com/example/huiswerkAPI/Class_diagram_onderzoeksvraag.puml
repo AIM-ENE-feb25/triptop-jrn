@@ -7,7 +7,8 @@ class HotelController {
 }
 
 class HotelService{
-    - API_Gateway gateway
+    - BookingRepo bookingRepo
+    - TripAdvisorRepo tripadvisorRepo
     getHotelsInArea(String latitude, String longitude): List<JsonNode>
 }
 
@@ -43,8 +44,8 @@ BookingRepo ..|> HotelRepository
 TripAdvisorRepo ..|> HotelRepository
 BookingData ..|> SecurityData
 TripAdvisorData ..|> SecurityData
-BookingRepo *-- BookingData
-TripAdvisorRepo *-- TripAdvisorData
+BookingRepo --> BookingData
+TripAdvisorRepo --> TripAdvisorData
 
 
 @enduml
