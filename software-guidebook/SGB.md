@@ -259,15 +259,25 @@ De juiste adapter roept vervolgens de externe API aan en ontvangt een antwoord i
 De adapter zet dit om naar een uniform formaat en stuurt het terug naar de service.
 De service handelt het verzoek verder af en stuurt de respons terug naar de gebruiker.
 
-### **Consistente authorisatie en authenticatie**
+### **Consistente autorisatie en authenticatie**
+
+![img_2.png](img_2.png)
+
+*Component Diagram voor consistente autorisatie en authenticatie*
+
+Er is een HotelRepository geïmplementeerd zodat de service op een uniforme manier met de repositories kan communiceren. De rest werkt als een gewone CRUD applicatie.
 
 ![img.png](img.png)
 
-> Om ervoor te zorgen dat de beveiliging consistent is wordt er gebruik gemaakt van een API Gateway. Deze gateway zorgt ervoor dat de communicatie met externe APIs uniform loopt. In de geval zijn er twee externe APIs geschetst. Dit zou uitgebreid kunnen worden naar hoeveel er nodig zijn. 
+*Dynamic Component Diagram voor consistente autorisatie en authenticatie*
 
-![img_1.png](img_1.png)
+In de dynamic diagram is te zien in welke volgorde de communicatie loopt. In deze diagram is de SecurityData apart gezet om in beeld te brengen hoe de repositories de security gegevens ophalen. Voor dit prototype is er gekozen om de waardes hard coded op te slaan. Als dit daadwerkelijk in een project zou geïntegreerd worden dan zullen deze gegevens gehasht in een database moeten staan.
 
-> In de dynamic diagram is te zien in welke volgorde de communicatie loopt. In deze diagram is de SecurityData apart gezet om in beeld te brengen hoe de API Gateway de security gegevens ophaalt. Voor dit prototype is er gekozen om de waardes hard coded op te slaan. Als dit daadwerkelijk in een project zou geïntegreerd worden dan zullen deze gegevens gehasht in een database moeten staan.
+![img_3.png](img_3.png)
+
+*Class Diagram voor consistente autorisatie en authenticatie*
+
+Hier is te zien in welke volgorde communicatie verloopt. In dit geval is ervoor gekozen om eerst Booking aan te roepen en daarna Tripadvisor. Dit zou later ook in een andere volgorde kunnen of synchroon.
 
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
@@ -297,6 +307,16 @@ De TransportService klasse maakt gebruik van de TransportProviderPort interface,
 Door gebruik te maken van het Program to an Interface Principle, zorgt de TransportService ervoor dat de communicatie met de adapters generiek en flexibel blijft. Dit betekent dat de service geen specifieke implementaties van API’s aanroept, maar alleen afhankelijk is van de interfaces. Dit voorkomt dat de service code moet worden aangepast voor elke nieuwe API, wat de code onderhoudbaar en betrouwbaar maakt.
 
 Tot slot, door deze ontwerpprincipes en patronen toe te passen, kunnen we de API’s in de toekomst gemakkelijk uitbreiden zonder dat de bestaande codebehoeften aangepast hoeven te worden, wat bijdraagt aan een schaalbaar en flexibel systeemontwerp.
+
+#### **Class Diagram Consistente Autorisatie en Authenticatie**
+
+![img_1.png](img_1.png)
+
+In dit klassediagram wordt duidelijk hoe we zorgen voor consistentie in communicatie tussen service en repository. Hiervoor is een HotelRepository interface geïmplementeerd. Hierdoor kun je met dezelfde functie verschillende repositories aanroepen. De reden dat dit gemaakt is, is omdat niet elke externe API dezelfde securitygegevens verwacht. Bijvoorbeeld:
+- Externe API 1 verwacht: Token + Key
+- Externe API 2 verwacht: Key + User + Password
+
+Houd er ook rekening mee dat de security gegevens hier hardcoded in de BookingData en TripadvisorData staan. Dit is gedaan omdat dit een **prototype** is. Mocht dit later in een project geïmplemteerd worden, dan zal het gehasht in een database moeten staan.
 
 > [!IMPORTANT]
 > Voeg toe: Per ontwerpvraag een Class Diagram plus een Sequence Diagram van een aantal scenario's inclusief begeleidende tekst.
