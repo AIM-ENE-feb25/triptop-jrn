@@ -91,6 +91,42 @@ Voordat deze casusomschrijving tot stand kwam, heeft de opdrachtgever de volgend
 
 ## 6. Principles
 
+Tijdens het ontwerpen van de applicatie is er rekening gehouden met verschillende design princaples. 
+
+**Single responsibilty:**
+
+Tijdens het designen van de proto-types hebben zoveel mogelijk rekening proberen te houden met de single responsibilty principle. 
+Om dat het soms lastig is om in te schatten wat er precies in de implementaties komt te staan van een functie is het tijdens het maken van de proto-types voorgekomen dat we ons niet helemaal hebben gehouden aan de principle. 
+
+_Voorbeeld_: 
+
+In het prototype voor de port/adapters voor restaurants word er data opgehaald uit de externe api's en daarna omgezet tot een json object en in een dto gedaan. Het ophalen word gedaan door de apiCaller. Het vervormen van de string naar een Object EN het aanmaken van de DTO met die data word afgehandeld in 1 functie.
+Deze zouden goed gesplitst kunnen worden om de serpartion of concern te waarborgen. 
+ 
+Voor het uitendelijke uitwerken van de applicatie is het van belang dat hier wel aan gehouden wordt.
+
+**open closed**
+
+Het open/closed principle word uitgebried gebruikt op verschillende plaatsen. Het onderhoudbaar en uitbreidbaar maken van de code was een groot onderdeel van het ontwerp. 
+Omdat het open/closed principe hier veel focus op legt was dit voor ons niet te missen. We maken hier dan ook veel gebruik van.
+
+_Voorbeeld_: 
+
+In het prototype restaurantService word de IRestaurant aangeroepen om de data op te halen en te vervormen. Dit wordt niet gedaan per elke adapter los aan te roepen op de directe implementatie maar de IRestaurant interface.
+Zo worden alle vormen van de implementaties aangeroepen die in de lijst zitten. Ook als er een nieuwe implementatie bijkomt word deze automatisch meegenomen zonder de code te hoeven veranderen.
+Door gebruik te maken van **@Autowired** boven de lijst met die api's en de implementaties **@Component** mee te geven worden deze automatisch toegevoegd aan de desbetreffende lijst. Zo hoef je niet eens meer iets te voegen aan de lijst als er een nieuwe implementatie van komt. Dit zorgt voor een nog meer open/closed codebase.
+
+Interface Segregation Principle (ISP)
+
+Het Interface Segregation Principle (ISP) is bedoeld om te voorkomen dat een klasse onnodige functies moet implementeren om te voldoen aan een interface. Om dit te voorkomen is het belangrijk dat interfaces alleen de methoden bevatten die voor hun specifieke taak nodig zijn en niet meer. Zoals eerder besproken bij **Single Responsibility Principle**, kan een functie opgesplitst worden in verschillende kleinere functies, zoals makeJsonObject() en makeDTORecords().
+
+Om te voorkomen dat je deze methoden ook moet implementeren in alle implementaties van de IRestaurant interface, kun je deze functies beter lokaal neerzetten, in plaats van dit overal in elke implementatie te doen. Dit geldt ook voor specifieke DTO's voor die API of wanneer je meer nodig hebt van die API dan gebruikelijk is.
+
+**Dependency Inversion Principle**
+
+Ook wel bekend als **Programming to an interface**. Dit combineert eigenlijk perfect met het **Open/closed principle**. Het maakt dat je niet op de implementatie van van een interface programeerd maar op de interface zelf. Zo worden alle vormen van deze interface die beschikbaar zijn voor die functie aangeroepen. Zie **Open/Closed** voor een mooi voorbeeld.
+
+
 > [!IMPORTANT]
 > Beschrijf zelf de belangrijkste architecturele en design principes die zijn toegepast in de software.
 
