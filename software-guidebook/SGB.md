@@ -1015,4 +1015,28 @@ De output zou er zo uit moeten zien: [
 
 Je kunt met verschillende coördinaten testen door de latitude en longitude parameters aan te passen
 
- 
+
+### Prototype: Verschillende soorten Transport
+
+1. Open de SOEX_PROJECT_JRN map in een IDE
+2. Run de SoexProjectrnApplication
+3. Open postman en maak een methode POST request naar 
+> http://localhost:8080/api/transport/getOptions
+4. Headers:
+>   {
+   "Content-Type": "application/json"
+   }
+5. Body (raw):
+>{
+>"origin": "35.665251,139.712092",
+> "destination": "35.661971,139.703795",
+>"provider": "NAVITIME"
+}
+6. Verwachte resultaat:
+> {
+"data": "{\"items\": [{\"summary\": {\"no\": \"1\", \"start\": {\"type\": \"point\", \"coord\": {\"lat\": 35.665251, \"lon\": 139.712092}, \"name\": \"start\"}, \"goal\": {\"type\": \"point\", \"coord\": {\"lat\": 35.661971, \"lon\": 139.703795}, \"name\": \"goal\"}, \"move\": {\"transit_count\": 0, \"walk_distance\": 1083, \"type\": \"move\", \"from_time\": \"2020-08-19T10:00:00+09:00\", \"to_time\": \"2020-08-19T10:15:00+09:00\", \"time\": 15, 
+
+> Dit gaat langer door, maar voor gemak van testen, als dit het begin is, is het goedgekeurd als test.
+
+
+
