@@ -16,12 +16,12 @@ interface ActiviteitenPort {
 }
 
 class RestaurantController {
-  - restaurentService
+  - restaurantService : RestaurantService
   + getAllRestaurantsInArea(): List<RestaurantDTO>
 }
 
 class ActiviteitenController {
-  - ActiviteitenService
+  - activiteitenService : ActiviteitenService
   + getActivities(opt String zoekwoord)
 }
 

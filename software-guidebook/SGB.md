@@ -414,6 +414,9 @@ Zo hoeven we niet voor elke port een langer of nieuwe aanroep te maken in de ser
 
 De activiteiten-Kant van het diagram is niet geimplementeerd in het proto-type. Dit heeft als reden dat het geen betrekking had op verder bewijs of de **adapter pattern** voldeed aan de verwachten die waren gesteld in [makkelijk uitbreiden externe API's](#adr-004-makkelijk-uitbreiden-externe-apis). Het is wel opgenomen in het klassediagram omdat het wel goed laat zien hoe er nog andere soorten api's makkelijk geimplementeerd kunnen worden en dat de apiCaller een algemene klasse is voor alle klasse die een api aan gaan roepen.
 
+Om een nieuwe Externe API aan te sluiten die ook restaurant data ophaalt, is het een kwestie van een nieuwe klasse maken die **apiCaller** extend, en **IRestaurantPost** implementeerd. Boven de klasse zet je de @Component annotatie neer. Deze zorgt ervoor dat de klasse automatisch door de service wordt meegenomen in de lijst van aan te roepen IRestaurantPorts.
+Mocht er een nieuwe functionaliteit toegevoegd moeten worden moet er uiteraard een controller en service gemaakt worden. Ook moet er port-interface komen voor het verwerken van de nieuwe data. Je maakt voor elke API een implementatie aan zoals je dat zou doen als hierboven beschreven.
+
 
 #### **class diagram transport api's**
 ![Class diagram travel externe api's](../opdracht-diagrammen/classDiagramTravel.png)
