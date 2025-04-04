@@ -259,7 +259,55 @@ De juiste adapter roept vervolgens de externe API aan en ontvangt een antwoord i
 De adapter zet dit om naar een uniform formaat en stuurt het terug naar de service.
 De service handelt het verzoek verder af en stuurt de respons terug naar de gebruiker.
 
-### **Consistente autorisatie en authenticatie**
+## Prototype Law of Demeter & Ontwerpvraag
+
+### Ontwerpvraag
+**Categorie:** Interoperability  
+**Vraag:** Hoe kunnen we verschillende externe vervoersservices (zoals Google Maps) integreren zonder afhankelijk te worden van hun specifieke implementaties?
+
+### Design Principle: Law of Demeter
+Bij de implementatie van de externe API-integratie is de **Law of Demeter (LoD)** toegepast. Dit principe stelt dat een module slechts minimale kennis moet hebben van andere modules en alleen mag communiceren met directe bekenden. Dit voorkomt sterke afhankelijkheden en bevordert een losjes gekoppelde architectuur.
+
+In ons ontwerp wordt de communicatie met externe vervoersservices afgehandeld via een **TransportProviderPort** interface en verschillende adapterklassen. Hierdoor hoeft de kernapplicatie niet direct met specifieke API's te communiceren en blijft de implementatie flexibel en uitbreidbaar.
+
+### Design Patterns
+In de architectuur van de prototype-integratie zijn de volgende design patterns toegepast:
+
+1. **Adapter Pattern** – Om verschillende API’s uniform toegankelijk te maken.
+2. **Factory Pattern** – Voor het dynamisch selecteren van de juiste transportadapter.
+3. **Dependency Injection (DI)** – Om afhankelijkheden los te koppelen en testbaarheid te verbeteren.
+
+### Evolutionary Prototype
+Dit prototype is een evolutionary prototype, wat betekent dat het in de uiteindelijke implementatie kan worden overgenomen en verder uitgebreid. De architectuur is ontworpen met uitbreidbaarheid in gedachten, zodat toekomstige API-integraties eenvoudig kunnen worden toegevoegd.
+
+### Class Diagram
+
+![Class Diagram Prototype](../opdracht-diagrammen/finalClassDiagramPrototype.png)
+
+Het class diagram toont de opbouw van de adapters en de onderliggende interfaces. De TransportProviderPort interface zorgt voor een generieke manier om transportdata op te vragen, terwijl de adapters de specifieke API-implementaties afhandelen.
+
+### Sequence Diagram
+
+![Plaats hier de sequence diagram afbeelding](../opdracht-diagrammen/finalSequenceDiagramPrototype.png)
+
+Scenario: Bryan plant een reis
+
+Bryan woont in Nederland en wil zijn oom in Duitsland bezoeken. Hij voert zijn vertrekpunt en bestemming in de TripTop Web App in.
+
+1. De frontend stuurt een verzoek naar TransportController.
+
+2. TransportController roept TransportService aan.
+
+3. TransportService selecteert de juiste API-adapter via TransportProviderSelector.
+
+4. De geselecteerde adapter maakt een API-call naar de externe service (bijvoorbeeld WikiRoutes).
+
+5. De API retourneert de transportdata.
+
+6. De transportdata wordt teruggestuurd naar de frontend en weergegeven aan Bryan.
+
+
+## **Consistente autorisatie en authenticatie**
 
 ![img_2.png](img_2.png)
 
