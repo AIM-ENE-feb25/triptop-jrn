@@ -543,12 +543,7 @@ Wij kiezen voor de integratie van de **Navitia API** als primaire routeplanner, 
 
 
 
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
-
-# Architecture Decision Record (ADR)
-
-### 8.5. implemtentatie nieuwe externe API's
+# Architecture Decision Record 005(ADR)
 
 ## 1. Titel
 **Het makkelijk uitbreiden van de applicatie met nieuwe externe API's**
@@ -573,16 +568,16 @@ Het gebruik van ports en adapters waarbij we een interface implementeren die de 
 **2. Switch-case voor afhandeling data abstractie**  
 Binnen de service wordt een switch-case gebruikt om alle inkomende datatypes per API te verwerken. De code wordt geformatteerd naar een voor de frontend bruikbare vorm binnen de switch-case.
 
-**3. Geen abstractie, switch-case per API**  
-Een switch-case in de service die per API de data doorgeeft zoals deze aankomt. In de frontend wordt een switch-case gebruikt die het type data detecteert en in het juiste formaat toont, afhankelijk van de API.
+**3. Facade door API-Gateway**  
+Eén centrale plek waar alle API-calls worden afgehandeld en de data wordt omgezet naar de DTO's die de service verwacht.
 
 **De opties zijn bekeken en hieruit is de volgende tabel gekomen:**
 
-| **Optie** | **Impact op onderhoudbaarheid** | **Impact op testbaarheid** | **Impact op schaalbaarheid** | **Impact op leesbaarheid** | **Impact op Betrouwbaarheid** |
-|-----------|---------------------------------|-----------------------------|------------------------------|----------------------------|----------------------------|
-| **1. Hexagonaal ontwerp (Ports en Adapters)** | ++ | ++ | ++ | - | ++ |
-| **2. Gebruik van een switch-case voor verschillende datatypes** | - | - | - | + | - |
-| **3. Directe integratie in de controller (zonder abstractie)** | -- | -- | -- | -- | -- |
+| **Optie**                                                       | **Impact op onderhoudbaarheid** | **Impact op testbaarheid** | **Impact op schaalbaarheid** | **Impact op leesbaarheid** | **Impact op Betrouwbaarheid** |
+|-----------------------------------------------------------------|--------------------------------|----------------------------|------------------------------|----------------------------|-------------------------------|
+| **1. Hexagonaal ontwerp (Ports en Adapters)**                   | ++                             | ++                         | ++                           | -                          | ++                            |
+| **2. Gebruik van een switch-case voor verschillende datatypes** | -                              | -                          | -                            | +                          | -                             |
+| **3. Facade Door API-Gateway**                                  | -                              | +                          | -                            | +                          | ++                            |
 
 ### **Hexagonaal ontwerp (Ports en Adapters)**
 
@@ -605,27 +600,24 @@ Een switch-case in de service die per API de data doorgeeft zoals deze aankomt. 
 - De switch-cases kunnen erg groot worden voor grotere API's.
 - De service wordt verantwoordelijk voor te veel taken, wat **Separation of Concerns** schendt.
 
-### **Geen abstractie**
+### **API-GateWay**
 
 **Voordelen:**
-- Geen extra omzetting van data nodig; de data komt direct van de API.
+- Eén plek waar alle API-calls worden afgehandeld
+- Goed overzicht van welke api's er allemaal aangeroepen worden.
 
 **Nadelen:**
-- De code wordt moeilijk te onderhouden door lange switch-cases in zowel de backend als frontend.
-- De frontend is niet altijd goed voorbereid op alle vormen van inkomende data.
-- Aanpassingen moeten in meerdere plekken worden doorgevoerd, wat de kans op fouten vergroot.
+- Niet open/closed
+- Is verantwoordelijk  voor alle datavervorming uit alle api's. geen **Separation of Concerns**.
+- Veel bloatcode
 
 ## 6. Onderbouwing
 De keuze voor het **hexagonaal ontwerp** levert de beste resultaten op het gebied van onderhoudbaarheid, testbaarheid en schaalbaarheid. Het gebruik van abstractie en het ontwerpen op basis van interfaces maakt het mogelijk om de code uit te breiden zonder bestaande functionaliteiten te breken. Dit ondersteunt drie belangrijke principes uit SOLID: **Separation of Concerns**, **Open/Closed principle** en **Programming for an Interface**.
 
 Hoewel het gebruik van een hexagonaal ontwerp een hogere leercurve met zich meebrengt, is de lange termijnwinst veel groter dan de korte termijnkosten. De tijd die nodig is om deze architectuur te begrijpen en toe te passen is verwaarloosbaar in vergelijking met de tijd die verloren zou gaan door het onderhoud van complexe switch-cases en de risico's van fouten bij wijzigingen.
 
-Door interfaces te gebruiken, wordt de **testbaarheid** aanzienlijk verbeterd, aangezien we niet voor elke nieuwe API een test hoeven te schrijven, maar alleen de implementatie van de interface moeten testen.
-
----
-
-**Datum:** `[27-03-2025]`
-**Auteur:** `[Rob Kokx]`
+Hoewel een API Gateway een goed alternatief leek, hebben we ervoor gekozen om het adapter pattern te gebruiken vanwege het gebrek aan Separation of Concerns en de hoeveelheid extra code die een API Gateway met zich meebrengt.
+Door interfaces te gebruiken, verbeteren we de **testbaarheid** aanzienlijk: voor elke nieuwe API hoeft alleen de implementatie van de interface getest te worden, niet de hele structuur.
 
 # 8.6. ADR-006 Law of Demeter en Modulaire Architectuur
 
