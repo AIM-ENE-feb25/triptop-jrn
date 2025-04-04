@@ -86,9 +86,6 @@ Voordat deze casusomschrijving tot stand kwam, heeft de opdrachtgever de volgend
 
 ## 5. Constraints
 
-> [!IMPORTANT]
-> Beschrijf zelf de beperkingen die op voorhand bekend zijn die invloed hebben op keuzes die wel of niet gemaakt kunnen of mogen worden.
-
 In onze applicatie gelden onder andere de volgende beperkingen:
 
 - **Beperkt API-verbruik:**
@@ -101,7 +98,7 @@ In onze applicatie gelden onder andere de volgende beperkingen:
 
 ## 6. Principles
 
-Tijdens het ontwerpen van de applicatie is er rekening gehouden met verschillende design princaples. 
+Tijdens het ontwerpen van de applicatie is er rekening gehouden met verschillende design principles. 
 
 **Single responsibilty:**
 
@@ -113,11 +110,11 @@ _Voorbeeld_:
 In het prototype voor de port/adapters voor restaurants word er data opgehaald uit de externe api's en daarna omgezet tot een json object en in een dto gedaan. Het ophalen word gedaan door de apiCaller. Het vervormen van de string naar een Object EN het aanmaken van de DTO met die data word afgehandeld in 1 functie.
 Deze zouden goed gesplitst kunnen worden om de serpartion of concern te waarborgen. 
  
-Voor het uitendelijke uitwerken van de applicatie is het van belang dat hier wel aan gehouden wordt.
+Voor het uiteindelijke uitwerken van de applicatie is het van belang dat hier wel aan gehouden wordt.
 
 **open closed**
 
-Het open/closed principle word uitgebried gebruikt op verschillende plaatsen. Het onderhoudbaar en uitbreidbaar maken van de code was een groot onderdeel van het ontwerp. 
+Het open/closed principle wordt uitgebreid gebruikt op verschillende plaatsen. Het onderhoudbaar en uitbreidbaar maken van de code was een groot onderdeel van het ontwerp. 
 Omdat het open/closed principe hier veel focus op legt was dit voor ons niet te missen. We maken hier dan ook veel gebruik van.
 
 _Voorbeeld_: 
@@ -149,8 +146,6 @@ In onze applicatie betekent dit dat:
 Een voorbeeld hiervan is:
 _In het prototype van transport wordt de TransportService aangeroepen om de transportgegevens op te halen, maar deze roept niet direct de specifieke implementatie van de externe API aan. In plaats daarvan maakt TransportService gebruik van de TransportProviderPort interface. Zo is de TransportService losgekoppeld van de specifieke implementaties van bijvoorbeeld WikiRoutesAdapter of NavitimeAdapter. Dit betekent dat als er een nieuwe adapter wordt toegevoegd, de TransportService niet hoeft te worden aangepast. Dit verhoogt de flexibiliteit van het systeem._
 
-> [!IMPORTANT]
-> Beschrijf zelf de belangrijkste architecturele en design principes die zijn toegepast in de software.
 
 ## 7. Software Architecture
 
