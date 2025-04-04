@@ -3,40 +3,48 @@
 
 class HotelController {
     - HotelService hotelService
-    getHotelsInArea(int: locationId): List<Hotel>
+    getHotelsInArea(String latitude, String longitude): List<JsonNode>
 }
 
 class HotelService{
     - API_Gateway gateway
-    getHotelsInArea(int: locationId): List<Hotel>
-}
-
-interface API_Gateway{
-    getHotelsInArea(int: locationId, headers): List<Hotel>
+    getHotelsInArea(String latitude, String longitude): List<JsonNode>
 }
 
 interface HotelRepository {
-    getHotelsInArea(int: locationId, headers): List<Hotel>
+    getHotelsInArea(String latitude, String longitude): List<JsonNode>
 }
 
 class BookingRepo {
-    getHotelsInArea(int: locationId, headers): List<Hotel>
+    getHotelsInArea(String latitude, String longitude): List<JsonNode>
 }
 
 class TripAdvisorRepo {
-    getHotelsInArea(int: locationId, headers): List<Hotel>
+    getHotelsInArea(String latitude, String longitude): List<JsonNode>
 }
 
-class SecurityRepo{
-+ BookingSecurity[]
-+ TripAdvisorSecurity[]
+interface SecurityData{
+String getSecurityData(int index, int index2)
+}
+
+class BookingData{
+- String[][] BookingData
++ String getSecurityData(int index, int index2)
+}
+
+class TripAdvisorData{
+- String[][] TripadvisorData
++ String getSecurityData(int index, int index2)
 }
 
 HotelController --> HotelService
-HotelService --> API_Gateway
-API_Gateway --> SecurityRepo
-API_Gateway --> HotelRepository
+HotelService --> HotelRepository
 BookingRepo ..|> HotelRepository
 TripAdvisorRepo ..|> HotelRepository
+BookingData ..|> SecurityData
+TripAdvisorData ..|> SecurityData
+BookingRepo *-- BookingData
+TripAdvisorRepo *-- TripAdvisorData
+
 
 @enduml

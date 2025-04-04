@@ -175,9 +175,14 @@ Proces:
     Zo nodig haalt de backend via de API Gateway vluchtinformatie op bij Skyscanner.
     De vluchtgegevens worden opgeslagen en teruggestuurd naar de gebruiker.
 
-#### **externe api connection restaurant en activiteit component diagram**
+#### **externe api connection restaurant en activiteit component/ Container diagram**
 
-![Compnent diagram voor externe api's aansluiten](../opdracht-diagrammen/Componentdiagram-portsadapters.puml)
+![Container Diagram Voor externa api's aansluiten](../opdracht-diagrammen/ContainerDiagramRestaurantAPI.png)
+
+Een simpel container diagram waarin de reiziger een aanvraag doet via de frontend voor een lijst met restaurants en de bijpassende informatie. De frontend verwerkt deze aanvraag en geeft deze met eventuele parameters voor aan de backend. 
+Hier wordt gekeken welke API's er beschikbaar zijn en deze worden aangeroepen en de informatie wordt opgehaald en getoond aan de reiziger. Het aantal Api's wat hier gebruikt kan worden is eindeloos.
+
+![Compnent diagram voor externe api's aansluiten](../opdracht-diagrammen/Componentdiagram-portsadapters.png)
 
 Het bovenstaande diagram geeft weer hoe de componenten samenwerken voor het ophalen van informatie van externe API's. Hierbij wordt gebruikgemaakt van een interface met de naamconventie **port**. Voor elke externe API wordt een aparte **port**-interface gemaakt. Deze interface zorgt ervoor dat de adapter (aangegeven als **AdapterAPI**) de ontvangen data uit de API in het juiste formaat terugstuurt naar de service.
 
@@ -195,7 +200,7 @@ Omdat deze volgorde vastligt, hoeft in de adapter alleen nog maar de implementat
 Het is dus van belang dat je bij het aanmaken van een adaptor zowel de port-interface implementeert en de APICaller extend. Zo krijg je de volledige implementatie voor het toevoegen van een nieuwe API.
 Mocht er een compleet nieuwe functionaliteit komen met een nieuwe api is het wel van belang dat er dus een nieuwe port-interface aangemaakt wordt!
 
-### **externe api connection dynamisch diagram**
+### **externe api connection dynamisch en sequentie diagram**
 
 ![Dynamisch diagram Exerne api](../opdracht-diagrammen/Dynamisch%20diagram%20externe%20api's.png)
 
@@ -203,6 +208,14 @@ Dit is het Dynamische diagram dat hoort bij het externe api component diagram.
 Zoals te zien is komt de aanvraag uit de frontend en wordt doorgegeven door de backend tot de service. Deze roept 1 of meerdere adapters aan afhankelijk van de hoeveelheid api's en of dat er een specefieke gevraagd wordt.
 Zodra de adapter de aanvraag krijgt gaat hij de api aanroepen met de voorgaand genoemde stappen. De api geeft informatie terug in een format die kan verschillen per api. De adapter zet het daarna weer om naar de juiste format en geeft het terug aan de serive die de aanvraag deed.
 De service kan dan ermee doen wat het moet. Dit is verder voor het diagram niet meer van belang. Het gaat in deze om de werking van de connectie met de externe API's.
+
+![Sequentie diagram voor het aanroepen van de externe API's](../opdracht-diagrammen/SequentieDiagramApiCall.svg.png)
+In dit voorbeeld is gebruik gemaakt van UberEats en TripTop. Dit is uitbreidbaar of verwisselbaar.
+
+In dit diagram is te zien dat de data die de adapters ophalen in dit voorbeeld beide een JSON-object zijn. Binnen de Adapters worden alle antwoorden omgezet naar een String om zo alle vormen van returnwaarde te kunnen gebruiken. Als alles omgezet is tot een String zet de functie dit om naar een **RestaurantDTO** met daarin de informatie die we willen laten zien in aan de gebruiker.
+Als de data in een DTO zit worden deze toegevoegd aan de Lijst die uiteindelijk teruggegeven wordt aan de service.
+
+Verder is goed te zien dat het een for-loop is die de adapters afloopt en de data aan de lijst toevoegd. Voor latere implementatie is een **ASync** iets wat ge-implementeert moet worden. Zo hoeft de gebruiker niet te wachten op 1 langezame API. 
 
 #### **externe api connection transport component diagram**
 
@@ -271,6 +284,9 @@ De implementatie van deze functies wordt gedaan per adaptor gezien elke externe 
 De service kan dus meerdere adaptors aanroepen. Om ons te houden aan het **open closed principale** wordt er binnen de service gebruik gemaakt van **program to an inferface principal**. In de service wordt niet elke vorm van bij restaurantPort los aangeroepen. Je roept hier alle restaurant ports aan door een simpele restaurantPort.fetchData().
 Zo hoeven we niet voor elke port een langer of nieuwe aanroep te maken in de service. Zo blijft de code onderhoudbaar en betrouwbaar omdat je geen aanpassingen kunt vergeten. Zoals eerder besproken heeft elke adaptor zijn eigen implementatie voor het formateren van de data.
 
+De activiteiten-Kant van het diagram is niet geimplementeerd in het proto-type. Dit heeft als reden dat het geen betrekking had op verder bewijs of de **adapter pattern** voldeed aan de verwachten die waren gesteld in ADR (XXXXXXX). Het is wel opgenomen in het klassediagram omdat het wel goed laat zien hoe er nog andere soorten api's makkelijk geimplementeerd kunnen worden en dat de apiCaller een algemene klasse is voor alle klasse die een api aan gaan roepen.
+
+
 #### **class diagram transport api's**
 ![Class diagram travel externe api's](../opdracht-diagrammen/classDiagramTravel.png)
 
@@ -324,12 +340,17 @@ Tot slot, door deze ontwerpprincipes en patronen toe te passen, kunnen we de API
 - TripAdviser haalt wereldwijd restaurants op. Zo kunnen over restaurant opties worden weergegeven.
 - Betrouwbaarheid van gegevens. Tripadvisor heeft een 100% Service Level. Ook is Tripadvisor een bekend bedrijf waardoor je betrouwbare informatie kan verwachten.
 - Tripadvisor biedt ook de mogelijkheid om vliegvelden, vluchten, autoverhuur en hotels. Hierdoor heb je eventueel geen andere API's hiervoor nodig.
+
 ### Negatieve gevolgen
 
 - Bij het ophalen van een restaurant wordt veel informatie opgehaald. Deze informatie is vaak niet allemaal nodig waardoor je eigenlijk te veel gegevens ophaald.
 - Voor het vinden van restaurants moet je een locationId meegeven. Hierdoor moet je twee GET requests doen. Eén voor het ophalen van de locationId en één voor het ophalen van de restaurants in die omgeving.
 - Het is afhankelijk van een locationId. Hierdoor moet je precies weten waar de gebruiker wilt zoeken en kan je niet algemeen zoeken zoals een land of regio.
 
+---
+
+**Datum:** `[21-03-2025]`
+**Auteur:** `[Niels van Eck]`
 
 
 
@@ -733,10 +754,13 @@ We implementeren een centrale **TransportProviderSelector** die dynamisch bepaal
 --- 
 
 ### 8.9. API Gateway
+> Onderzoeksvraag: Hoe zorg je ervoor dat authenticatie  en authorisatie consistent worden toegepast bij het communiceren met verschillende externe api's?
 
 ## Status
 
-> Voorstel
+> Afgewezen
+
+Reden: Tijdens het implementeren van de code waaronder de API gateway viel het op dat de API gateway niet gebruikt werd en dus niet nodig was. Het probleem is opgevangen door een andere interface. Daarom is besloten om de API gateway te verwijderen.
 
 ## Context
 
@@ -745,7 +769,7 @@ We implementeren een centrale **TransportProviderSelector** die dynamisch bepaal
 ## Beslissing
 
 > We kiezen ervoor om een API Gateway te gebruiken. De API Gateway zal verantwoordelijk zijn voor:
->
+
 - Het centraliseren van authenticatie en autorisatie.
 - Het gelijkmaken van API-aanroepen ongeacht de verschillen tussen de externe APIs.
 

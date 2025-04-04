@@ -3,7 +3,7 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 !include <C4/C4_Container>
 
-title C4 Container Diagram voor Inloggen op TripTop
+title C4 Container Diagram voor restaurant Scraper op TripTop
 
 LAYOUT_WITH_LEGEND()
 
@@ -11,33 +11,19 @@ SHOW_PERSON_OUTLINE()
 
 Person(Reiziger, "Reiziger", "Een reiziger die zonder zorgen op reis wil.")
 
-Container_Ext(fbLogin, "Facebook Media API", "Zorgt voor het inloggen via Facebook")
-Container_Ext(fbVerify, "Facebook Graph API", "Haalt de gegevens van fb op")
+Container_Ext(UberEatsScraperAPI, "UberEatsScraperAPI", "Scrapt informatie over restaurants en retouneerd deze als een lijst.")
+Container_Ext(TripadvisorScraperAPI, "TripadvisorScraperAPI", "Scrapt informatie over restaurants en retouneerd deze als een lijst.")
 
 System_Boundary(triptop_core, "TripTop") {
     Container(triptop, "TripTop Frontend", "React", "User interface voor het plannen, boeken en bijhouden van vakanties")
     Container(backend, "TripTop Back-end", "Java", "Verwerken, controleren en aanpassen van API requests vanuit de web applicatie")
-    Container(db, "TripTop Database", "MSSQL", "Opslag van gegevens")
 }
 
-' Standaard login flow (numeriek)
-Reiziger --> triptop : "1. Logt in op TripTop"
-triptop --> backend : "2. Stuurt inloggegevens (JSON) ter controle"
-backend --> db : "3. Controleert inloggegevens"
-backend --> triptop : "4/F. Geeft JWT-token terug en slaat op in Session"
-triptop --> triptop : "5/G. Toon username en wijzig login naar logout"
 
-' Facebook login flow (alfabetisch)
-Reiziger --> triptop : "A. Logt in via Facebook"
-triptop --> fbLogin : "B. Verifieert met FB access token"
-fbLogin --> backend : "C. Geeft access token door"
-backend --> fbVerify : "D. Controleert access token"
-fbVerify --> backend : "E. Bevestigt inlog en genereert JWT-token"
+Reiziger --> triptop : "vraagt informatie over restaurants in de buurt."
+triptop --> backend : "Geeft de vraag door met eventuele params"
+backend --> UberEatsScraperAPI : "Vraag lijst met restaurants op."
+backend --> TripadvisorScraperAPI : "Vraag lijst met restaurants op."
 
-' Layout positioning
-Reiziger -[hidden]-> triptop
-triptop -[hidden]-> backend
-backend -[hidden]-> db
-fbLogin -[hidden]-> fbVerify
 
 @enduml

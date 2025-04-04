@@ -20,7 +20,7 @@ System_Boundary(triptop_core, "TripTop") {
     Container(triptop, "TripTop Web Applicatie", "React", "User interface voor het plannen, boeken en bijhouden van vakanties")
     Container(backend, "TripTop Back-end", "Java", "Verwerken, controleren en aanpassen van API requests vanuit de web applicatie")
     Container(db, "TripTop Database", "MSSQL", "Opslag van gegevens")
-    Container(gateway, "API Gateway", "React", "Handelen van API calls")
+    Container(gateway, "API Gateway", "Java", "Handelen van API calls")
 }
 
 ' Definieer externe systemen

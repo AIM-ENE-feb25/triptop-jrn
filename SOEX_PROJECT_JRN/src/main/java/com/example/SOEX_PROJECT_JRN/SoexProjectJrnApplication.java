@@ -9,5 +9,4 @@ public class SoexProjectJrnApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SoexProjectJrnApplication.class, args);
 	}
-
 }
