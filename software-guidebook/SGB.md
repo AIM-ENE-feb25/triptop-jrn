@@ -513,7 +513,7 @@ Als secundaire bronnen worden **Kiwi.com API** en **Amadeus API** overwogen. Dez
 **Routeplanning: Vergelijking tussen Navitia en Google Maps**
 
 ### 2. Status
-**Voorstel**
+>Afgewezen
 
 ### 3. Context
 Voor de routeplanning in onze applicatie willen we gebruikers meerdere vervoersmogelijkheden bieden (auto, openbaar vervoer, fietsen en wandelen). De twee hoofdopties die we overwegen zijn:
@@ -647,7 +647,7 @@ Door interfaces te gebruiken, verbeteren we de **testbaarheid** aanzienlijk: voo
 # 8.6. ADR-006 Law of Demeter en Modulaire Architectuur
 
 ## Status
-> Voorgesteld
+> Geaccepteerd
 
 ## Context
 Om een goed georganiseerde en onderhoudbare codebase te garanderen, hanteren we de **Law of Demeter (LoD)**. Deze ontwerpregel stelt dat een object alleen mag communiceren met zijn directe afhankelijkheden en niet met diep geneste objecten. Hierdoor blijft de code modulair en testbaar.
@@ -685,7 +685,7 @@ We implementeren **Facades en Dependency Injection** om de Law of Demeter te han
 # 8.7. ADR-007 TransportProviderSelector in plaats van een Hardcoded Switch
 
 ## Status
-> Voorgesteld
+> Geaccepteerd
 
 ## Context
 Om een flexibele en uitbreidbare architectuur te garanderen, vermijden we het gebruik van hardcoded switch statements in de businesslogica. Een hardcoded aanpak beperkt de mogelijkheid om dynamisch nieuwe transportproviders te integreren en schaadt de onderhoudbaarheid.
@@ -810,6 +810,52 @@ Reden: Tijdens het implementeren van de code waaronder de API gateway viel het o
 
 **Datum:** `[27-03-2025]`
 **Auteur:** `[Niels van Eck]`
+
+--- 
+### 8.10. Implementation of Alternative External APIs for Prototype
+
+## Status
+> Geaccepteerd
+
+## Context
+Oorspronkelijk werd in het ontwerp overwogen om API's zoals Google Maps, Skyscanner en Navitia te gebruiken voor transportintegratie. Er werd echter ontdekt dat twee van deze API's, ondanks dat ze adverteren als “gratis”, uiteindelijk betalingsinformatie vereisen (meestal via een creditcard) tijdens de laatste instellingsfase. Omdat het prototype moest worden ontwikkeld zonder onnodige kosten en complexiteit (en ik geen creditcard beschikbaar heb), werden alternatieve API's (WikiRoutes, Navitime en BusMaps) geselecteerd. Deze beslissing werd besproken met de docent, die bevestigde dat deze alternatieven acceptabel zijn voor prototypedoeleinden.
+
+## Overwogen Alternatieven
+
+| Alternatief                                              | Voordelen                                                                    | Nadelen                                                                                                                        | Besluit                                             |
+|----------------------------------------------------------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|
+| **Creditcard verkrijgen en originele API's gebruiken**   | Toegang tot uitgebreide en officiële API's zoals Google Maps en Skyscanner.  | Vereist een creditcard, brengt mogelijk verborgen kosten met zich mee, en introduceert extra complexiteit in accountbeheer.    | ❌ Verworpen                                         |
+| **Gebruik van een 'Fake Google Maps' API**               | Mogelijk eenvoudig te implementeren en geen kosten.                          | De API is niet officieel en biedt geen realistische functionaliteit of datakwaliteit, wat het testen onbetrouwbaar maakt.      | ❌ Verworpen                                         |
+| **Gebruik van OpenStreetMap (OSM) als alternatief**      | Open-source en volledig gratis, brede dekking van kaarten en routes.         | Beperkte documentatie voor gebruik als directe transport-API en vereist extra verwerking om routes en reisopties te berekenen. | ⚠️ Mogelijk bruikbaar, maar niet als primaire optie |
+
+## Beslissing
+
+We hebben besloten om drie alternatieve externe API's te integreren (**WikiRoutes, Navitime en BusMaps**) om aan te tonen dat het systeem in staat is om meerdere transportdiensten te verwerken met behoud van losse koppeling door het gebruik van poorten en adapters. Deze aanpak is voldoende voor de prototypefase en maakt toekomstige integratie van robuustere API's mogelijk indien nodig.
+
+## Redenering
+**Kostenefficiëntie:** Vermijdt verborgen kosten die gepaard gaan met “gratis” API's die creditcardverificatie vereisen.
+
+**Toereikend prototype:** De geselecteerde API's leveren de benodigde gegevens om het architectuurontwerp te demonstreren.
+
+**Goedkeuring leerkracht:** De docent is het ermee eens dat deze benadering acceptabel is voor een prototype.
+
+**Schaalbaarheid en onderhoudbaarheid:** Het ontwerp blijft flexibel voor het toevoegen of verwisselen van API-aanbieders zonder impact op het kernsysteem.
+
+## Gevolgen
+
+### Voordelen
+
+- Een functioneel prototype dat voldoet aan de ontwerpeisen zonder kosten te maken.
+- Behoudt een modulaire, losjes gekoppelde architectuur die gemakkelijk uit te breiden is.
+
+### Nadelen
+
+- De alternatieve API's kunnen andere gegevensformaten of beperkingen hebben dan de originele API's, waardoor extra aanpassingen nodig zijn in een productieomgeving.
+
+---
+
+**Datum:** `[04-04-2025]`
+**Auteur:** `[Jae Dreijling]`
 
 
 > [!TIP]
