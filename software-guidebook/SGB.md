@@ -970,6 +970,12 @@ We hebben besloten om drie alternatieve externe API's te integreren (**WikiRoute
 
 ## 9. Deployment, Operation and Support
 
+Opstarten
+
+Stap 1: Open de SOEX_PROJECT_JRN map in een IDE
+
+Stap 2: Run de SoexProjectJrnApplication
+
 ### protoType RestaurantAPI met ports/adapters
 
 1. Run prototype code base
@@ -995,12 +1001,6 @@ endpoint:
 "http://localhost:8080/api/transport/getOptions"
 
 ### Prototype: Consistentie autorisatie en authenticatie
-
-Opstarten
-
-Stap 1: Open de SOEX_PROJECT_JRN map in een IDE
-
-Stap 2: Run de SoexProjectrnApplication
 
 Testen in postman:
 
