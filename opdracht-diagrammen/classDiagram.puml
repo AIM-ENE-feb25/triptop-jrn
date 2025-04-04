@@ -8,16 +8,16 @@ abstract class ApiCaller {
 }
 
 interface RestaurentPort {
-  + formatData() : object
+  +  retrieveData() : List<RestaurantDTO>
 }
 
 interface ActiviteitenPort {
-  + formatData() : object
+  +  retrieveData() : List<AcitivteitDTO>
 }
 
 class RestaurentController {
   - restaurentService
-  + getRestaurantData(opt String zoekwoord)
+  + getAllRestaurantsInArea(): List<RestaurantDTO>
 }
 
 class ActiviteitenController {
@@ -26,41 +26,50 @@ class ActiviteitenController {
 }
 
 class RestaurentService {
-  + processRestaurantData()
+  - restaurantports:List<IRestaurantPort>
+  + getAllRestaurants():List<RestaurantDTO>
 }
 
 class ActiviteitenService {
   + processActivityData()
 }
 
-class RestaurantApi1Implementatie {
-  + fetchData() :object
+class UberEatsScraperAdapt  {
 }
 
-class RestaurantApi1_2Implementatie {
-  + fetchData():object
+class TripAdvicorScraperAdapt  {
 }
 
-class Api2Implementatie {
-  + fetchData():object
+class ActiviteitenAdapt {
+}
+
+class RestaurantDTO{
+    + name: String
+    + latitude: double
+    + longitude: double
+    + address: String
+    + phoneNumber: String
 }
 
 Frontend ..> RestaurentController : "calls"
 Frontend ..> ActiviteitenController : "calls"
 
-RestaurentController --> RestaurentService : "has"
-ActiviteitenController --> ActiviteitenService : "has"
+RestaurentController --> RestaurentService : "heeft"
+ActiviteitenController --> ActiviteitenService : "heeft"
 
-RestaurentService --> RestaurantApi1Implementatie : "queries"
-RestaurentService --> RestaurantApi1_2Implementatie : "queries"
-ActiviteitenService --> Api2Implementatie : "queries"
+RestaurentService --> UberEatsScraperAdapt  : "queries"
+RestaurentService --> TripAdvicorScraperAdapt : "queries"
+ActiviteitenService --> ActiviteitenAdapt : "queries"
 
-RestaurantApi1Implementatie ..|> RestaurentPort : "implements"
-RestaurantApi1_2Implementatie ..|> RestaurentPort : "implements"
-Api2Implementatie ..|> ActiviteitenPort : "implements"
+UberEatsScraperAdapt  ..|> RestaurentPort : "implements"
+TripAdvicorScraperAdapt ..|> RestaurentPort : "implements"
+ActiviteitenAdapt ..|> ActiviteitenPort : "implements"
 
-RestaurantApi1Implementatie --|> ApiCaller : "extends"
-RestaurantApi1_2Implementatie --|> ApiCaller : "extends"
-Api2Implementatie --|> ApiCaller : "extends"
+UberEatsScraperAdapt  --|> ApiCaller : "extends"
+TripAdvicorScraperAdapt --|> ApiCaller : "extends"
+ActiviteitenAdapt --|> ApiCaller : "extends"
+
+RestaurentPort --> RestaurantDTO : maakt aan
+ActiviteitenPort --> ActivteitenDTO: maakt aan
 
 @enduml

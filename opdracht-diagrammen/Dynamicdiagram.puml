@@ -6,14 +6,14 @@
 Container("frontend", "Frontend", "Container met React.js", "Zorgt voor frontend en de gebruikersinterfaces")
 
 System_Boundary(triptop_core, "TripTop") {
-Component("restaurentController1", "restaurentController","SpringBoot.java","Controller voor een restaurantscraper")
-Component("restaurentService1", "restaurentService","SpringBoot.java","Controller voor een restaurantscraper")
-Component("RestaurantApi1Implementatie", "RestaurantApi1Implementatie", "Java class", "neemt alle info op uit api1")
-Component("RestaurantApi1.2Implementatie", "RestaurantApi1.2Implementatie", "Java class", "neemt alle info op uit api1.2")
+Component("restaurentController1", "restaurentController","SpringBoot","Controller voor een restaurantscraper")
+Component("restaurentService1", "restaurentService","SpringBoot","Controller voor een restaurantscraper")
+Component("RestaurantApi1Implementatie", "UberEastScraperAdapt",  "Java", "neemt alle info op uit UberEastScraperAPI")
+Component("RestaurantApi1.2Implementatie", "TripAdvisorAdapt", "Java", "neemt alle info op uit TripAdvisorAPI")
 }
 
-System_Ext("RestaurantApi1","RestaurantApi1")
-System_Ext("RestaurantApi2","RestaurantApi2")
+System_Ext("RestaurantApi1","UberEastScraperAPI")
+System_Ext("RestaurantApi2","TripAdvisorAPI")
 
 frontend --> restaurentController1 : "/GET Voor het ophalen van restaurants in de buurt 1"
 
@@ -33,8 +33,5 @@ restaurentService1 --> "RestaurantApi1.2Implementatie" : "Geeft de aanvraag aan 
 
 "RestaurantApi1Implementatie" --> "restaurentService1" : "Returned data in bruikbare format[Json] 7"
 "RestaurantApi1.2Implementatie" --> "restaurentService1" : "Returned data in bruikbare format[Json]"
-
-
-
 
 @enduml

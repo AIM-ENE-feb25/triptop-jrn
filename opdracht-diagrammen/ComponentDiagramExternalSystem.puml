@@ -13,14 +13,14 @@ Component("ActiviteitenService", "ActiviteitenService","SpringBoot.java","Contro
 Component("ApiCaller", "ApiCaller(abstract)","Java Abstract class", "makes sure api's are called propperly")
 Component("RestaurentPort","RestaurentPort", "java interface", "Forceerd de juiste formatering van info van de api")
 Component("activiteitenPort","activiteitenPort", "java interface", "Forceerd de juiste formatering van info van de api")
-Component("RestaurantApi1Implementatie", "RestaurantApi1Implementatie", "Java class", "neemt alle info op uit api1 en vormt dit naar de format van de port")
-Component("RestaurantApi1.2Implementatie", "RestaurantApi1.2Implementatie", "Java class", "neemt alle info op uit api1.2 en vormt dit naar de format van de port")
-Component("Api2Implementatie", "Api2Implementatie", "Java class", "neemt alle info op uit api2 en vormt dit naar de format van de port")
+Component("RestaurantApi1Implementatie", "UberEatsScraperAdapt", "Java class", "neemt alle info op uit Uber Eats scraper API en vormt dit naar de format van de port")
+Component("RestaurantApi1.2Implementatie", "TripAdvisorScraperAdapt", "Java class", "neemt alle info op uit Trip advisor Scraper API en vormt dit naar de format van de port")
+Component("Api2Implementatie", "ActiviteitenAdapt", "Java class", "neemt alle info op uit api2 en vormt dit naar de format van de port")
 }
 
-System_Ext("RestaurantApi1","RestaurantApi1")
-System_Ext("RestaurantApi2","RestaurantApi2")
-System_Ext("api2","api2")
+System_Ext("RestaurantApi1","Uber Eats scraper API")
+System_Ext("RestaurantApi2","Trip advisor Scraper API")
+System_Ext("api2","Activiteiten API")
 
 
 frontend --> restaurentController : "Roept aan met CRUD"
