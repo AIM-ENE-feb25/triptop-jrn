@@ -136,6 +136,18 @@ Om te voorkomen dat je deze methoden ook moet implementeren in alle implementati
 
 Ook wel bekend als **Programming to an interface**. Dit combineert eigenlijk perfect met het **Open/closed principle**. Het maakt dat je niet op de implementatie van van een interface programeerd maar op de interface zelf. Zo worden alle vormen van deze interface die beschikbaar zijn voor die functie aangeroepen. Zie **Open/Closed** voor een mooi voorbeeld.
 
+**Law of Demeter (LoD)**
+
+Dit principe stelt dat een module alleen direct moet communiceren met zijn directe afhankelijkheden en niet met objecten die door andere objecten worden beheerd. Hierdoor wordt een losjes gekoppelde architectuur gerealiseerd.
+In onze applicatie betekent dit dat:
+- Services communiceren uitsluitend met hun directe interfaces. Zo hoeven controllers niet de interne details van repositories of adapters te kennen.
+
+- Adapters en facades worden gebruikt om de interactie met externe API's te encapsuleren, zodat de kernlogica niet afhankelijk is van de specifieke implementatiedetails van deze API's.
+
+- Diepe ketens van method calls worden vermeden, wat de code overzichtelijker en beter onderhoudbaar maakt.
+
+Een voorbeeld hiervan is:
+_In het prototype van transport wordt de TransportService aangeroepen om de transportgegevens op te halen, maar deze roept niet direct de specifieke implementatie van de externe API aan. In plaats daarvan maakt TransportService gebruik van de TransportProviderPort interface. Zo is de TransportService losgekoppeld van de specifieke implementaties van bijvoorbeeld WikiRoutesAdapter of NavitimeAdapter. Dit betekent dat als er een nieuwe adapter wordt toegevoegd, de TransportService niet hoeft te worden aangepast. Dit verhoogt de flexibiliteit van het systeem._
 
 > [!IMPORTANT]
 > Beschrijf zelf de belangrijkste architecturele en design principes die zijn toegepast in de software.
