@@ -1,0 +1,30 @@
+@startuml
+
+actor Gebruiker
+participant "Frontend" as FE
+participant "RestaurantController" as Controller
+participant "RestaurantService" as Service
+participant "UberEatsScraperAdapt" as UberEats
+participant "TripAdvisorAdapt" as TripAdvisor
+database "UberEatsScraperAPI" as UEAPI
+database "TripadvisorAPI" as TAAPI
+
+Gebruiker -> FE: Verzoek om restaurants
+FE -> Controller: getAllRestaurantsInArea()
+Controller -> Service: getAllRestaurants()
+
+Service -> UberEats: retrieveData()
+UberEats -> UEAPI: makeApiCall()
+UEAPI --> UberEats: return JSON response
+UberEats --> Service: return List<RestaurantDTO>
+
+Service -> TripAdvisor: retrieveData()
+TripAdvisor -> TAAPI: makeApiCall()
+TAAPI --> TripAdvisor: return JSON response
+TripAdvisor --> Service: return List<RestaurantDTO>
+
+Service --> Controller: combined restaurant list
+Controller --> FE: return restaurant list
+FE --> Gebruiker: Toon resultaten
+
+@enduml
