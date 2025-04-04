@@ -89,6 +89,16 @@ Voordat deze casusomschrijving tot stand kwam, heeft de opdrachtgever de volgend
 > [!IMPORTANT]
 > Beschrijf zelf de beperkingen die op voorhand bekend zijn die invloed hebben op keuzes die wel of niet gemaakt kunnen of mogen worden.
 
+In onze applicatie gelden onder andere de volgende beperkingen:
+
+- **Beperkt API-verbruik:**
+    De externe API's die we gebruiken zijn gratis beschikbaar, wat betekent dat het aantal requests per tijdseenheid beperkt is. Dit vereist dat er gelimiteerd gebruik gemaakt wordt van de api's, of dat we caching-mechanismen en optimalisaties implementeren om binnen de quota te blijven en de gebruikerservaring niet te schaden.
+- Kosten en schaalbaarheid:
+    Omdat de API gratis is, kunnen er beperkingen zijn qua performance en ondersteuning bij intensief gebruik. Hierdoor moeten we rekening houden met fallback-opties en extra validatie van data.
+
+- Externe afhankelijkheden:
+    Afhankelijkheid van externe API's betekent dat we robuuste error-handling en monitoring moeten implementeren om te kunnen reageren op mogelijke serviceonderbrekingen of wijzigingen in het API-aanbod.
+
 ## 6. Principles
 
 Tijdens het ontwerpen van de applicatie is er rekening gehouden met verschillende design princaples. 
